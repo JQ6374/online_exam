@@ -25,6 +25,13 @@ spring:
         max-idle: 4   # 连接池中的最大空闲连接
         min-idle: 0   # 连接池中的最小空闲连接
 
+pagehelper:
+  helper-dialect: mysql
+  reasonable: true
+  params: count=countSql
+  support-methods-arguments: true
+  page-size-zero: true
+
 my-email:
   title: "[在线考试系统] 您的账号注册验证码"
 

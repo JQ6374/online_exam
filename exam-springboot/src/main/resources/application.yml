@@ -1,9 +1,9 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/online_exam?useUnicode=true&characterEncoding=utf-8&useSSL=true
+    url: jdbc:mysql://localhost:3306/online_exam
     username: root
-    password: "000000"
+    password: dsj1
     type: com.alibaba.druid.pool.DruidDataSource
   mail:
     host: smtp.qq.com  # 服务器 不用修改
@@ -19,11 +19,11 @@ spring:
     port: 6379
     database: 0
     jedis:
-     pool:
-      max-active: 8 # 最大连接数
-      max-wait: 1ms # 连接池最大阻塞等待时间
-      max-idle: 4   # 连接池中的最大空闲连接
-      min-idle: 0   # 连接池中的最小空闲连接
+      pool:
+        max-active: 8 # 最大连接数
+        max-wait: 1ms # 连接池最大阻塞等待时间
+        max-idle: 4   # 连接池中的最大空闲连接
+        min-idle: 0   # 连接池中的最小空闲连接
 
 my-email:
   title: "[在线考试系统] 您的账号注册验证码"
@@ -31,20 +31,14 @@ my-email:
 server:
   port: 80
 
-pagehelper:
-  helper-dialect: mysql
-  reasonable: true
-  params: count=countSql
-  support-methods-arguments: true
-  page-size-zero: true
-
-
 mybatis:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-    map-underscore-to-camel-case: true
     mapper-locations: classpath:com.zz.dao
-  # 开启事务管理器
+    map-underscore-to-camel-case: true
+    # 开启事务管理器
     sqlSessionTemplate:
       executorType: BATCH
+
+
 

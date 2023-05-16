@@ -202,11 +202,11 @@ DROP TABLE IF EXISTS `tag`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `tag` (
-  `tag_id` int(11) NOT NULL,
-  `u_id` int(11) DEFAULT NULL COMMENT '教师ID，标签可由教师管理',
+  `tag_id` int(11) NOT NULL AUTO_INCREMENT,
+  `u_id` int(11) DEFAULT NULL COMMENT '教师ID，标签可由教师管理，0代表所有教师可共享的标签',
   `name` varchar(255) DEFAULT NULL COMMENT '标签名称',
   PRIMARY KEY (`tag_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -215,6 +215,7 @@ CREATE TABLE `tag` (
 
 LOCK TABLES `tag` WRITE;
 /*!40000 ALTER TABLE `tag` DISABLE KEYS */;
+INSERT INTO `tag` VALUES (1,0,'其他'),(2,8,'二十大');
 /*!40000 ALTER TABLE `tag` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -232,11 +233,11 @@ CREATE TABLE `topic` (
   `tag_id` int(11) DEFAULT NULL COMMENT '题目标签：Java、Python等等',
   `difficulty_id` int(11) DEFAULT NULL COMMENT '难度类型：简单题、中等题、困难题',
   `question` text COMMENT '问题',
-  `answer` varchar(255) DEFAULT NULL COMMENT '答案',
-  `status` int(11) DEFAULT NULL COMMENT '状态：是否共享题目',
+  `answer` varchar(255) DEFAULT NULL COMMENT '答案，格式：["A","B"]||["填空题和主观题的答案"]',
+  `status` int(11) DEFAULT NULL COMMENT '状态：是否与其他人共享题目，1代表共享，0代表不共享',
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`t_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -245,6 +246,7 @@ CREATE TABLE `topic` (
 
 LOCK TABLES `topic` WRITE;
 /*!40000 ALTER TABLE `topic` DISABLE KEYS */;
+INSERT INTO `topic` VALUES (1,9,1,1,1,'测试问题','[\"测试答案\"]',0,'2023-05-16 22:49:07'),(2,9,5,2,2,'测试问题','[\"主观题答案\"]',1,'2023-05-16 23:45:07'),(3,11,3,2,2,'这是一个共享的题目','[\"A\", \"B\"]',1,'2023-05-16 23:49:53');
 /*!40000 ALTER TABLE `topic` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -287,7 +289,7 @@ CREATE TABLE `user` (
   `email` varchar(255) DEFAULT NULL,
   `register_time` datetime DEFAULT NULL,
   PRIMARY KEY (`u_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -296,7 +298,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (9,1,'zjq','$2a$10$cauSOxYgNk7VC6iN/6RrcO/GGhGZdAzZxLupK6.KKTEKObaX75Jna','z13706035322@163.com','2023-05-16 13:35:32'),(10,2,'zk','$2a$10$t.wOpQEb5lcBwEewp.PzBunA.lS2fZGTgYiI4b099UZHaGgCGQnrm','1206796814@qq.com','2023-05-16 15:39:02');
+INSERT INTO `user` VALUES (9,1,'zjq','$2a$10$cauSOxYgNk7VC6iN/6RrcO/GGhGZdAzZxLupK6.KKTEKObaX75Jna','z13706035322@163.com','2023-05-16 13:35:32'),(10,2,'zk','$2a$10$t.wOpQEb5lcBwEewp.PzBunA.lS2fZGTgYiI4b099UZHaGgCGQnrm','1206796814@qq.com','2023-05-16 15:39:02'),(11,1,'zxy','$2a$10$O/RNV2QiKReJ2iCHwOKBeeF0Nv3SRHT9cq7NfvtQfmyrm9dDWY5ja','2673492930@qq.com','2023-05-16 23:47:57');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -309,4 +311,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-05-16 20:35:18
+-- Dump completed on 2023-05-17  0:01:02

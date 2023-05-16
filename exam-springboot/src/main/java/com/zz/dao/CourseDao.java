@@ -2,7 +2,6 @@ package com.zz.dao;
 
 import com.zz.bean.Course;
 import org.apache.ibatis.annotations.*;
-import org.springframework.stereotype.Repository;
 
 @Mapper
 public interface CourseDao {

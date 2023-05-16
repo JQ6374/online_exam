@@ -2,13 +2,15 @@ package com.zz.bean;
 
 import java.time.LocalDateTime;
 
-
 public class Topic {
     private Integer tId;
     private Integer uId;
     private Integer typeId;
+    private String typeName;
     private Integer tagId;
+    private String tagName;
     private Integer difficultyId;
+    private String difficultyName;
     private String question;
     private String answer;
     private Integer status;
@@ -20,8 +22,11 @@ public class Topic {
                 "tId=" + tId +
                 ", uId=" + uId +
                 ", typeId=" + typeId +
+                ", typeName='" + typeName + '\'' +
                 ", tagId=" + tagId +
+                ", tagName='" + tagName + '\'' +
                 ", difficultyId=" + difficultyId +
+                ", difficultyName='" + difficultyName + '\'' +
                 ", question='" + question + '\'' +
                 ", answer='" + answer + '\'' +
                 ", status=" + status +
@@ -53,6 +58,14 @@ public class Topic {
         this.typeId = typeId;
     }
 
+    public String getTypeName() {
+        return typeName;
+    }
+
+    public void setTypeName(String typeName) {
+        this.typeName = typeName;
+    }
+
     public Integer getTagId() {
         return tagId;
     }
@@ -61,12 +74,28 @@ public class Topic {
         this.tagId = tagId;
     }
 
+    public String getTagName() {
+        return tagName;
+    }
+
+    public void setTagName(String tagName) {
+        this.tagName = tagName;
+    }
+
     public Integer getDifficultyId() {
         return difficultyId;
     }
 
     public void setDifficultyId(Integer difficultyId) {
         this.difficultyId = difficultyId;
+    }
+
+    public String getDifficultyName() {
+        return difficultyName;
+    }
+
+    public void setDifficultyName(String difficultyName) {
+        this.difficultyName = difficultyName;
     }
 
     public String getQuestion() {

@@ -30,7 +30,7 @@ CREATE TABLE `course` (
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   `is_exist` int(11) DEFAULT NULL COMMENT '用于逻辑删除，默认值1代表存在，0代表删除',
   PRIMARY KEY (`c_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -39,7 +39,7 @@ CREATE TABLE `course` (
 
 LOCK TABLES `course` WRITE;
 /*!40000 ALTER TABLE `course` DISABLE KEYS */;
-INSERT INTO `course` VALUES (1,NULL,'修改',NULL,NULL,0),(2,NULL,'政治',NULL,NULL,0),(3,NULL,'政治','19298901','2023-05-16 18:07:43',NULL),(4,NULL,'政治','6724958','2023-05-16 18:10:30',1),(5,NULL,'政治','89213956','2023-05-16 18:11:18',1),(6,NULL,'政治','9042191','2023-05-16 18:11:30',1),(7,1,'党校考试','26714381','2023-05-16 18:27:02',1);
+INSERT INTO `course` VALUES (8,9,'22软件专升本1班','52570384','2023-05-16 19:32:15',1);
 /*!40000 ALTER TABLE `course` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -82,6 +82,7 @@ CREATE TABLE `exam` (
   `start_time` datetime DEFAULT NULL COMMENT '考试开始时间',
   `end_time` datetime DEFAULT NULL COMMENT '考试结束时间',
   `status` int(11) DEFAULT NULL COMMENT '考试状态',
+  `is_exist` int(11) DEFAULT NULL COMMENT '逻辑删除，默认值1表示存在，0表示删除',
   PRIMARY KEY (`e_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -143,27 +144,28 @@ INSERT INTO `role` VALUES (1,'教师'),(2,'学生');
 UNLOCK TABLES;
 
 --
--- Table structure for table `stduent_course`
+-- Table structure for table `student_course`
 --
 
-DROP TABLE IF EXISTS `stduent_course`;
+DROP TABLE IF EXISTS `student_course`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `stduent_course` (
-  `uc_id` int(11) NOT NULL,
+CREATE TABLE `student_course` (
+  `uc_id` int(11) NOT NULL AUTO_INCREMENT,
   `u_id` int(11) DEFAULT NULL COMMENT '学生ID',
   `c_id` int(11) DEFAULT NULL COMMENT '课程ID',
   PRIMARY KEY (`uc_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `stduent_course`
+-- Dumping data for table `student_course`
 --
 
-LOCK TABLES `stduent_course` WRITE;
-/*!40000 ALTER TABLE `stduent_course` DISABLE KEYS */;
-/*!40000 ALTER TABLE `stduent_course` ENABLE KEYS */;
+LOCK TABLES `student_course` WRITE;
+/*!40000 ALTER TABLE `student_course` DISABLE KEYS */;
+INSERT INTO `student_course` VALUES (1,2,8);
+/*!40000 ALTER TABLE `student_course` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -294,7 +296,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (9,NULL,'zjq','$2a$10$cauSOxYgNk7VC6iN/6RrcO/GGhGZdAzZxLupK6.KKTEKObaX75Jna','z13706035322@163.com','2023-05-16 13:35:32'),(10,NULL,'zk','$2a$10$t.wOpQEb5lcBwEewp.PzBunA.lS2fZGTgYiI4b099UZHaGgCGQnrm','1206796814@qq.com','2023-05-16 15:39:02');
+INSERT INTO `user` VALUES (9,1,'zjq','$2a$10$cauSOxYgNk7VC6iN/6RrcO/GGhGZdAzZxLupK6.KKTEKObaX75Jna','z13706035322@163.com','2023-05-16 13:35:32'),(10,2,'zk','$2a$10$t.wOpQEb5lcBwEewp.PzBunA.lS2fZGTgYiI4b099UZHaGgCGQnrm','1206796814@qq.com','2023-05-16 15:39:02');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -307,4 +309,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-05-16 18:54:10
+-- Dump completed on 2023-05-16 20:35:18

@@ -32,7 +32,7 @@ public class ProjectExceptionAdvice {
         // 记录日志
         // 发送消息给运维
         // 发送邮件给开发人员,ex对象发送给开发人员
-        return new ApiResult(Code.SYSTEM_UNKNOWN_ERROR, null, "系统繁忙，请稍后再试！");
+        return new ApiResult(Code.SYSTEM_UNKNOWN_ERROR, null, Code.ERROR_MSG);
     }
 
 }

@@ -16,10 +16,10 @@ public interface UserDao {
             "#{username}, #{password}, #{email}, #{registerTime})")
     Integer addUser(User user);
 
-    @Select("select * from user where email=#{email}")
+    @Select("select * from user where email=#{email} and r_id=#{rId}")
     ArrayList<User> selectByEmail(User user);
 
-    @Update("update user set password=#{password} where email=#{email}")
+    @Update("update user set password=#{password} where email=#{email} and r_id=#{rId}")
     Integer updateUser(User user);
 
 }

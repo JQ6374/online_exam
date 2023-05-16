@@ -3,6 +3,7 @@ package com.zz.Service.impl;
 import com.zz.Service.UserService;
 import com.zz.bean.User;
 import com.zz.dao.UserDao;
+import com.zz.utils.Code;
 import com.zz.utils.result.TempResult;
 import com.zz.utils.EmailUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,7 +64,7 @@ public class UserServiceImpl implements UserService {
         TempResult tempResult = emailUtils.emailCheck(user.getEmailCode(), user.getEmail());
         if (tempResult.isFlag()) {
             user.setPassword(encoder.encode(user.getPassword()));
-            tempResult.setMsg(userDao.updateUser(user) != 0 ? "修改成功！" : "修改失败！");
+            tempResult.setMsg(userDao.updateUser(user) != 0 ? "修改成功！" : Code.ERROR_MSG);
         }
         return tempResult;
     }

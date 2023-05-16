@@ -20,7 +20,7 @@ public class ExamTest {
     @Test
     public void ExamCreate(){
          Exam exam = new Exam();
-         exam.setCId(1);
+         exam.setcId(1);
 //         //时间格式转换
          DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
          String startTime = "2023-05-16 09:30:00";

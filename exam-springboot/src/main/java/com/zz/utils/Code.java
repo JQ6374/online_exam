@@ -19,4 +19,6 @@ public class Code {
 
     public static final Integer PROJECT_VALIDATE_ERROR = 60001;
     public static final Integer PROJECT_BUSINESS_ERROR = 60002;
+
+    public static final String ERROR_MSG = "服务器繁忙，请稍后再试！";
 }

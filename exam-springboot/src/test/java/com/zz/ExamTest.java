@@ -1,5 +1,6 @@
 package com.zz;
 
+import com.zz.Service.ExamService;
 import com.zz.bean.Exam;
 import com.zz.dao.ExamDao;
 import com.zz.dao.UserDao;
@@ -17,6 +18,8 @@ import java.time.format.DateTimeFormatter;
 public class ExamTest {
     @Autowired
     private ExamDao examDao;
+    @Autowired
+    private ExamService examService;
     @Test
     public void ExamCreate(){
          Exam exam = new Exam();
@@ -30,5 +33,11 @@ public class ExamTest {
         System.out.println(exam);
 //        System.out.println("成功");
 //        examDao.createExam(exam);
+    }
+
+    @Test
+    public void ExamDelete(){
+        String examId = "1";
+        examDao.deleteExam(Integer.parseInt(examId));
     }
 }

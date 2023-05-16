@@ -25,4 +25,18 @@ public class ExamServiceImpl implements ExamService {
         }
         return tempResult;
     }
+
+    @Override
+    public TempResult deleteExam(Integer examId) {
+        TempResult tempResult = new TempResult();
+        Integer exam1 = examDao.deleteExam(examId);
+        if(exam1 !=0){
+            tempResult.setFlag(true);
+            tempResult.setMsg("删除成功！");
+        }else {
+            tempResult.setFlag(false);
+            tempResult.setMsg("删除失败！");
+        }
+        return tempResult;
+    }
 }

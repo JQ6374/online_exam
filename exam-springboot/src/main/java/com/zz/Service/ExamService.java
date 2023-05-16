@@ -8,5 +8,10 @@ import org.springframework.stereotype.Service;
 
 
 public interface ExamService {
-    TempResult createExam(Exam exam);
+
+//    创建考试
+public TempResult createExam(Exam exam);
+
+//    注销考试
+public   TempResult deleteExam(Integer examId);
 }

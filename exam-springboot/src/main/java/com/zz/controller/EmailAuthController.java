@@ -2,7 +2,7 @@ package com.zz.controller;
 
 import com.zz.Service.MailService;
 import com.zz.utils.result.ApiResult;
-import com.zz.utils.ValidateCodeUtils;
+import com.zz.utils.EmailUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
@@ -26,12 +26,12 @@ public class EmailAuthController {
     private RedisTemplate<Object, Object> redisTemplate;
 
     @Autowired
-    private ValidateCodeUtils validateCodeUtils;
+    private EmailUtils emailUtils;
 
     @PostMapping("/send_email")
     public ApiResult send_email(@RequestParam String toEmail) {
         ApiResult result = new ApiResult();
-        String code = validateCodeUtils.generateValidateCodeString(6);
+        String code = emailUtils.generateValidateCodeString(6);
         System.out.println(code);
         boolean flag = mailService.sendMail(toEmail, code);
         if (flag) {

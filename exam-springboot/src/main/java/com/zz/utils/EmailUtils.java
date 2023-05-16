@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import java.util.Random;
 
 @Component
-public class ValidateCodeUtils {
+public class EmailUtils {
     @Autowired
     private RedisTemplate<Object, Object> redisTemplate;
 

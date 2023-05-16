@@ -1,8 +1,11 @@
 package com.zz;
 
+import com.zz.utils.CourseUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Random;
 
 @SpringBootTest
@@ -10,11 +13,8 @@ public class MyTest {
 
     @Test
     void test() {
-        Random random = new Random();
-        StringBuilder code = new StringBuilder();
-        for (int i = 0; i < 6; i++) {
-            code.append(random.nextInt(10));
+        for (int i = 0; i < 100; i++) {
+            System.out.println(CourseUtils.getCourseCode());
         }
-        System.out.println(code);
     }
 }

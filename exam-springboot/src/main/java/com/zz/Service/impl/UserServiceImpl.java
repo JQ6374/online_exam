@@ -3,10 +3,8 @@ package com.zz.Service.impl;
 import com.zz.Service.UserService;
 import com.zz.bean.User;
 import com.zz.dao.UserDao;
-import com.zz.utils.Code;
-import com.zz.utils.result.ApiResult;
 import com.zz.utils.result.TempResult;
-import com.zz.utils.ValidateCodeUtils;
+import com.zz.utils.EmailUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -16,7 +14,7 @@ import java.util.ArrayList;
 @Service
 public class UserServiceImpl implements UserService {
     @Autowired
-    private ValidateCodeUtils validateCodeUtils;
+    private EmailUtils emailUtils;
 
     @Autowired
     private UserDao userDao;
@@ -26,7 +24,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public TempResult register(User user) {
-        TempResult result = validateCodeUtils.emailCheck(user.getEmailCode(), user.getEmail());
+        TempResult result = emailUtils.emailCheck(user.getEmailCode(), user.getEmail());
         if (!result.isFlag()) {
             return result;
         }
@@ -62,7 +60,7 @@ public class UserServiceImpl implements UserService {
     }
 
     public TempResult updatePassword(User user) {
-        TempResult tempResult = validateCodeUtils.emailCheck(user.getEmailCode(), user.getEmail());
+        TempResult tempResult = emailUtils.emailCheck(user.getEmailCode(), user.getEmail());
         if (tempResult.isFlag()) {
             user.setPassword(encoder.encode(user.getPassword()));
             tempResult.setMsg(userDao.updateUser(user) != 0 ? "修改成功！" : "修改失败！");

@@ -23,12 +23,14 @@ DROP TABLE IF EXISTS `course`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `course` (
-  `c_id` int(11) NOT NULL COMMENT '课程ID ',
+  `c_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '课程ID ',
   `u_id` int(11) DEFAULT NULL COMMENT '教师id',
   `name` varchar(255) DEFAULT NULL COMMENT '课程名称',
+  `course_code` varchar(255) DEFAULT NULL COMMENT '课程代码，学生可通过班级码加入班级',
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `is_exist` int(11) DEFAULT NULL COMMENT '用于逻辑删除，默认值1代表存在，0代表删除',
   PRIMARY KEY (`c_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -37,6 +39,7 @@ CREATE TABLE `course` (
 
 LOCK TABLES `course` WRITE;
 /*!40000 ALTER TABLE `course` DISABLE KEYS */;
+INSERT INTO `course` VALUES (1,NULL,'修改',NULL,NULL,0),(2,NULL,'政治',NULL,NULL,0),(3,NULL,'政治','19298901','2023-05-16 18:07:43',NULL),(4,NULL,'政治','6724958','2023-05-16 18:10:30',1),(5,NULL,'政治','89213956','2023-05-16 18:11:18',1),(6,NULL,'政治','9042191','2023-05-16 18:11:30',1),(7,1,'党校考试','26714381','2023-05-16 18:27:02',1);
 /*!40000 ALTER TABLE `course` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -74,6 +77,7 @@ DROP TABLE IF EXISTS `exam`;
 CREATE TABLE `exam` (
   `e_id` int(11) NOT NULL COMMENT '考试ID',
   `c_id` int(11) DEFAULT NULL COMMENT '课程ID',
+  `p_id` int(11) DEFAULT NULL COMMENT '试卷ID',
   `name` varchar(255) DEFAULT NULL COMMENT '考试名称',
   `start_time` datetime DEFAULT NULL COMMENT '考试开始时间',
   `end_time` datetime DEFAULT NULL COMMENT '考试结束时间',
@@ -92,27 +96,26 @@ LOCK TABLES `exam` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `exam_topic`
+-- Table structure for table `papers`
 --
 
-DROP TABLE IF EXISTS `exam_topic`;
+DROP TABLE IF EXISTS `papers`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `exam_topic` (
-  `et_id` int(11) NOT NULL,
-  `e_id` int(11) DEFAULT NULL COMMENT '考试ID',
-  `papers` text COMMENT '整张试卷：Json类型的字符串',
-  PRIMARY KEY (`et_id`)
+CREATE TABLE `papers` (
+  `p_id` int(11) NOT NULL AUTO_INCREMENT,
+  `content` text COMMENT '整张试卷的内容',
+  PRIMARY KEY (`p_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `exam_topic`
+-- Dumping data for table `papers`
 --
 
-LOCK TABLES `exam_topic` WRITE;
-/*!40000 ALTER TABLE `exam_topic` DISABLE KEYS */;
-/*!40000 ALTER TABLE `exam_topic` ENABLE KEYS */;
+LOCK TABLES `papers` WRITE;
+/*!40000 ALTER TABLE `papers` DISABLE KEYS */;
+/*!40000 ALTER TABLE `papers` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -282,7 +285,7 @@ CREATE TABLE `user` (
   `email` varchar(255) DEFAULT NULL,
   `register_time` datetime DEFAULT NULL,
   PRIMARY KEY (`u_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -291,7 +294,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,NULL,'zjq','123',NULL,NULL);
+INSERT INTO `user` VALUES (9,NULL,'zjq','$2a$10$cauSOxYgNk7VC6iN/6RrcO/GGhGZdAzZxLupK6.KKTEKObaX75Jna','z13706035322@163.com','2023-05-16 13:35:32'),(10,NULL,'zk','$2a$10$t.wOpQEb5lcBwEewp.PzBunA.lS2fZGTgYiI4b099UZHaGgCGQnrm','1206796814@qq.com','2023-05-16 15:39:02');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -304,4 +307,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-05-16 10:36:09
+-- Dump completed on 2023-05-16 18:54:10

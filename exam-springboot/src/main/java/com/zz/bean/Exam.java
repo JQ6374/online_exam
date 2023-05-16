@@ -1,15 +1,72 @@
 package com.zz.bean;
 
-import lombok.Data;
-
 import java.time.LocalDateTime;
 
-@Data
 public class Exam {
-    private Integer e_id;
-    private Integer c_id;
+    private Integer eId;
+    private Integer cId;
     private String name;
-    private LocalDateTime start_time;
-    private LocalDateTime end_time;
+    private LocalDateTime startTime;
+    private LocalDateTime endTime;
     private Integer status;
+
+    @Override
+    public String toString() {
+        return "Exam{" +
+                "eId=" + eId +
+                ", cId=" + cId +
+                ", name='" + name + '\'' +
+                ", startTime=" + startTime +
+                ", endTime=" + endTime +
+                ", status=" + status +
+                '}';
+    }
+
+    public Integer geteId() {
+        return eId;
+    }
+
+    public void seteId(Integer eId) {
+        this.eId = eId;
+    }
+
+    public Integer getcId() {
+        return cId;
+    }
+
+    public void setcId(Integer cId) {
+        this.cId = cId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public LocalDateTime getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(LocalDateTime endTime) {
+        this.endTime = endTime;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
 }

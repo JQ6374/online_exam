@@ -24,6 +24,6 @@ public interface ExamDao {
 
 
 //    查询By Id
-    @Select("select * from exam where #{param01}")
+    @Select("select * from exam where e_id=#{param01}")
     public Exam selectOne(@Param("param01")Integer examId);
 }

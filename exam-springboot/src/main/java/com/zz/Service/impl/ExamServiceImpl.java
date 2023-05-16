@@ -6,6 +6,7 @@ import com.github.pagehelper.PageInfo;
 import com.zz.Service.ExamService;
 import com.zz.bean.Exam;
 import com.zz.dao.ExamDao;
+import com.zz.utils.Code;
 import com.zz.utils.result.ApiResult;
 import com.zz.utils.result.TempResult;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,20 +65,22 @@ public class ExamServiceImpl implements ExamService {
     }
 
     @Override
-    public TempResult selectOne(Integer examId) {
+    public ApiResult selectOne(Integer examId) {
         /**
          * 查询结果
          */
         Exam exam = examDao.selectOne(examId);
-        TempResult tempResult = new TempResult();
+        ApiResult apiResult = new ApiResult();
         if (exam != null){
-            tempResult.setFlag(true);
-            tempResult.setMsg("查询成功！");
+            apiResult.setData(exam);
+            apiResult.setCode(Code.GET_OK);
+            apiResult.setMsg("查询成功！");
         }
         else {
-            tempResult.setFlag(false);
-            tempResult.setMsg("查询失败！");
+            apiResult.setData(null);
+            apiResult.setCode(Code.GET_ERR);
+            apiResult.setMsg("查询失败！");
         }
-        return  new HashMap<Exam,TempResult>().put(exam,tempResult);
+        return  apiResult;
     }
 }

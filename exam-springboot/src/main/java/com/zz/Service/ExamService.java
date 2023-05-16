@@ -15,5 +15,5 @@ public   TempResult deleteExam(Integer examId);
 
 
 public ApiResult selectAll(String pageNum);
-public TempResult selectOne(Integer examId);
+public ApiResult selectOne(Integer examId);
 }

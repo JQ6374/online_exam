@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -64,20 +65,19 @@ public class Examcontroller {
     @GetMapping("/selectAll/{pageNum}")
     public ApiResult selectAll(@PathVariable("pageNum") String pageNumNow) {
         ApiResult apiResult  = examService.selectAll(pageNumNow);
-        System.out.println(apiResult.getData().toString());
+        if(apiResult.getData() !=null){
+            apiResult.setMsg("分页查询成功");
+            apiResult.setCode(Code.GET_OK);
+        }else {
+            apiResult.setMsg("分页查询失败!");
+            apiResult.setCode(Code.GET_ERR);
+        }
         return apiResult;
     }
 
     @GetMapping("/selectOne/{examId}")
     public ApiResult selectOne(@PathVariable("examId") String examId) {
-        ApiResult apiResult  = new ApiResult();
-        TempResult tempResult = examService.selectOne(Integer.parseInt(examId));
-        apiResult.setMsg(tempResult.getMsg());
-        if (tempResult.isFlag()) {
-            apiResult.setCode(Code.GET_OK);
-        } else {
-            apiResult.setCode(Code.GET_ERR);
-        }
+        ApiResult apiResult = examService.selectOne(Integer.parseInt(examId));
         System.out.println(apiResult.getData().toString());
         return apiResult;
     }

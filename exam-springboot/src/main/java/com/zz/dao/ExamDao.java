@@ -1,10 +1,9 @@
 package com.zz.dao;
 
 import com.zz.bean.Exam;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
+
+import java.util.List;
 
 @Mapper
 //@Repository
@@ -18,4 +17,13 @@ public interface ExamDao {
     //注销考试 is_exist 默认状态为1 注销为0
     @Update("UPDATE exam set is_exist = 0 where e_id =#{param01}")
     public Integer deleteExam(@Param("param01") Integer examId);
+
+//    查询所有 All
+    @Select("select * from exam")
+    public List<Exam> selectAll();
+
+
+//    查询By Id
+    @Select("select * from exam where #{param01}")
+    public Exam selectOne(@Param("param01")Integer examId);
 }

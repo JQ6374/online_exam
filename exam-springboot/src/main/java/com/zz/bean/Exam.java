@@ -11,5 +11,5 @@ public class Exam {
     private String name;
     private LocalDateTime start_time;
     private LocalDateTime end_time;
-    private String status;
+    private Integer status;
 }

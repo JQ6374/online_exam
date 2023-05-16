@@ -4,7 +4,9 @@ import com.zz.bean.User;
 import com.zz.utils.result.TempResult;
 
 public interface UserService {
-    public TempResult register(User user);
+    TempResult register(User user);
 
-    public TempResult login(User user);
+    TempResult login(User user);
+
+    TempResult updatePassword(User user);
 }

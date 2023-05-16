@@ -4,6 +4,7 @@ import com.zz.bean.User;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.ArrayList;
 
@@ -17,5 +18,8 @@ public interface UserDao {
 
     @Select("select * from user where email=#{email}")
     ArrayList<User> selectByEmail(User user);
+
+    @Update("update user set password=#{password} where email=#{email}")
+    Integer updateUser(User user);
 
 }

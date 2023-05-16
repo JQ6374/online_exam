@@ -1,31 +1,18 @@
 package com.zz.utils.result;
 
-public class TempResult {
-    private boolean flag;
+import lombok.Data;
 
+@Data
+public class TempResult {
+
+    private boolean flag;
     private String msg;
 
-    @Override
-    public String toString() {
-        return "TempResult{" +
-                "flag=" + flag +
-                ", msg='" + msg + '\'' +
-                '}';
+    public TempResult() {
     }
 
-    public boolean isFlag() {
-        return flag;
-    }
-
-    public void setFlag(boolean flag) {
+    public TempResult(boolean flag, String msg) {
         this.flag = flag;
-    }
-
-    public String getMsg() {
-        return msg;
-    }
-
-    public void setMsg(String msg) {
         this.msg = msg;
     }
 }

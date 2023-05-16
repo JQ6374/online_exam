@@ -29,12 +29,12 @@ public class ValidateCodeUtils {
         result.setFlag(true);
         if (rightCode == null) {
             result.setFlag(false);
-            result.setMsg("验证码过期，请重新注册...");
+            result.setMsg("验证码过期，请重试...");
             return result;
         }
-        if (!code.equals(rightCode)) {
+        if (!rightCode.equals(code)) {
             result.setFlag(false);
-            result.setMsg("验证码错误,请重新注册...");
+            result.setMsg("验证码错误,请重试...");
             return result;
         }
         result.setMsg("邮箱验证通过...");

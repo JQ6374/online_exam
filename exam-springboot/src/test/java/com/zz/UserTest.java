@@ -30,7 +30,7 @@ public class UserTest {
     }
 
     @Test
-    void selectAll(){
+    void selectAll() {
         User user = new User();
         user.setEmail("2410360091111@qq.com");
         ArrayList<User> integer = userDao.selectByEmail(user);
@@ -39,10 +39,19 @@ public class UserTest {
     }
 
     @Test
-    void passwordEncode(){
+    void passwordEncode() {
         String password = "123";
         String encode = encoder.encode(password);
         System.out.println(encode);
         System.out.println(encoder.matches("123", encode));
+    }
+
+    @Test
+    void update() {
+        User user = new User();
+        user.setPassword("123");
+        user.setEmail("123");
+        Integer integer = userDao.updateUser(user);
+        System.out.println(integer);
     }
 }

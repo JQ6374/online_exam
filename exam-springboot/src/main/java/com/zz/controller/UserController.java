@@ -32,9 +32,14 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ApiResult login(@RequestBody User user){
+    public ApiResult login(@RequestBody User user) {
         TempResult tempResult = userService.login(user);
+        return new ApiResult(Code.GET_OK, null, tempResult.getMsg());
+    }
 
-        return null;
+    @PostMapping("/updatePassword")
+    public ApiResult updatePassword(@RequestBody User user) {
+        TempResult tempResult = userService.updatePassword(user);
+        return new ApiResult(Code.UPDATE_OK, null, tempResult.getMsg());
     }
 }

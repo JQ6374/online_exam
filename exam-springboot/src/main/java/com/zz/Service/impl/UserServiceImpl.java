@@ -60,4 +60,13 @@ public class UserServiceImpl implements UserService {
         }
         return tempResult;
     }
+
+    public TempResult updatePassword(User user) {
+        TempResult tempResult = validateCodeUtils.emailCheck(user.getEmailCode(), user.getEmail());
+        if (tempResult.isFlag()) {
+            user.setPassword(encoder.encode(user.getPassword()));
+            tempResult.setMsg(userDao.updateUser(user) != 0 ? "修改成功！" : "修改失败！");
+        }
+        return tempResult;
+    }
 }

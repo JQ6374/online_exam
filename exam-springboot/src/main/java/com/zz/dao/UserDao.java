@@ -3,6 +3,9 @@ package com.zz.dao;
 import com.zz.bean.User;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
+
+import java.util.ArrayList;
 
 @Mapper
 //@Repository
@@ -11,5 +14,8 @@ public interface UserDao {
     @Insert("insert into user values(null, #{rId}, " +
             "#{username}, #{password}, #{email}, #{registerTime})")
     Integer addUser(User user);
+
+    @Select("select * from user where email=#{email}")
+    ArrayList<User> selectByEmail(User user);
 
 }

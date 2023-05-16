@@ -1,7 +1,7 @@
 package com.zz.controller;
 
 import com.zz.Service.MailService;
-import com.zz.utils.ApiResult;
+import com.zz.utils.result.ApiResult;
 import com.zz.utils.ValidateCodeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -33,10 +33,12 @@ public class EmailAuthController {
         ApiResult result = new ApiResult();
         String code = validateCodeUtils.generateValidateCodeString(6);
         System.out.println(code);
-        // 将生成的验证码保存到Redis中并设置有效期三分钟
-        redisTemplate.opsForValue().set(toEmail, code,
-                3, TimeUnit.MINUTES);
         boolean flag = mailService.sendMail(toEmail, code);
+        if (flag) {
+            // 将生成的验证码保存到Redis中并设置有效期五分钟
+            redisTemplate.opsForValue().set(toEmail, code,
+                    5, TimeUnit.MINUTES);
+        }
         result.setCode(200);
         result.setMsg(flag ? "发送成功！" : "服务器繁忙请稍后!");
         return result;

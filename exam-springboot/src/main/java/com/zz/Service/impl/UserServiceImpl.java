@@ -3,10 +3,15 @@ package com.zz.Service.impl;
 import com.zz.Service.UserService;
 import com.zz.bean.User;
 import com.zz.dao.UserDao;
-import com.zz.utils.TempResult;
+import com.zz.utils.Code;
+import com.zz.utils.result.ApiResult;
+import com.zz.utils.result.TempResult;
 import com.zz.utils.ValidateCodeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -16,17 +21,43 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserDao userDao;
 
+    @Autowired
+    private BCryptPasswordEncoder encoder;
+
     @Override
-    public TempResult register(User user, String code) {
-        TempResult result = validateCodeUtils.check(code, user.getEmail());
+    public TempResult register(User user) {
+        TempResult result = validateCodeUtils.emailCheck(user.getEmailCode(), user.getEmail());
         if (!result.isFlag()) {
             return result;
         }
-        Integer integer = userDao.addUser(user);
-        if (integer != null && integer != 0) {
+        ArrayList<User> isExist = userDao.selectByEmail(user);
+        if (!isExist.isEmpty()) {
+            result.setFlag(false);
+            result.setMsg("邮箱已被注册...");
+            return result;
+        }
+        user.setPassword(encoder.encode(user.getPassword()));
+        Integer isSucceed = userDao.addUser(user);
+        if (isSucceed != null && isSucceed != 0) {
             result.setMsg("注册成功！");
             result.setFlag(true);
         }
         return result;
+    }
+
+    @Override
+    public TempResult login(User user) {
+        ArrayList<User> userLis = userDao.selectByEmail(user);
+        TempResult tempResult = new TempResult();
+        if (userLis.isEmpty()) {
+            tempResult.setFlag(false);
+            tempResult.setMsg("账号不存在！");
+        } else {
+            User rightUser = userLis.get(0);
+            boolean isSucceed = encoder.matches(user.getPassword(), rightUser.getPassword());
+            tempResult.setFlag(isSucceed);
+            tempResult.setMsg(isSucceed ? "登录成功！" : "密码错误！");
+        }
+        return tempResult;
     }
 }

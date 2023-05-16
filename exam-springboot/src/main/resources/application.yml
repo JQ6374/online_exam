@@ -31,6 +31,9 @@ my-email:
 server:
   port: 80
 
+mybatis:
+  configuration:
+    log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
 
 
 

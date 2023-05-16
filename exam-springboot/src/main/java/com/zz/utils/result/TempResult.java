@@ -1,4 +1,4 @@
-package com.zz.utils;
+package com.zz.utils.result;
 
 public class TempResult {
     private boolean flag;

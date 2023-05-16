@@ -8,7 +8,7 @@ public class Exam {
     private String name;
     private LocalDateTime start_time;
     private LocalDateTime end_time;
-    private Integer status;
+    private String status;
 
     @Override
     public String toString() {
@@ -18,7 +18,7 @@ public class Exam {
                 ", name='" + name + '\'' +
                 ", start_time=" + start_time +
                 ", end_time=" + end_time +
-                ", status=" + status +
+                ", status='" + status + '\'' +
                 '}';
     }
 
@@ -62,11 +62,11 @@ public class Exam {
         this.end_time = end_time;
     }
 
-    public Integer getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(Integer status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 }

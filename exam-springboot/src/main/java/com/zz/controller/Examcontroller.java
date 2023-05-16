@@ -11,12 +11,9 @@ import com.zz.utils.result.ApiResult;
 import com.zz.utils.result.TempResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -64,11 +61,26 @@ public class Examcontroller {
         return apiResult;
     }
 
-    @GetMapping("/{pageNum}")
-    public ApiResult selectAll(@PathVariable("pageNum") String pageNum) {
-        ApiResult apiResult = new ApiResult();
-
+    @GetMapping("/selectAll/{pageNum}")
+    public ApiResult selectAll(@PathVariable("pageNum") String pageNumNow) {
+        ApiResult apiResult  = examService.selectAll(pageNumNow);
+        System.out.println(apiResult.getData().toString());
         return apiResult;
     }
+
+    @GetMapping("/selectOne/{examId}")
+    public ApiResult selectOne(@PathVariable("examId") String examId) {
+        ApiResult apiResult  = new ApiResult();
+        TempResult tempResult = examService.selectOne(Integer.parseInt(examId));
+        apiResult.setMsg(tempResult.getMsg());
+        if (tempResult.isFlag()) {
+            apiResult.setCode(Code.GET_OK);
+        } else {
+            apiResult.setCode(Code.GET_ERR);
+        }
+        System.out.println(apiResult.getData().toString());
+        return apiResult;
+    }
+
 
 }

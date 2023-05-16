@@ -9,6 +9,7 @@ public class Exam {
     private LocalDateTime startTime;
     private LocalDateTime endTime;
     private Integer status;
+    private Integer isExist;
 
     @Override
     public String toString() {
@@ -19,6 +20,7 @@ public class Exam {
                 ", startTime=" + startTime +
                 ", endTime=" + endTime +
                 ", status=" + status +
+                ", isExist=" + isExist +
                 '}';
     }
 
@@ -68,5 +70,13 @@ public class Exam {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public Integer getIsExist() {
+        return isExist;
+    }
+
+    public void setIsExist(Integer isExist) {
+        this.isExist = isExist;
     }
 }

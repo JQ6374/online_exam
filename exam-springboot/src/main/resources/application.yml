@@ -34,12 +34,17 @@ server:
 pagehelper:
   helper-dialect: mysql
   reasonable: true
+  params: count=countSql
   support-methods-arguments: true
-  params: count=countsql
+  page-size-zero: true
+
 
 mybatis:
   configuration:
-    log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
-
-
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    map-underscore-to-camel-case: true
+    mapper-locations: classpath:com.zz.dao
+  # 开启事务管理器
+    sqlSessionTemplate:
+      executorType: BATCH
 

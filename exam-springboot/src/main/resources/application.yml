@@ -1,0 +1,36 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/online_exam
+    username: root
+    password: dsj1
+    type: com.alibaba.druid.pool.DruidDataSource
+  mail:
+    host: smtp.qq.com  # 服务器 不用修改
+    username: 2410360091@qq.com
+    password: xnkvpquqqpvwecja  #授权码
+    default-encoding: utf-8
+    protocol: smtp
+    port: 25
+    properties:
+      mail.smtp.socketFactory.class: javax.net.ssl.SSLSocketFactory
+  redis:
+    host: localhost
+    port: 6379
+    database: 0
+    jedis:
+     pool:
+      max-active: 8 # 最大连接数
+      max-wait: 1ms # 连接池最大阻塞等待时间
+      max-idle: 4   # 连接池中的最大空闲连接
+      min-idle: 0   # 连接池中的最小空闲连接
+
+my-email:
+  title: "[在线考试系统] 您的账号注册验证码"
+
+server:
+  port: 80
+
+
+
+

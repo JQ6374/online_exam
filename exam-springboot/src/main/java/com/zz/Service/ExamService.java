@@ -14,7 +14,7 @@ public TempResult createExam(Exam exam);
 public   TempResult deleteExam(Integer examId);
 
 //信息更新 时间、试卷。
-    public ApiResult updateExamInfo(Exam exam);
+public ApiResult updateExamInfo(Exam exam);
 
 //查询
 public ApiResult selectAll(String pageNum);

@@ -3,20 +3,32 @@ package com.zz.dao;
 import com.zz.bean.Exam;
 import com.zz.bean.Papers;
 import org.apache.ibatis.annotations.*;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Mapper
 //@Repository
 public interface ExamDao {
+
+
+
+//            e_id
+//            c_id
+//            p_id
+//            name
+//            start_time
+//            end_time
+//            status
+//            is_exist
+
+    @Transactional
     //创建考试
-    @Insert("insert into exam values(null, #{cId}, #{pId}" +
-            "#{name}, #{startTime}, #{endTime}, #{status})")
+    @Insert("insert into exam(c_id,p_id,name,start_time,end_time) values(#{cId},#{pId},#{name},#{startTime},#{endTime})")
     public Integer createExam(Exam exam);
 
     //    修改信息
-    @Update("UPDATE exam set c_id = #{cId},p_id=#{pId},name=#{name}, start_time = #{startTime}," +
-            "end_time=#{endTime} where e_id =#{eId}")
+    @Update("UPDATE exam set c_id = #{cId},p_id=#{pId},name=#{name}, start_time = #{startTime},end_time=#{endTime} where e_id =#{eId}")
     public Integer updateExamInfo(Exam exam);
 
     // 考试开启

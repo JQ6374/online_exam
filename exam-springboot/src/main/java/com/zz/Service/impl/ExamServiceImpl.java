@@ -25,6 +25,7 @@ public class ExamServiceImpl implements ExamService {
     //创建考试
     @Override
     public TempResult createExam(Exam exam) {
+        System.out.println("create Exam print"+exam.toString());
         TempResult tempResult = new TempResult();
         Integer exam1 = examDao.createExam(exam);
         if(exam1 !=0){
@@ -56,6 +57,7 @@ public class ExamServiceImpl implements ExamService {
     //考试信息更改 时间、试卷等。
     @Override
     public ApiResult updateExamInfo(Exam exam) {
+        System.out.println(exam);
         Integer flag = examDao.updateExamInfo(exam);//返回更新后的考试实体
         ApiResult apiResult = new ApiResult();
 

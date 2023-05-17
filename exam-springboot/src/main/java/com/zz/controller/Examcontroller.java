@@ -32,8 +32,9 @@ public class Examcontroller {
         exam.setcId(Integer.parseInt((String) map.get("cid")));
         exam.setpId(Integer.parseInt((String) map.get("pid")));
         exam.setName((String) map.get("name"));
-        String endTime = (String) map.get("end_time");
-        String startTime = (String) map.get("start_time");
+        String endTime = (String) map.get("endTime");
+//        System.out.println(endTime.getClass());
+        String startTime = (String) map.get("startTime");
         //字符串格式化为时间 LocalDateTime类型
         exam.setEndTime(LocalDateTime.parse(endTime, DATE_TIME_FORMATTER));
         exam.setStartTime(LocalDateTime.parse(startTime, DATE_TIME_FORMATTER));
@@ -74,8 +75,8 @@ public class Examcontroller {
         exam.setpId(Integer.parseInt((String) map.get("pid")));
         exam.setcId(Integer.parseInt((String) map.get("cid")));
         exam.setName((String) map.get("name"));
-        String endTime = (String) map.get("end_time");
-        String startTime = (String) map.get("start_time");
+        String endTime = (String) map.get("endTime");
+        String startTime = (String) map.get("startTime");
         //字符串格式化为时间 LocalDateTime类型
         exam.setEndTime(LocalDateTime.parse(endTime, DATE_TIME_FORMATTER));
         exam.setStartTime(LocalDateTime.parse(startTime, DATE_TIME_FORMATTER));

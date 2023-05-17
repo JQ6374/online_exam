@@ -23,7 +23,21 @@ public class TopicController {
     }
 
     @GetMapping("/{uId}")
-    public ApiResult selectByUId(@PathVariable Integer uId){
+    public ApiResult selectByUId(@PathVariable Integer uId) {
         return new ApiResult(Code.GET_OK, topicService.selectByUId(uId), null);
+    }
+
+    @DeleteMapping("/{tId}")
+    public ApiResult delTopic(@PathVariable Integer tId) {
+        TempResult tempResult = topicService.delTopic(tId);
+        return new ApiResult(tempResult.isFlag() ? Code.DELETE_OK : Code.DELETE_ERR,
+                null, tempResult.getMsg());
+    }
+
+    @PutMapping
+    public ApiResult updateTop(@RequestBody Topic topic) {
+        TempResult tempResult = topicService.updateTopic(topic);
+        return new ApiResult(tempResult.isFlag() ? Code.UPDATE_OK : Code.UPDATE_ERR,
+                null, tempResult.getMsg());
     }
 }

@@ -31,4 +31,27 @@ public class TopicServiceImpl implements TopicService {
     public ArrayList<Topic> selectByUId(Integer uId) {
         return topicDao.selectByUId(uId);
     }
+
+    @Override
+    public TempResult delTopic(Integer tId) {
+        TempResult tempResult = new TempResult();
+        Integer integer = topicDao.delTopic(tId);
+        tempResult.setFlag(integer != 0);
+        tempResult.setMsg(tempResult.isFlag() ? "删除成功！" : Code.ERROR_MSG);
+        return tempResult;
+    }
+
+    @Override
+    public TempResult updateTopic(Topic topic) {
+        TempResult tempResult = new TempResult();
+        Integer integer = topicDao.updateTopic(topic);
+        tempResult.setFlag(integer != 0);
+        tempResult.setMsg(tempResult.isFlag() ? "修改成功！" : Code.ERROR_MSG);
+        return tempResult;
+    }
+
+    @Override
+    public TempResult topicToPapers(Integer[] tIds) {
+        return null;
+    }
 }

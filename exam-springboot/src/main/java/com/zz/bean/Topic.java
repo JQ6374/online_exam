@@ -14,6 +14,7 @@ public class Topic {
     private String question;
     private String answer;
     private Integer status;
+    private Integer isExist;
     private LocalDateTime createTime;
 
     @Override
@@ -30,8 +31,17 @@ public class Topic {
                 ", question='" + question + '\'' +
                 ", answer='" + answer + '\'' +
                 ", status=" + status +
+                ", isExist=" + isExist +
                 ", createTime=" + createTime +
                 '}';
+    }
+
+    public Integer getIsExist() {
+        return isExist;
+    }
+
+    public void setIsExist(Integer isExist) {
+        this.isExist = isExist;
     }
 
     public Integer gettId() {

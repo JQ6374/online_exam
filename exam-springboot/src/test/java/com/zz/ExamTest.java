@@ -57,4 +57,18 @@ public class ExamTest {
         examMap.put(exams,pageHelper);
         System.out.println(examMap.toString());
     }
+
+    @Test
+    public  void ExamGet(){
+         List<Exam> exams = examDao.selectAll();
+        for (Exam e:
+        exams) {
+            System.out.println(e);
+        }
+    }
+
+    @Test
+    public  void ExamGetOne(){
+        System.out.println( examDao.selectOne(1));;
+    }
 }

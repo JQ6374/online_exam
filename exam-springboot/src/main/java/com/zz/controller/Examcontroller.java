@@ -81,6 +81,4 @@ public class Examcontroller {
         System.out.println(apiResult.getData().toString());
         return apiResult;
     }
-
-
 }

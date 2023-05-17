@@ -10,6 +10,7 @@ public class Exam {
     private LocalDateTime endTime;
     private Integer status;
     private Integer isExist;
+    private String content;
 
     @Override
     public String toString() {
@@ -21,7 +22,16 @@ public class Exam {
                 ", endTime=" + endTime +
                 ", status=" + status +
                 ", isExist=" + isExist +
+                ", content='" + content + '\'' +
                 '}';
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 
     public Integer geteId() {

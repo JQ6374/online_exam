@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 public class Exam {
     private Integer eId;
     private Integer cId;
+    private Integer pId;
     private String name;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
@@ -17,6 +18,7 @@ public class Exam {
         return "Exam{" +
                 "eId=" + eId +
                 ", cId=" + cId +
+                ", pId=" + pId +
                 ", name='" + name + '\'' +
                 ", startTime=" + startTime +
                 ", endTime=" + endTime +
@@ -24,6 +26,14 @@ public class Exam {
                 ", isExist=" + isExist +
                 ", content='" + content + '\'' +
                 '}';
+    }
+
+    public Integer getpId() {
+        return pId;
+    }
+
+    public void setpId(Integer pId) {
+        this.pId = pId;
     }
 
     public String getContent() {

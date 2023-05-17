@@ -5,7 +5,9 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.zz.Service.ExamService;
 import com.zz.bean.Exam;
+import com.zz.controller.Examcontroller;
 import com.zz.dao.ExamDao;
+import com.zz.utils.result.ApiResult;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +27,8 @@ public class ExamTest {
     private ExamDao examDao;
     @Autowired
     private ExamService examService;
+    @Autowired
+    private Examcontroller examcontroller;
     @Test
     public void ExamCreate(){
          Exam exam = new Exam();
@@ -48,7 +52,7 @@ public class ExamTest {
 
     @Test
     public void ExamPageHelper(){
-        String pageNum = "5";
+        String pageNum = "1";
         Page<?> page = PageHelper.startPage(Integer.parseInt(pageNum), 5);  //设置第几条记录开始，多少条记录为一页
         //通过userService获取user的信息，其sql语句为"select * from user" 但因pagehelp已经注册为插件，所以pagehelp会在原sql语句上增加limit，从而实现分页
         List<Exam> exams = examDao.selectAll();  //因而获得的是分好页的结果集
@@ -70,5 +74,23 @@ public class ExamTest {
     @Test
     public  void ExamGetOne(){
         System.out.println( examDao.selectOne(1));;
+    }
+
+
+    @Test
+    public  void ExamGetAll(){
+         ApiResult apiResult = examcontroller.selectAll("1");
+        System.out.println(apiResult.toString());
+
+    }
+
+
+    @Test
+    public  void ExamUpdateInfo(){
+        Exam exam = new Exam();
+        exam.setpId(2);
+        ApiResult apiResult = examService.updateExamInfo(exam);
+        System.out.println(apiResult.toString());
+
     }
 }

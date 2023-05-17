@@ -21,6 +21,8 @@ public class ExamServiceImpl implements ExamService {
 
     @Autowired
     private ExamDao examDao;
+
+    //创建考试
     @Override
     public TempResult createExam(Exam exam) {
         TempResult tempResult = new TempResult();
@@ -35,6 +37,7 @@ public class ExamServiceImpl implements ExamService {
         return tempResult;
     }
 
+    //注销考试
     @Override
     public TempResult deleteExam(Integer examId) {
         TempResult tempResult = new TempResult();
@@ -47,6 +50,23 @@ public class ExamServiceImpl implements ExamService {
             tempResult.setMsg("删除失败！");
         }
         return tempResult;
+    }
+
+
+    //考试信息更改 时间、试卷等。
+    @Override
+    public ApiResult updateExamInfo(Exam exam) {
+        Integer flag = examDao.updateExamInfo(exam);//返回更新后的考试实体
+        ApiResult apiResult = new ApiResult();
+
+        if (flag != null) {
+            apiResult.setMsg("修改成功");
+            apiResult.setData(exam);
+        } else {
+            apiResult.setMsg("修改失败");
+            apiResult.setData(null);//返回原exam
+        }
+        return  apiResult;
     }
 
     @Override

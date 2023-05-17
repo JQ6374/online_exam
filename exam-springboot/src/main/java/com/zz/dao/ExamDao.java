@@ -10,9 +10,16 @@ import java.util.List;
 //@Repository
 public interface ExamDao {
     //创建考试
-    @Insert("insert into exam values(null, #{cId}, " +
+    @Insert("insert into exam values(null, #{cId}, #{pId}" +
             "#{name}, #{startTime}, #{endTime}, #{status})")
     public Integer createExam(Exam exam);
+
+    //    修改信息
+    @Update("UPDATE exam set c_id = #{cId},p_id=#{pId},name=#{name}, start_time = #{startTime}," +
+            "end_time=#{endTime} where e_id =#{eId}")
+    public Integer updateExamInfo(Exam exam);
+
+    //考试开启
 
 
     //注销考试 is_exist 默认状态为1 注销为0

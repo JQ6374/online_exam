@@ -1,9 +1,21 @@
 package com.zz.bean;
 
+import java.time.LocalDateTime;
+
 public class Papers {
     private Integer pId;
     private String name;
     private String content;
+    private LocalDateTime createTime;
+
+    public Papers() {
+    }
+
+    public Papers(String name, String content, LocalDateTime createTime) {
+        this.name = name;
+        this.content = content;
+        this.createTime = createTime;
+    }
 
     @Override
     public String toString() {
@@ -11,7 +23,16 @@ public class Papers {
                 "pId=" + pId +
                 ", name='" + name + '\'' +
                 ", content='" + content + '\'' +
+                ", createTime=" + createTime +
                 '}';
+    }
+
+    public LocalDateTime getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(LocalDateTime createTime) {
+        this.createTime = createTime;
     }
 
     public Integer getpId() {

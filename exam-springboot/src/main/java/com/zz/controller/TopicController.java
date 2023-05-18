@@ -1,5 +1,6 @@
 package com.zz.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.zz.Service.TopicService;
 import com.zz.bean.Topic;
 import com.zz.utils.Code;
@@ -38,6 +39,23 @@ public class TopicController {
     public ApiResult updateTop(@RequestBody Topic topic) {
         TempResult tempResult = topicService.updateTopic(topic);
         return new ApiResult(tempResult.isFlag() ? Code.UPDATE_OK : Code.UPDATE_ERR,
+                null, tempResult.getMsg());
+    }
+
+    @PostMapping("/topicToPapers")
+    public ApiResult topicToPapers(@RequestBody JSONObject params) {
+        Integer[] tIds = params.getObject("tIds", Integer[].class);
+        String name = params.getString("name");
+        JSONObject topicScore = params.getJSONObject("topicScore");
+        TempResult tempResult = topicService.topicToPapers(tIds, name, topicScore);
+        return new ApiResult(tempResult.isFlag() ? Code.SAVA_OK : Code.SAVA_ERR,
+                null, tempResult.getMsg());
+    }
+
+    @PostMapping("/topicRandomToPapers")
+    public ApiResult topicRandomToPapers(@RequestBody JSONObject params) {
+        TempResult tempResult = topicService.topicToPapers(params);
+        return new ApiResult(tempResult.isFlag() ? Code.SAVA_OK : Code.SAVA_ERR,
                 null, tempResult.getMsg());
     }
 }

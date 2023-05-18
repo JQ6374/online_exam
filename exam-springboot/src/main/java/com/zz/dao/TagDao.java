@@ -11,7 +11,7 @@ import java.util.ArrayList;
 @Mapper
 public interface TagDao {
 
-    @Select("select tag_id, u_id, name from tag where u_id=0||#{uId}")
+    @Select("select tag_id, u_id, name from tag where u_id in (0,#{uId})")
     ArrayList<Tag> selectAll(Integer uId);
 
     @Select("select name from tag where tag_id=#{tagId}")

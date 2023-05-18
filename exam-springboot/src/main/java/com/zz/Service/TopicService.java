@@ -1,5 +1,6 @@
 package com.zz.Service;
 
+import com.alibaba.fastjson.JSONObject;
 import com.zz.bean.Topic;
 import com.zz.utils.result.TempResult;
 import net.sf.jsqlparser.statement.select.Top;
@@ -16,5 +17,7 @@ public interface TopicService {
 
     TempResult updateTopic(Topic topic);
 
-    TempResult topicToPapers(Integer[] tIds);
+    TempResult topicToPapers(Integer[] tIds, String papersName, JSONObject topicScore);
+
+    TempResult topicToPapers(JSONObject params);
 }

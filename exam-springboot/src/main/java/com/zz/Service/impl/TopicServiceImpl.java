@@ -33,6 +33,7 @@ public class TopicServiceImpl implements TopicService {
     @Autowired
     private TopicTypeDao topicTypeDao;
 
+
     @Override
     public TempResult addTopic(Topic topic) {
         TempResult tempResult = new TempResult();
@@ -70,11 +71,8 @@ public class TopicServiceImpl implements TopicService {
     @Override
     public TempResult topicToPapers(Integer[] tIds, String papersName, JSONObject topicScore) {
         JSONObject result = new JSONObject();
-        result.put("1", new ArrayList<>());
-        result.put("2", new ArrayList<>());
-        result.put("3", new ArrayList<>());
-        result.put("4", new ArrayList<>());
-        result.put("5", new ArrayList<>());
+        topicTypeDao.selectAll().forEach(item ->
+                result.put(String.valueOf(item.getTypeId()), new ArrayList<>()));
         TempResult tempResult = new TempResult();
 
         for (Topic topic : topicDao.topicToPapers(tIds)) {

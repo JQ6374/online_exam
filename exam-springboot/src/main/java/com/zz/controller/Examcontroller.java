@@ -9,6 +9,7 @@ import com.zz.bean.Exam;
 import com.zz.utils.Code;
 import com.zz.utils.result.ApiResult;
 import com.zz.utils.result.TempResult;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,14 +20,14 @@ import java.util.Map;
 import java.util.Set;
 
 @RestController
-    @RequestMapping("/api/exam")
+@RequestMapping("/api/exam")
 public class Examcontroller {
     static DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     @Autowired
     private ExamService examService;
 
     @PostMapping("/createExam")
-    public ApiResult createExam(@RequestBody Map<String, Object> map) {
+    public ApiResult createExam(@RequestBody @NotNull Map<String, Object> map) {
 //        读取map数据注入exam
         Exam exam = new Exam();
         exam.setcId(Integer.parseInt((String) map.get("cid")));
@@ -66,8 +67,8 @@ public class Examcontroller {
     }
 
     @PutMapping("/updateExam")
-    public ApiResult updateExamInfo(@RequestBody Map<String, Object> map){
-    //        封装Exam
+    public ApiResult updateExamInfo(@RequestBody Map<String, Object> map) {
+        //        封装Exam
         System.out.println(map.toString());
         Exam exam = new Exam();
 
@@ -82,21 +83,28 @@ public class Examcontroller {
         exam.setStartTime(LocalDateTime.parse(startTime, DATE_TIME_FORMATTER));
         //更新操作
         ApiResult apiResult = examService.updateExamInfo(exam);
-        if (apiResult.getData() != null){
+        if (apiResult.getData() != null) {
             apiResult.setCode(Code.UPDATE_OK);
-        }else {
+        } else {
             apiResult.setCode(Code.UPDATE_ERR);
         }
         return apiResult;
     }
 
+    @GetMapping("/startExam/{examId}")
+    public ApiResult startExam(@PathVariable String examId) {
+        int eId = Integer.parseInt(examId);
+        ApiResult apiResult = examService.startExam(eId);
+        return apiResult;
+    }
+
     @GetMapping("/selectAll/{pageNum}")
     public ApiResult selectAll(@PathVariable("pageNum") String pageNumNow) {
-        ApiResult apiResult  = examService.selectAll(pageNumNow);
-        if(apiResult.getData() !=null){
+        ApiResult apiResult = examService.selectAll(pageNumNow);
+        if (apiResult.getData() != null) {
             apiResult.setMsg("分页查询成功");
             apiResult.setCode(Code.GET_OK);
-        }else {
+        } else {
             apiResult.setMsg("分页查询失败!");
             apiResult.setCode(Code.GET_ERR);
         }

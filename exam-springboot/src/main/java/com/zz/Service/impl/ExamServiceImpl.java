@@ -25,13 +25,13 @@ public class ExamServiceImpl implements ExamService {
     //创建考试
     @Override
     public TempResult createExam(Exam exam) {
-        System.out.println("create Exam print"+exam.toString());
+        System.out.println("create Exam print" + exam.toString());
         TempResult tempResult = new TempResult();
         Integer exam1 = examDao.createExam(exam);
-        if(exam1 !=0){
+        if (exam1 != 0) {
             tempResult.setFlag(true);
             tempResult.setMsg("创建成功！");
-        }else {
+        } else {
             tempResult.setFlag(false);
             tempResult.setMsg("创建失败！");
         }
@@ -43,10 +43,10 @@ public class ExamServiceImpl implements ExamService {
     public TempResult deleteExam(Integer examId) {
         TempResult tempResult = new TempResult();
         Integer exam1 = examDao.deleteExam(examId);
-        if(exam1 !=0){
+        if (exam1 != 0) {
             tempResult.setFlag(true);
             tempResult.setMsg("删除成功！");
-        }else {
+        } else {
             tempResult.setFlag(false);
             tempResult.setMsg("删除失败！");
         }
@@ -68,8 +68,54 @@ public class ExamServiceImpl implements ExamService {
             apiResult.setMsg("修改失败");
             apiResult.setData(null);//返回原exam
         }
-        return  apiResult;
+        return apiResult;
     }
+
+    //    考试开启
+    @Override
+    public ApiResult updateExamStatusOpen(Integer eId) {
+        ApiResult apiResult = new ApiResult();
+        Integer flag = examDao.updateExamStatusOpen(eId);
+        if (flag != 0) {
+            apiResult.setMsg("开启成功");
+            apiResult.setCode(Code.UPDATE_OK);
+        } else {
+            apiResult.setMsg("开启失败");
+            apiResult.setCode(Code.UPDATE_ERR);
+        }
+        return apiResult;
+    }
+
+    //考试关闭
+    @Override
+    public ApiResult updateExamStatusClose(Integer eId) {
+        ApiResult apiResult = new ApiResult();
+        Integer flag = examDao.updateExamStatusClose(eId);
+        if (flag != 0) {
+            apiResult.setMsg("关闭成功");
+        } else {
+            apiResult.setMsg("关闭失败");
+        }
+        return apiResult;
+
+    }
+
+    //开始考试  通过eid获取本次考试papers的pid，用pid查询papers，papers中有content，封装入exam中
+    public ApiResult startExam(Integer eId) {
+        Exam exam = examDao.selectOne(eId);
+        ApiResult apiResult = new ApiResult();
+        apiResult.setData(exam.getContent());
+        if (apiResult.getData()!=null){
+            apiResult.setMsg("查找试卷成功");
+            apiResult.setCode(Code.GET_OK);
+        }
+        else {
+            apiResult.setMsg("查找试卷失败");
+            apiResult.setCode(Code.GET_ERR);
+        }
+        return apiResult;
+    }
+
 
     @Override
     public ApiResult selectAll(String pageNumNow) {
@@ -80,8 +126,8 @@ public class ExamServiceImpl implements ExamService {
         List<Exam> exams = examDao.selectAll();  //因而获得的是分好页的结果集
         System.out.println(exams.toString());
         PageInfo<?> pageHelper = page.toPageInfo(); //获取页面信息的对象，里面封装了许多页面的信息 如：总条数，当前页码，需显示的导航页等等
-        Map<List<Exam>,PageInfo> examMap = new HashMap<>();
-        examMap.put(exams,pageHelper);
+        Map<List<Exam>, PageInfo> examMap = new HashMap<>();
+        examMap.put(exams, pageHelper);
         apiResult.setData(examMap);
         return apiResult;
     }
@@ -93,16 +139,15 @@ public class ExamServiceImpl implements ExamService {
          */
         Exam exam = examDao.selectOne(examId);
         ApiResult apiResult = new ApiResult();
-        if (exam != null){
+        if (exam != null) {
             apiResult.setData(exam);
             apiResult.setCode(Code.GET_OK);
             apiResult.setMsg("查询成功！");
-        }
-        else {
+        } else {
             apiResult.setData(null);
             apiResult.setCode(Code.GET_ERR);
             apiResult.setMsg("查询失败！");
         }
-        return  apiResult;
+        return apiResult;
     }
 }

@@ -11,17 +11,6 @@ import java.util.List;
 //@Repository
 public interface ExamDao {
 
-
-
-//            e_id
-//            c_id
-//            p_id
-//            name
-//            start_time
-//            end_time
-//            status
-//            is_exist
-
     @Transactional
     //创建考试
     @Insert("insert into exam(c_id,p_id,name,start_time,end_time) values(#{cId},#{pId},#{name},#{startTime},#{endTime})")
@@ -31,7 +20,14 @@ public interface ExamDao {
     @Update("UPDATE exam set c_id = #{cId},p_id=#{pId},name=#{name}, start_time = #{startTime},end_time=#{endTime} where e_id =#{eId}")
     public Integer updateExamInfo(Exam exam);
 
+    //    考试的状态变更
     // 考试开启
+    @Update("UPDATE exam set status = 1 where e_id =#{eId}")
+    public Integer updateExamStatusOpen(Integer eId);
+
+    // 考试关闭
+    @Update("UPDATE exam set status = 0 where e_id =#{eId}")
+    public Integer updateExamStatusClose(Integer eId);
 
 
     // 注销考试 is_exist 默认状态为1 注销为0

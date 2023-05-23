@@ -6,7 +6,7 @@ public class AnswerUtils {
     public static String formatAnswer(int typeId, String answer) {
         JSONObject result = new JSONObject();
         result.put("typeId", typeId);
-        result.put("answer", answer);
+        result.put("answerContent", answer);
         return result.toString();
     }
 

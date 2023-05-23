@@ -5,7 +5,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.zz.Service.ExamService;
 import com.zz.bean.Exam;
-import com.zz.controller.Examcontroller;
+import com.zz.controller.ExamController;
 import com.zz.dao.ExamDao;
 import com.zz.utils.result.ApiResult;
 import org.junit.Test;
@@ -28,7 +28,7 @@ public class ExamTest {
     @Autowired
     private ExamService examService;
     @Autowired
-    private Examcontroller examcontroller;
+    private ExamController examcontroller;
     @Test
     public void ExamCreate(){
          Exam exam = new Exam();

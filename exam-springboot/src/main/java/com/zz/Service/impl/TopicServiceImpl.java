@@ -12,7 +12,6 @@ import com.zz.dao.TopicTypeDao;
 import com.zz.utils.AnswerUtils;
 import com.zz.utils.Code;
 import com.zz.utils.result.TempResult;
-import net.sf.jsqlparser.statement.select.Top;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -76,7 +75,6 @@ public class TopicServiceImpl implements TopicService {
         TempResult tempResult = new TempResult();
 
         for (Topic topic : topicDao.topicToPapers(tIds)) {
-            topic.setAnswer(AnswerUtils.formatAnswer(topic.getTypeId(), topic.getAnswer()));
             result.getJSONArray(String.valueOf(topic.getTypeId()))
                     .add(new PapersContent(
                             topic.gettId(),

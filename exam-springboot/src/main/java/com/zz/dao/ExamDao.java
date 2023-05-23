@@ -10,18 +10,6 @@ import java.util.List;
 @Mapper
 //@Repository
 public interface ExamDao {
-
-
-
-//            e_id
-//            c_id
-//            p_id
-//            name
-//            start_time
-//            end_time
-//            status
-//            is_exist
-
     @Transactional
     //创建考试
     @Insert("insert into exam(c_id,p_id,name,start_time,end_time) values(#{cId},#{pId},#{name},#{startTime},#{endTime})")
@@ -40,26 +28,20 @@ public interface ExamDao {
 
     // 查询所有 All 会获取papers的内容
     @Select("select * from exam")
-    @Results(
-            {
-                    @Result(property = "content", column = "p_id",
-                            javaType = Papers.class,
-                            one = @One(select = "com.zz.dao.PaperDao.getPaperContent")
-                    )
-            }
-    )
+    @Results({
+            @Result(property = "content", column = "p_id",
+                    one = @One(select = "com.zz.dao.PapersDao.getPaperContent")
+            )
+    })
     public List<Exam> selectAll();
 
-
     //    查询ById
-    @Select("select * from exam where e_id=#{param01}")
-    @Results(
-            {
-                    @Result(property = "content", column = "p_id",
-                            javaType = Papers.class,
-                            one = @One(select = "com.zz.dao.PaperDao.getPaperContent")
-                    )
-            }
-    )
-    public Exam selectOne(@Param("param01") Integer examId);
+    @Select("select * from exam where e_id=#{eId}")
+    @Results({
+            @Result(property = "content", column = "p_id",
+                    javaType = Papers.class,
+                    one = @One(select = "com.zz.dao.PapersDao.getPaperContent")
+            )
+    })
+    public Exam selectOne(Integer eId);
 }

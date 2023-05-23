@@ -1,8 +1,5 @@
 package com.zz.controller;
 
-import com.github.pagehelper.Page;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import com.zz.Service.ExamService;
 
 import com.zz.bean.Exam;
@@ -14,13 +11,11 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 @RestController
-    @RequestMapping("/api/exam")
-public class Examcontroller {
+@RequestMapping("/api/exam")
+public class ExamController {
     static DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     @Autowired
     private ExamService examService;
@@ -66,8 +61,8 @@ public class Examcontroller {
     }
 
     @PutMapping("/updateExam")
-    public ApiResult updateExamInfo(@RequestBody Map<String, Object> map){
-    //        封装Exam
+    public ApiResult updateExamInfo(@RequestBody Map<String, Object> map) {
+        //        封装Exam
         System.out.println(map.toString());
         Exam exam = new Exam();
 
@@ -82,9 +77,9 @@ public class Examcontroller {
         exam.setStartTime(LocalDateTime.parse(startTime, DATE_TIME_FORMATTER));
         //更新操作
         ApiResult apiResult = examService.updateExamInfo(exam);
-        if (apiResult.getData() != null){
+        if (apiResult.getData() != null) {
             apiResult.setCode(Code.UPDATE_OK);
-        }else {
+        } else {
             apiResult.setCode(Code.UPDATE_ERR);
         }
         return apiResult;
@@ -92,15 +87,7 @@ public class Examcontroller {
 
     @GetMapping("/selectAll/{pageNum}")
     public ApiResult selectAll(@PathVariable("pageNum") String pageNumNow) {
-        ApiResult apiResult  = examService.selectAll(pageNumNow);
-        if(apiResult.getData() !=null){
-            apiResult.setMsg("分页查询成功");
-            apiResult.setCode(Code.GET_OK);
-        }else {
-            apiResult.setMsg("分页查询失败!");
-            apiResult.setCode(Code.GET_ERR);
-        }
-        return apiResult;
+        return examService.selectAll(pageNumNow);
     }
 
     @GetMapping("/selectOne/{examId}")

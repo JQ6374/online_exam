@@ -10,7 +10,7 @@
 
 <script setup lang="ts">
 import {watch, ref, nextTick} from 'vue';
-import useLayOutSettingStore from '@/store/modules/setting';
+import useLayOutSettingStore from '@/store/modules/layoutTabBar.ts';
 
 let layOutSettingStore = useLayOutSettingStore();
 

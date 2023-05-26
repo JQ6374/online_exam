@@ -11,6 +11,7 @@ import com.zz.dao.TopicDao;
 import com.zz.dao.TopicTypeDao;
 import com.zz.utils.AnswerUtils;
 import com.zz.utils.Code;
+import com.zz.utils.CourseUtils;
 import com.zz.utils.result.TempResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -61,6 +62,7 @@ public class TopicServiceImpl implements TopicService {
     @Override
     public TempResult updateTopic(Topic topic) {
         TempResult tempResult = new TempResult();
+        topic.setAnswer(AnswerUtils.formatAnswer(topic.getTypeId(), topic.getAnswer()));
         Integer integer = topicDao.updateTopic(topic);
         tempResult.setFlag(integer != 0);
         tempResult.setMsg(tempResult.isFlag() ? "修改成功！" : Code.ERROR_MSG);

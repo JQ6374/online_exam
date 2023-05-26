@@ -14,3 +14,20 @@ export interface Role {
   rId: number,
   name: string
 }
+
+export interface Topic {
+  index: number,
+  tId: number,
+  uId: number,
+  typeId: number,
+  typeName: string,
+  tagId: number,
+  tagName: string,
+  difficultyId: number,
+  difficultyName: string,
+  question: string,
+  answer: string,
+  status: string,
+  isExist: string,
+  createTime: string
+}

@@ -12,7 +12,6 @@
             :default-active="$route.name"
             active-text-color="#3b82f6"
             text-color="#6b7280">
-
           <!--          根据路由动态生成菜单-->
           <Menu :menuList="userStore.menuRoutes"></Menu>
         </el-menu>
@@ -48,14 +47,14 @@ import Main from './layout/main/index.vue';
 import TabBar from './layout/tabbar/index.vue';
 //获取用户相关的小仓库
 import useUserStore from '@/store/modules/user';
-import useLayOutSettingStore from '@/store/modules/setting';
-
+import useLayOutSettingStore from '@/store/modules/layoutTabBar.ts';
 //获取路由对象
 const $route = useRoute();
 //获取仓库
 const userStore = useUserStore();
 userStore.constantRouterChoice($route.path.split('/')[1])
 const LayOutSettingStore = useLayOutSettingStore();
+
 
 </script>
 

@@ -1,17 +1,11 @@
 <template>
-  <el-container>
-    <el-header>
-      <span>课表列表</span>
-    </el-header>
-    <el-main>
-      <el-table
-          :data="tableData"
-          stripe
-          style="width: 100%">
-        <el-table-column align="center" prop="index" label="序号"/>
+  <my-el-top-bottom title="课程列表">
+    <template #main>
+      <el-table width="100%" :height=useMainHeight().mainHeight :data="tableData" stripe>
+        <el-table-column align="center" prop="index" label="序号" fixed/>
         <el-table-column align="center" prop="name" label="课程名称"/>
         <el-table-column align="center" prop="courseCode" label="课程口令"/>
-        <el-table-column align="center" prop="createTime" label="创建时间"/>
+        <el-table-column align="center" prop="createTime" label="创建时间" sortable/>
         <el-table-column align="center" label="操作">
           <template #default="scope">
             <el-button
@@ -40,26 +34,28 @@
           </el-form-item>
         </el-form>
         <template #footer>
-          <span class="dialog-footer">
-            <el-button @click="dialogFormVisible = false">取消</el-button>
-            <el-button type="primary" @click="updateName">
-              更改
-            </el-button>
-          </span>
+                <span class="dialog-footer">
+                  <el-button @click="dialogFormVisible = false">取消</el-button>
+                  <el-button type="primary" @click="updateName">
+                    更改
+                  </el-button>
+                </span>
         </template>
       </el-dialog>
-    </el-main>
-  </el-container>
+    </template>
+  </my-el-top-bottom>
 </template>
 
 <script setup lang="ts">
 import myRequest from "@/utils/request.ts";
 import {reactive, ref, onMounted} from 'vue'
 import {ApiResult} from "@/utils/type.ts";
-import {Action, ElMessage, ElMessageBox, ElNotification} from "element-plus";
+import {ElMessageBox, ElNotification} from "element-plus";
 import request from "@/utils/request.ts";
 import {Code} from "@/utils/Code.ts";
-import myElNotification from "@/hook/requestTooltip.ts";
+import {myElNotification} from "@/hook/requestTooltip.ts";
+import MyElTopBottom from "@/views/admin/components/MyElTopBottom.vue";
+import {useMainHeight} from "@/store/modules/mainHeight.ts";
 
 onMounted(() => {
   getTableData();
@@ -95,34 +91,26 @@ const handleEdit = (row) => {
     form[key] = row[key];
   }
 }
-const updateName = () => {
+const updateName = async () => {
   dialogFormVisible.value = false;
   console.log(form.valueOf())
-  request
-      .put<any, ApiResult>(
-          '/updateName',
-          {cId: form.cId, name: form.name}
-      )
-      .then((res) => {
-        console.log(res)
-        myElNotification(res, Code.UPDATE_OK, '修改');
-      })
+  try {
+    const res = await request.put<any, ApiResult>('/course/updateName', form)
+    myElNotification(res, Code.UPDATE_OK, '修改');
+    await getTableData();
+  } catch (e) {
+    console.log(e)
+  }
 }
 const handleDelete = (row) => {
   ElMessageBox.confirm('此操作将永久删除数据, 是否继续?', '提示', {
     confirmButtonText: '确定',
     cancelButtonText: '取消',
     type: 'warning'
-  }).then(() => {
-    request.delete<any, ApiResult>(`/course/${row.cId}`)
-        .then(res => {
-          const isSuccess = res.code == Code.DELETE_OK
-          ElNotification({
-            title: isSuccess ? '删除成功' : '删除失败',
-            message: isSuccess ? res.msg : Code.ERROR_MSG,
-            type: isSuccess ? 'success' : 'error',
-          })
-        })
+  }).then(async () => {
+    const res = await request.delete<any, ApiResult>(`/course/${row.cId}`)
+    myElNotification(res, Code.DELETE_OK, '删除');
+    await getTableData();
   }).catch(() => {
     // 点击取消按钮后的回调函数
     ElNotification({
@@ -136,18 +124,6 @@ const handleDelete = (row) => {
 </script>
 
 <style scoped lang="scss">
-.el-header {
-  display: flex;
-  height: 40px;
-  align-items: center;
-  border-left: 5px solid #3b82f6;
-
-  span {
-    padding-right: 15px;
-    font-size: 24px;
-  }
-}
-
 .el-button--text {
   margin-right: 15px;
 }

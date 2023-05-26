@@ -21,9 +21,8 @@ public class Test {
         List<String> answerList = SentenceSeparation.sentenceList(answer);
         double scorePointSim = ScorePointSim.getScorePointSim(answerCaseList, answerList);
         System.out.println(scorePointSim);
-        int maxScore = 5;
-        double score = 0;
-        score = Math.floor((scorePointSim * maxScore) + 0.5);
+        double maxScore = 5;
+        double score = Math.floor((scorePointSim * maxScore) + 0.5);
         System.out.println(score);
     }
 }

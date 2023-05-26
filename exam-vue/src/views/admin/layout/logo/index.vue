@@ -8,7 +8,7 @@
 <script setup lang="ts">
 //引入设置标题与logo这配置文件
 import setting from "@/setting.ts";
-import useLayOutSettingStore from "@/store/modules/setting.ts";
+import useLayOutSettingStore from "@/store/modules/layoutTabBar.ts";
 const layOutSettingStore =  useLayOutSettingStore()
 
 </script>

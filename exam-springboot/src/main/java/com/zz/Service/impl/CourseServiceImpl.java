@@ -5,17 +5,27 @@ import com.zz.bean.Course;
 import com.zz.dao.CourseDao;
 import com.zz.utils.Code;
 import com.zz.utils.CourseUtils;
+import com.zz.utils.result.ApiResult;
 import com.zz.utils.result.TempResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 @Service
 public class CourseServiceImpl implements CourseService {
 
     @Autowired
     private CourseDao courseDao;
+
+    @Override
+    public ApiResult selectByUId(Integer uId) {
+        ArrayList<Course> courses = courseDao.selectByUId(uId);
+        System.out.println(courses);
+        boolean isEmpty = courses.isEmpty();
+        return new ApiResult(Code.GET_OK, courses, isEmpty ? "查询成功！" : "查询结果为空！");
+    }
 
     @Override
     public boolean addCourse(Course course) {

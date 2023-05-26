@@ -1,2 +1,30 @@
-// 全局变量的定义
-$color: red
+//项目提供scss全局变量
+
+// admin-start
+// 整个页面的内边距
+$base-page-padding: 30px;
+// 元素的弧度
+$base-item-radius: 15px;
+//左侧的菜单的宽度
+$base-menu-width: 260px;
+//背景色
+$base-background-color: #f3f4f6;
+//元素色
+$item-background-color: #ffffff;
+
+
+// 顶部导航的高度
+$base-tabbar-height: 55px;
+
+//左侧菜单logo栏高度设置
+$base-menu-logo-height: 50px;
+//左侧菜单logo图片的高度设置
+$base-logo-img-height: 30px;
+//左侧菜单logo右侧文字大小
+$base-logo-title-fontSize: 20px;
+
+
+//左侧菜单缩小的后的宽度
+$base-menu-min-width: calc($base-menu-logo-height + 30px);
+
+// admin-end

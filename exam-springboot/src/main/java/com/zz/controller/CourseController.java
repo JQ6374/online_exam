@@ -17,6 +17,11 @@ public class CourseController {
     @Autowired
     private CourseService courseService;
 
+    @GetMapping("/{uId}")
+    public ApiResult selectByUId(@PathVariable Integer uId) {
+        return courseService.selectByUId(uId);
+    }
+
     @PostMapping("/add")
     public ApiResult addCourse(@RequestBody Course course) {
         System.out.println(course);

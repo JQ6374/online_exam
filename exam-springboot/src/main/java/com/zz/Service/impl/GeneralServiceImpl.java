@@ -2,9 +2,11 @@ package com.zz.Service.impl;
 
 import com.zz.Service.GeneralService;
 import com.zz.bean.Difficulty;
+import com.zz.bean.Role;
 import com.zz.bean.Tag;
 import com.zz.bean.TopicType;
 import com.zz.dao.DifficultyDao;
+import com.zz.dao.RoleDao;
 import com.zz.dao.TagDao;
 import com.zz.dao.TopicTypeDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,8 @@ public class GeneralServiceImpl implements GeneralService {
     private TopicTypeDao topicTypeDao;
     @Autowired
     private DifficultyDao difficultyDao;
+    @Autowired
+    private RoleDao roleDao;
 
     @Override
     public ArrayList<Tag> getTagList(Integer uId) {
@@ -35,5 +39,10 @@ public class GeneralServiceImpl implements GeneralService {
     @Override
     public ArrayList<Difficulty> getDifficultyList() {
         return difficultyDao.selectAll();
+    }
+
+    @Override
+    public ArrayList<Role> getRoleList() {
+        return roleDao.selectAll();
     }
 }

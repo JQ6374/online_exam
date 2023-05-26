@@ -1,6 +1,7 @@
 package com.zz.Service;
 
 import com.zz.bean.Difficulty;
+import com.zz.bean.Role;
 import com.zz.bean.Tag;
 import com.zz.bean.TopicType;
 
@@ -13,4 +14,6 @@ public interface GeneralService {
     ArrayList<TopicType> getTypeList();
 
     ArrayList<Difficulty> getDifficultyList();
+
+    ArrayList<Role> getRoleList();
 }

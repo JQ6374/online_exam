@@ -1,4 +1,6 @@
 spring:
+  jackson:
+    date-format: yyyy-MM-dd
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/online_exam
@@ -25,6 +27,7 @@ spring:
         max-idle: 4   # 连接池中的最大空闲连接
         min-idle: 0   # 连接池中的最小空闲连接
 
+# 分页插件
 pagehelper:
   helper-dialect: mysql
   reasonable: true
@@ -40,6 +43,7 @@ server:
 
 mybatis:
   configuration:
+    # 开启sql日志
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
     mapper-locations: classpath:com.zz.dao
     map-underscore-to-camel-case: true

@@ -1,9 +1,11 @@
 package com.zz.Service.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.zz.Service.UserService;
 import com.zz.bean.User;
 import com.zz.dao.UserDao;
 import com.zz.utils.Code;
+import com.zz.utils.result.ApiResult;
 import com.zz.utils.result.TempResult;
 import com.zz.utils.EmailUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,19 +47,24 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public TempResult login(User user) {
+    public ApiResult login(User user) {
         ArrayList<User> userLis = userDao.selectByEmail(user);
-        TempResult tempResult = new TempResult();
+        ApiResult apiResult = new ApiResult();
         if (userLis.isEmpty()) {
-            tempResult.setFlag(false);
-            tempResult.setMsg("账号不存在！");
+            apiResult.setCode(Code.GET_ERR);
+            apiResult.setMsg("账号不存在！");
         } else {
             User rightUser = userLis.get(0);
             boolean isSucceed = encoder.matches(user.getPassword(), rightUser.getPassword());
-            tempResult.setFlag(isSucceed);
-            tempResult.setMsg(isSucceed ? "登录成功！" : "密码错误！");
+            apiResult.setCode(isSucceed ? Code.GET_OK : Code.GET_ERR);
+            JSONObject data = new JSONObject();
+            data.put("uId", rightUser.getuId());
+            data.put("username", rightUser.getUsername());
+            data.put("email", rightUser.getEmail());
+            apiResult.setData(data);
+            apiResult.setMsg(isSucceed ? "登录成功！" : "密码错误！");
         }
-        return tempResult;
+        return apiResult;
     }
 
     public TempResult updatePassword(User user) {

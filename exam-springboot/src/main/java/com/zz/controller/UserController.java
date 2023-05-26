@@ -23,7 +23,7 @@ public class UserController {
         TempResult tempResult = userService.register(user);
         ApiResult apiResult = new ApiResult();
         if (tempResult.isFlag()) {
-            apiResult.setCode(Code.SAVA_OK);
+                apiResult.setCode(Code.SAVA_OK);
         } else {
             apiResult.setCode(Code.SAVA_ERR);
         }
@@ -33,11 +33,10 @@ public class UserController {
 
     @PostMapping("/login")
     public ApiResult login(@RequestBody User user) {
-        TempResult tempResult = userService.login(user);
-        return new ApiResult(Code.GET_OK, null, tempResult.getMsg());
+        return userService.login(user);
     }
 
-    @PostMapping("/updatePassword")
+    @PutMapping("/updatePassword")
     public ApiResult updatePassword(@RequestBody User user) {
         TempResult tempResult = userService.updatePassword(user);
         return new ApiResult(Code.UPDATE_OK, null, tempResult.getMsg());

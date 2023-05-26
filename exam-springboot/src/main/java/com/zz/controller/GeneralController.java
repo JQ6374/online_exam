@@ -31,4 +31,9 @@ public class GeneralController {
     public ApiResult getDifficultyList() {
         return new ApiResult(Code.GET_OK, generalService.getDifficultyList(), null);
     }
+
+    @GetMapping("/role")
+    public ApiResult getRoleList() {
+        return new ApiResult(Code.GET_OK, generalService.getRoleList(), null);
+    }
 }

@@ -3,8 +3,13 @@ package com.zz.dao;
 import com.zz.bean.Course;
 import org.apache.ibatis.annotations.*;
 
+import java.util.ArrayList;
+
 @Mapper
 public interface CourseDao {
+
+    @Select("select * from course where u_id=#{uId}")
+    ArrayList<Course> selectByUId(Integer uId);
 
     @Insert("insert into course values(null,#{uId},#{name},#{courseCode},#{createTime},1)")
     boolean addCourse(Course course);

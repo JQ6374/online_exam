@@ -1,5 +1,6 @@
 package com.zz.Service.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.zz.Service.CourseService;
 import com.zz.bean.Course;
 import com.zz.dao.CourseDao;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class CourseServiceImpl implements CourseService {
@@ -63,6 +65,38 @@ public class CourseServiceImpl implements CourseService {
         }
         return tempResult;
     }
+
+    /**
+     * @param uId 教师所教授课程cid的的列表
+     * @return 返回apiresult
+     */
+    public ApiResult selectStudentAndCourse(Integer uId) {
+        ArrayList<JSONObject> jsonObjects = courseDao.selectStudentAndCourse(uId);
+        ApiResult apiResult = new ApiResult();
+        apiResult.setData(jsonObjects);
+        if (apiResult.getData() != null) {
+            apiResult.setCode(Code.GET_OK);
+            apiResult.setMsg("查询成功");
+        } else {
+            apiResult.setCode(Code.GET_ERR);
+            apiResult.setMsg("查询失败");
+        }
+        return apiResult;
+    }
+//    @Override
+//    public ApiResult selectStudentAndCourse(List<Integer> cIdList) {
+//        ArrayList<JSONObject> jsonObjects = courseDao.selectStudentAndCourse(cIdList);
+//        ApiResult apiResult = new ApiResult();
+//        apiResult.setData(jsonObjects);
+//        if (apiResult.getData() != null) {
+//            apiResult.setCode(Code.GET_OK);
+//            apiResult.setMsg("查询成功");
+//        } else {
+//            apiResult.setCode(Code.GET_ERR);
+//            apiResult.setMsg("查询失败");
+//        }
+//        return apiResult;
+//    }
 
 
 }

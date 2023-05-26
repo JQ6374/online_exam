@@ -22,4 +22,5 @@ public interface UserDao {
     @Update("update user set password=#{password} where email=#{email} and r_id=#{rId}")
     Integer updateUser(User user);
 
+
 }

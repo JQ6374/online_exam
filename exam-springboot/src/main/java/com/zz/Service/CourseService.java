@@ -4,7 +4,7 @@ import com.zz.bean.Course;
 import com.zz.utils.result.ApiResult;
 import com.zz.utils.result.TempResult;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public interface CourseService {
 
@@ -17,5 +17,12 @@ public interface CourseService {
     boolean updateName(Course course);
 
     TempResult joinCourse(Integer uId, String code);
+
+    /**
+     *
+     * @param uId 教师的uId
+     * @return Apiresult中data为ArrayList<JsonObject>
+     */
+    ApiResult selectStudentAndCourse(Integer uId);
 
 }

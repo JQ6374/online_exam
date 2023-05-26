@@ -8,6 +8,7 @@ import com.zz.utils.result.TempResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -50,5 +51,14 @@ public class CourseController {
         TempResult tempResult = courseService.joinCourse(Integer.valueOf(params.get("uId")), params.get("courseCode"));
         return new ApiResult(tempResult.isFlag() ? Code.SAVA_OK : Code.SAVA_ERR,
                 null, tempResult.getMsg());
+    }
+
+    /**
+     *
+     * @param uId 由userController传入
+     * @return 返回ApiResult
+     */
+    public ApiResult selectStudentAndCourse(Integer uId){
+        return courseService.selectStudentAndCourse(uId);
     }
 }

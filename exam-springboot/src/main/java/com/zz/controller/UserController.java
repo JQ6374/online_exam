@@ -16,7 +16,20 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private CourseController courseController;
 
+    /**
+     *
+     * @param uid 该uid为教师的uid 通过教师uid获取cid，通过cid获取学生的uid，获取到所有的学生信息
+     * @return 返回学生信息列表
+     */
+    @GetMapping("/Student/{uid}")
+    public ApiResult getStudentList(@PathVariable("uid") String uid){
+        int idTeacher = Integer.parseInt(uid);
+        ApiResult apiResult = courseController.selectStudentAndCourse(idTeacher);
+        return apiResult;
+    }
     @PostMapping("/register")
     public ApiResult register(@RequestBody User user) {
         user.setRegisterTime(LocalDateTime.now());

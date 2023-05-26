@@ -30,7 +30,7 @@ public class CourseController {
                 flag ? "课程创建成功！" : "课程创建失败！");
     }
 
-    @PostMapping("/updateName")
+    @PutMapping("/updateName")
     public ApiResult updateName(@RequestBody Course course) {
         boolean flag = courseService.updateName(course);
         return new ApiResult(flag ? Code.UPDATE_OK : Code.UPDATE_ERR, null,

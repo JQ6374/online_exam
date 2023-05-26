@@ -24,7 +24,7 @@ public class CourseServiceImpl implements CourseService {
         ArrayList<Course> courses = courseDao.selectByUId(uId);
         System.out.println(courses);
         boolean isEmpty = courses.isEmpty();
-        return new ApiResult(Code.GET_OK, courses, isEmpty ? "查询成功！" : "查询结果为空！");
+        return new ApiResult(Code.GET_OK, courses, !isEmpty ? "查询成功！" : "查询结果为空！");
     }
 
     @Override

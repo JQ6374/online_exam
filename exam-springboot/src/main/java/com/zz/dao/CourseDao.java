@@ -8,7 +8,7 @@ import java.util.ArrayList;
 @Mapper
 public interface CourseDao {
 
-    @Select("select * from course where u_id=#{uId}")
+    @Select("select * from course where u_id=#{uId} and is_exist=1")
     ArrayList<Course> selectByUId(Integer uId);
 
     @Insert("insert into course values(null,#{uId},#{name},#{courseCode},#{createTime},1)")

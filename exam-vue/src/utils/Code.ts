@@ -6,5 +6,6 @@ export enum Code {
   SAVA_ERR = 20010,
   DELETE_ERR = 20020,
   UPDATE_ERR = 20030,
-  GET_ERR = 20040
+  GET_ERR = 20040,
+  ERROR_MSG = "服务器繁忙，请稍后再试！"
 }

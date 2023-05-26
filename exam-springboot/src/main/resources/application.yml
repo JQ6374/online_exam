@@ -5,7 +5,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/online_exam
     username: root
-    password: "000000"
+    password: dsj1
     type: com.alibaba.druid.pool.DruidDataSource
   mail:
     host: smtp.qq.com  # 服务器 不用修改

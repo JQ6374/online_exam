@@ -1,5 +1,6 @@
 package com.zz.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.zz.Service.CourseService;
 import com.zz.bean.Course;
 import com.zz.utils.Code;
@@ -7,8 +8,6 @@ import com.zz.utils.result.ApiResult;
 import com.zz.utils.result.TempResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -23,9 +22,15 @@ public class CourseController {
         return courseService.selectByUId(uId);
     }
 
+    @PutMapping("/updateStudentByCourse")
+    public ApiResult updateStudentByCourse(@RequestBody JSONObject param) {
+        return courseService.updateStudentByCourse(
+                param.getInteger("cId"),
+                param.getInteger("ucId"));
+    }
+
     @PostMapping("/add")
     public ApiResult addCourse(@RequestBody Course course) {
-        System.out.println(course);
         boolean flag = courseService.addCourse(course);
         return new ApiResult(flag ? Code.SAVA_OK : Code.SAVA_ERR, null,
                 flag ? "课程创建成功！" : "课程创建失败！");
@@ -53,12 +58,9 @@ public class CourseController {
                 null, tempResult.getMsg());
     }
 
-    /**
-     *
-     * @param uId 由userController传入
-     * @return 返回ApiResult
-     */
-    public ApiResult selectStudentAndCourse(Integer uId){
-        return courseService.selectStudentAndCourse(uId);
+    @GetMapping("/{uId}/{courseName}")
+    public ApiResult searchCourseByName(@PathVariable Integer uId,
+                                @PathVariable String courseName) {
+        return courseService.searchCourseByName(uId, courseName);
     }
 }

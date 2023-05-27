@@ -1,5 +1,11 @@
 <template>
-  <my-el-top-bottom title="题目列表">
+  <my-el-top-bottom
+      title="题目列表"
+      placeholder="根据题型或者标签或者难度或者题目查找"
+      isSearch
+      requestUrl="/topic"
+      @update="updateTableData"
+  >
     <template #main>
       <el-table
           width="100%"
@@ -7,7 +13,7 @@
           :data="tableData"
           stripe
           style="width: 100%">
-        <el-table-column align="center" prop="index" label="序号" width="80"/>
+        <el-table-column align="center" prop="tId" label="题目号" width="80"/>
         <el-table-column align="center" prop="typeName" label="题型" width="100" sortable/>
         <el-table-column align="center" prop="tagName" label="标签" width="100" sortable/>
         <el-table-column align="center" prop="difficultyName" label="难度" width="100" sortable/>
@@ -86,22 +92,28 @@ import {onMounted, reactive, ref} from "vue";
 import myRequest from "@/utils/request.ts";
 import {ApiResult, Topic} from "@/utils/type.ts";
 import request from "@/utils/request.ts";
-import {myElNotification} from "@/hook/requestTooltip.ts";
+import {MyElNotification} from "@/hook/requestTooltip.ts";
 import {Code} from "@/utils/Code.ts";
 import {ElMessageBox, ElNotification} from "element-plus";
 import {useMainHeight} from "@/store/modules/mainHeight.ts";
+import useUserStore from "@/store/modules/user.ts";
+import setting from "@/setting.ts";
+
+const userStore = useUserStore();
+
+const updateTableData = (res) => {
+  tableData.value = res
+}
 
 onMounted(() => {
   getTableData();
 })
 const tableData = ref([])
 const getTableData = async () => {
-  const uId = 9;
-  await myRequest.get<any, ApiResult>(`/topic/${uId}`)
+  await myRequest.get<any, ApiResult>(`/topic/${userStore.uId}`)
       .then(res => {
         const data = res.data as [];
         data.map((item: Topic, index) => {
-          item.index = index + 1;
           const answerDict = JSON.parse(item.answer)
           const answer = answerDict.answerContent
           const typeId = answerDict.typeId
@@ -178,13 +190,12 @@ const handleEdit = (row) => {
   }
 }
 
-
 const updateData = async () => {
   form.answer = JSON.stringify(choiceValue.value)
   dialogFormVisible.value = false;
   try {
     const res = await request.put<any, ApiResult>('/topic', form)
-    myElNotification(res, Code.UPDATE_OK, '修改');
+    MyElNotification(res, Code.UPDATE_OK, '修改');
     await getTableData();
   } catch (e) {
     console.log(e)
@@ -197,7 +208,7 @@ const handleDelete = (row) => {
     type: 'warning'
   }).then(async () => {
     const res = await request.delete<any, ApiResult>(`/topic/${row.tId}`)
-    myElNotification(res, Code.DELETE_OK, '删除');
+    MyElNotification(res, Code.DELETE_OK, '删除');
     await getTableData();
   }).catch(() => {
     // 点击取消按钮后的回调函数
@@ -205,11 +216,12 @@ const handleDelete = (row) => {
       title: '提示信息',
       message: '您取消了该操作！',
       type: 'warning',
+      duration:setting.duration
     })
   });
 }
 </script>
 
 <style scoped>
-
+@import "@/styles/admin-style.scss";
 </style>

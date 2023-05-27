@@ -28,6 +28,18 @@ public class TopicController {
         return new ApiResult(Code.GET_OK, topicService.selectByUId(uId), null);
     }
 
+    /**
+     * 根据题型、标签、难度、题目进行搜索
+     * @param uId 教师Id
+     * @param info 搜索值
+     * @return 接口
+     */
+    @GetMapping("/{uId}/{info}")
+    public ApiResult searchByInfo(@PathVariable Integer uId,
+                                  @PathVariable String info) {
+        return topicService.searchByInfo(uId, info);
+    }
+
     @DeleteMapping("/{tId}")
     public ApiResult delTopic(@PathVariable Integer tId) {
         TempResult tempResult = topicService.delTopic(tId);
@@ -44,10 +56,11 @@ public class TopicController {
 
     @PostMapping("/topicToPapers")
     public ApiResult topicToPapers(@RequestBody JSONObject params) {
+        Integer uId = params.getInteger("uId");
         Integer[] tIds = params.getObject("tIds", Integer[].class);
         String name = params.getString("name");
         JSONObject topicScore = params.getJSONObject("topicScore");
-        TempResult tempResult = topicService.topicToPapers(tIds, name, topicScore);
+        TempResult tempResult = topicService.topicToPapers(uId, tIds, name, topicScore);
         return new ApiResult(tempResult.isFlag() ? Code.SAVA_OK : Code.SAVA_ERR,
                 null, tempResult.getMsg());
     }

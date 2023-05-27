@@ -1,5 +1,6 @@
 package com.zz.controller;
 
+import com.zz.Service.CourseService;
 import com.zz.Service.UserService;
 import com.zz.bean.User;
 import com.zz.utils.result.ApiResult;
@@ -16,27 +17,43 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
     @Autowired
-    private CourseController courseController;
+    private CourseService courseService;
 
     /**
-     *
-     * @param uid 该uid为教师的uid 通过教师uid获取cid，通过cid获取学生的uid，获取到所有的学生信息
+     * @param uId 该uid为教师的uid 通过教师uid获取cid，通过cid获取学生的uid，获取到所有的学生信息
      * @return 返回学生信息列表
      */
-    @GetMapping("/Student/{uid}")
-    public ApiResult getStudentList(@PathVariable("uid") String uid){
-        int idTeacher = Integer.parseInt(uid);
-        ApiResult apiResult = courseController.selectStudentAndCourse(idTeacher);
-        return apiResult;
+    @GetMapping("/student/{uId}")
+    public ApiResult getStudentList(@PathVariable("uId") Integer uId) {
+        return courseService.selectStudentAndCourse(uId);
     }
+
+    /**
+     * 根据学号或者姓名搜索
+     * @param uId
+     * @param studentIdOrName
+     * @return
+     */
+    @GetMapping("/searchStudent/{uId}/{studentIdOrName}")
+    public ApiResult searchStudentList(@PathVariable("uId") Integer uId,
+                                       @PathVariable("studentIdOrName") String studentIdOrName) {
+        return courseService.searchStudentAndCourse(uId, studentIdOrName);
+    }
+
+    @DeleteMapping("/deleteStudentByCourse/{ucId}")
+    public ApiResult deleteStudentByCourse(@PathVariable Integer ucId) {
+        return courseService.deleteStudentByCourse(ucId);
+    }
+
     @PostMapping("/register")
     public ApiResult register(@RequestBody User user) {
         user.setRegisterTime(LocalDateTime.now());
         TempResult tempResult = userService.register(user);
         ApiResult apiResult = new ApiResult();
         if (tempResult.isFlag()) {
-                apiResult.setCode(Code.SAVA_OK);
+            apiResult.setCode(Code.SAVA_OK);
         } else {
             apiResult.setCode(Code.SAVA_ERR);
         }

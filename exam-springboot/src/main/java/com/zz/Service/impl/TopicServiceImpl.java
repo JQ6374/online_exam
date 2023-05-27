@@ -12,6 +12,7 @@ import com.zz.dao.TopicTypeDao;
 import com.zz.utils.AnswerUtils;
 import com.zz.utils.Code;
 import com.zz.utils.CourseUtils;
+import com.zz.utils.result.ApiResult;
 import com.zz.utils.result.TempResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,7 +20,9 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 public class TopicServiceImpl implements TopicService {
@@ -33,7 +36,9 @@ public class TopicServiceImpl implements TopicService {
     @Autowired
     private TopicTypeDao topicTypeDao;
 
-
+    /**
+     * 添加题目
+     */
     @Override
     public TempResult addTopic(Topic topic) {
         TempResult tempResult = new TempResult();
@@ -45,11 +50,46 @@ public class TopicServiceImpl implements TopicService {
         return tempResult;
     }
 
+    /**
+     * 查询该老师创建的所有题目
+     *
+     * @param uId 教师Id
+     * @return 题目集合
+     */
     @Override
     public ArrayList<Topic> selectByUId(Integer uId) {
         return topicDao.selectByUId(uId);
     }
 
+    /**
+     * 根据题型、标签、难度、题目进行搜索
+     *
+     * @param uId  教师Id
+     * @param info 搜索值
+     * @return 题目集合
+     */
+    @Override
+    public ApiResult searchByInfo(Integer uId, String info) {
+        ArrayList<Topic> topicList = topicDao.selectByUId(uId);
+        List<Topic> res = topicList.stream()
+                .filter(item -> {
+                    boolean b1 = info.equals(item.getTypeName());
+                    boolean b2 = info.equals(item.getTagName());
+                    boolean b3 = info.equals(item.getDifficultyName());
+                    boolean b4 = item.getQuestion().contains(info);
+                    return b1 || b2 || b3 || b4;
+                })
+                .collect(Collectors.toList());
+        int count = res.size();
+        return new ApiResult(Code.GET_OK, res,
+                count != 0 ? "查询出" + count + "道题目！" : "未找到改题目！");
+    }
+
+    /**
+     * 删除题目，逻辑删除
+     *
+     * @param tId 题目Id
+     */
     @Override
     public TempResult delTopic(Integer tId) {
         TempResult tempResult = new TempResult();
@@ -59,6 +99,11 @@ public class TopicServiceImpl implements TopicService {
         return tempResult;
     }
 
+    /**
+     * 修改题目
+     *
+     * @param topic 题目对象
+     */
     @Override
     public TempResult updateTopic(Topic topic) {
         TempResult tempResult = new TempResult();
@@ -69,8 +114,15 @@ public class TopicServiceImpl implements TopicService {
         return tempResult;
     }
 
+    /**
+     * 手动组卷
+     *
+     * @param tIds       题目Id
+     * @param papersName 试卷名称
+     * @param topicScore 分数字典
+     */
     @Override
-    public TempResult topicToPapers(Integer[] tIds, String papersName, JSONObject topicScore) {
+    public TempResult topicToPapers(Integer uId, Integer[] tIds, String papersName, JSONObject topicScore) {
         JSONObject result = new JSONObject();
         topicTypeDao.selectAll().forEach(item ->
                 result.put(String.valueOf(item.getTypeId()), new ArrayList<>()));
@@ -84,12 +136,43 @@ public class TopicServiceImpl implements TopicService {
                             topic.getAnswer(),
                             topicScore.getInteger(String.valueOf(topic.getTypeId()))));
         }
-        Integer integer = papersDao.addPaper(new Papers(papersName, result.toString(), LocalDateTime.now()));
+        Integer integer = papersDao.addPaper(new Papers(uId, papersName, result.toString(), LocalDateTime.now()));
         tempResult.setFlag(integer != 0);
         tempResult.setMsg(tempResult.isFlag() ? "试卷生成成功！" : Code.ERROR_MSG);
         return tempResult;
     }
 
+    /**
+     * 随机组卷
+     *
+     * @param params example：
+     *               {
+     *               "uId": 9,               // 教师Id
+     *               "tagId": 1,             // 标签（试卷类型）Id
+     *               "papersName": "随机组卷",   // 考卷名字
+     *               "topicScore": {         // 题型对应的分数
+     *               "1": 1,
+     *               "2": 2,
+     *               "3": 2,
+     *               "4": 2,
+     *               "5": 5
+     *               },
+     *               "check": {              // 约束
+     *               "typeCheck": {          // 题型数量约束
+     *               "1": 3,  // typeId: topicNum
+     *               "2": 0,
+     *               "3": 0,
+     *               "4": 0,
+     *               "5": 1
+     *               },
+     *               "difficultyCheck": {     // 难度分布
+     *               "1": 0.7,  // 百分比
+     *               "2": 0.2,
+     *               "3": 0.1
+     *               }
+     *               }
+     *               }
+     */
     @Override
     public TempResult topicToPapers(JSONObject params) {
         TempResult tempResult = new TempResult();
@@ -204,7 +287,7 @@ public class TopicServiceImpl implements TopicService {
             }
         }
 
-        Integer integer = papersDao.addPaper(new Papers(papersName, papersResult.toString(), LocalDateTime.now()));
+        Integer integer = papersDao.addPaper(new Papers(uId, papersName, papersResult.toString(), LocalDateTime.now()));
         tempResult.setFlag(integer != 0);
         tempResult.setMsg(tempResult.isFlag() ? "试卷生成成功！" : Code.ERROR_MSG);
         return tempResult;

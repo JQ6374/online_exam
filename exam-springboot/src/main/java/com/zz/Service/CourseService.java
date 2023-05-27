@@ -21,8 +21,38 @@ public interface CourseService {
     /**
      *
      * @param uId 教师的uId
-     * @return Apiresult中data为ArrayList<JsonObject>
+     * @return ApiResult接口
      */
     ApiResult selectStudentAndCourse(Integer uId);
 
+    /**
+     * 根据学生Id或者学生姓名搜索
+     * @param uId 教师Id
+     * @param studentIdOrName 学生Id或者姓名
+     * @return ApiResult接口
+     */
+    ApiResult searchStudentAndCourse(Integer uId, String studentIdOrName);
+
+    /**
+     * 根据课程名进行搜索
+     * @param uId 教师Id
+     * @param courseName 课程名
+     * @return ApiResult接口
+     */
+    ApiResult searchCourseByName(Integer uId, String courseName);
+
+    /**
+     * 修改学生所选的课程
+     * @param cId 课程Id
+     * @param ucId 选课Id
+     * @return ApiResult接口
+     */
+    ApiResult updateStudentByCourse(Integer cId, Integer ucId);
+
+    /**
+     * 将学生移除课程
+     * @param ucId 选课Id
+     * @return ApiResult接口
+     */
+    ApiResult deleteStudentByCourse(Integer ucId);
 }

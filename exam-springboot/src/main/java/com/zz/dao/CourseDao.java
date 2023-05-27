@@ -14,10 +14,20 @@ public interface CourseDao {
     ArrayList<Course> selectByUId(Integer uId);
 
 
-    @Select("select sc.u_id,`user`.username,`user`.email,course.`name` FROM `user`,course,student_course as sc\n" +
-            "WHERE  `user`.u_id = sc.u_id  AND sc.c_id = course.c_id AND course.u_id = #{uId}")
+    /**
+     * 查询该老师所教课程的所有学生
+     * @param uId 老师Id
+     * @return
+     */
+    @Select("select sc.u_id as uId, course.c_id as cId, sc.uc_id as ucId," +
+            "user.userName, user.email, " +
+            "course.name as courseName " +
+            "FROM user,course,student_course as sc " +
+            "WHERE user.u_id = sc.u_id  AND sc.c_id = course.c_id AND course.u_id = #{uId}")
     ArrayList<JSONObject> selectStudentAndCourse(Integer uId);
 
+    @Update("update student_course set c_id=#{cId} where uc_id = #{ucId}")
+    Integer updateStudentByCourse(Integer cId, Integer ucId);
 
     @Insert("insert into course values(null,#{uId},#{name},#{courseCode},#{createTime},1)")
     boolean addCourse(Course course);
@@ -37,4 +47,6 @@ public interface CourseDao {
     @Select("select count(1) from student_course where u_id=#{uId} and c_id=#{cId}")
     Integer isJoin(Integer uId, Integer cId);
 
+    @Update("delete from student_course where uc_id=#{ucId}")
+    Integer deleteStudentByCourse(Integer ucId);
 }

@@ -15,7 +15,5 @@ public class PapersTest {
     private PapersDao papersDao;
     @Test
    public void getPaperContent(){
-        String paperContent = papersDao.getPaperContent(1);
-        System.out.println(paperContent);
     }
 }

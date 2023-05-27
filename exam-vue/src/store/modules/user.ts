@@ -10,6 +10,7 @@ const constantRouterList = ref()
 const useUserStore = defineStore('User', {
   state: () => {
     return {
+      uId: 9,
       token: GET_TOKEN(),
       menuRoutes: constantRouterList
     }

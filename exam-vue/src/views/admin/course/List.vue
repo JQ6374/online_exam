@@ -1,8 +1,17 @@
 <template>
-  <my-el-top-bottom title="课程列表">
+  <my-el-top-bottom
+      title="课程列表"
+      placeholder="根据课程名查找"
+      isSearch
+      requestUrl="/course"
+      @update="updateTableData"
+  >
     <template #main>
-      <el-table width="100%" :height=useMainHeight().mainHeight :data="tableData" stripe>
-        <el-table-column align="center" prop="index" label="序号" fixed/>
+      <el-table
+          width="100%"
+          :height="useMainHeight().mainHeight"
+          :data="tableData" stripe>
+        <el-table-column align="center" prop="cId" label="课程号" fixed/>
         <el-table-column align="center" prop="name" label="课程名称"/>
         <el-table-column align="center" prop="courseCode" label="课程口令"/>
         <el-table-column align="center" prop="createTime" label="创建时间" sortable/>
@@ -48,35 +57,27 @@
 
 <script setup lang="ts">
 import myRequest from "@/utils/request.ts";
-import {reactive, ref, onMounted} from 'vue'
+import request from "@/utils/request.ts";
+import {onMounted, reactive, ref} from 'vue'
 import {ApiResult} from "@/utils/type.ts";
 import {ElMessageBox, ElNotification} from "element-plus";
-import request from "@/utils/request.ts";
 import {Code} from "@/utils/Code.ts";
-import {myElNotification} from "@/hook/requestTooltip.ts";
+import {MyElNotification} from "@/hook/requestTooltip.ts";
 import MyElTopBottom from "@/views/admin/components/MyElTopBottom.vue";
 import {useMainHeight} from "@/store/modules/mainHeight.ts";
+import useUserStore from "@/store/modules/user.ts";
+import setting from "@/setting.ts";
+
+const userStore = useUserStore();
+
+const updateTableData = (res) => {
+  tableData.value = res
+}
 
 onMounted(() => {
   getTableData();
 })
 const tableData = ref([])
-const getTableData = async () => {
-  const uId = 9;
-  await myRequest.get<any, ApiResult>(`/course/${uId}`)
-      .then(res => {
-        const data = res.data as [];
-        data.map((item: object, index) => {
-          item.index = index + 1;
-          return item;
-        })
-        tableData.value = data
-      })
-}
-
-const dialogFormVisible = ref(false)
-const formLabelWidth = '140px'
-
 const form = reactive({
   cId: '',
   uId: '',
@@ -84,6 +85,17 @@ const form = reactive({
   courseCode: '',
   createTime: ''
 })
+
+const getTableData = async () => {
+  await myRequest.get<any, ApiResult>(`/course/${userStore.uId}`)
+      .then(res => {
+        tableData.value = res.data as []
+      })
+}
+
+const dialogFormVisible = ref(false)
+const formLabelWidth = '140px'
+
 
 const handleEdit = (row) => {
   dialogFormVisible.value = true;
@@ -93,10 +105,9 @@ const handleEdit = (row) => {
 }
 const updateName = async () => {
   dialogFormVisible.value = false;
-  console.log(form.valueOf())
   try {
     const res = await request.put<any, ApiResult>('/course/updateName', form)
-    myElNotification(res, Code.UPDATE_OK, '修改');
+    MyElNotification(res, Code.UPDATE_OK, '修改');
     await getTableData();
   } catch (e) {
     console.log(e)
@@ -109,7 +120,7 @@ const handleDelete = (row) => {
     type: 'warning'
   }).then(async () => {
     const res = await request.delete<any, ApiResult>(`/course/${row.cId}`)
-    myElNotification(res, Code.DELETE_OK, '删除');
+    MyElNotification(res, Code.DELETE_OK, '删除');
     await getTableData();
   }).catch(() => {
     // 点击取消按钮后的回调函数
@@ -117,6 +128,7 @@ const handleDelete = (row) => {
       title: '提示信息',
       message: '您取消了该操作！',
       type: 'warning',
+      duration: setting.duration
     })
   });
 }
@@ -124,20 +136,6 @@ const handleDelete = (row) => {
 </script>
 
 <style scoped lang="scss">
-.el-button--text {
-  margin-right: 15px;
-}
-
-.el-select {
-  width: 300px;
-}
-
-.el-input {
-  width: 300px;
-}
-
-.dialog-footer button:first-child {
-  margin-right: 10px;
-}
+@import "@/styles/admin-style";
 
 </style>

@@ -93,16 +93,6 @@ export const constantRouter = [
               hidden: false,
             },
           },
-          {
-            path: 'courseCreate',
-            name: 'courseCreate',
-            // @ts-ignore
-            component: () => import('@/views/admin/course/Create.vue'),
-            meta: {
-              title: '课程创建',
-              hidden: false,
-            },
-          },
         ]
       },
       {
@@ -125,52 +115,12 @@ export const constantRouter = [
             }
           },
           {
-            path: 'topicTrueFalse',
-            name: 'topicTrueFalse',
+            path: 'topicCreate',
+            name: 'topicCreate',
             // @ts-ignore
-            component: () => import('@/views/admin/topic/TrueFalse.vue'),
+            component: () => import('@/views/admin/topic/Create.vue'),
             meta: {
-              title: '判断题',
-              hidden: false,
-            }
-          },
-          {
-            path: 'topicSingleChoice',
-            name: 'topicSingleChoice',
-            // @ts-ignore
-            component: () => import('@/views/admin/topic/SingleChoice.vue'),
-            meta: {
-              title: '单选题',
-              hidden: false,
-            }
-          },
-          {
-            path: 'topicMultipleChoice',
-            name: 'topicMultipleChoice',
-            // @ts-ignore
-            component: () => import('@/views/admin/topic/MultipleChoice.vue'),
-            meta: {
-              title: '多选题',
-              hidden: false,
-            },
-          },
-          {
-            path: 'topicGapFilling',
-            name: 'topicGapFilling',
-            // @ts-ignore
-            component: () => import('@/views/admin/topic/GapFilling.vue'),
-            meta: {
-              title: '填空题',
-              hidden: false,
-            }
-          },
-          {
-            path: 'topicShortAnswer',
-            name: 'topicShortAnswer',
-            // @ts-ignore
-            component: () => import('@/views/admin/topic/ShortAnswer.vue'),
-            meta: {
-              title: '简答题',
+              title: '题目创建',
               hidden: false,
             }
           },

@@ -24,12 +24,13 @@ public class ExamController {
     public ApiResult createExam(@RequestBody Map<String, Object> map) {
 //        读取map数据注入exam
         Exam exam = new Exam();
-        exam.setcId(Integer.parseInt((String) map.get("cid")));
-        exam.setpId(Integer.parseInt((String) map.get("pid")));
+        exam.setcId(Integer.parseInt((String) map.get("cId")));
+        exam.setpId(Integer.parseInt((String) map.get("pId")));
         exam.setName((String) map.get("name"));
         String endTime = (String) map.get("endTime");
 //        System.out.println(endTime.getClass());
         String startTime = (String) map.get("startTime");
+        exam.setuId(Integer.parseInt((String) map.get("uId")));
         //字符串格式化为时间 LocalDateTime类型
         exam.setEndTime(LocalDateTime.parse(endTime, DATE_TIME_FORMATTER));
         exam.setStartTime(LocalDateTime.parse(startTime, DATE_TIME_FORMATTER));
@@ -85,9 +86,9 @@ public class ExamController {
         return apiResult;
     }
 
-    @GetMapping("/selectAll/{pageNum}")
-    public ApiResult selectAll(@PathVariable("pageNum") String pageNumNow) {
-        return examService.selectAll(pageNumNow);
+    @GetMapping("/{uId}")
+    public ApiResult selectAll(@PathVariable("uId") Integer uId) {
+        return examService.selectAll(uId);
     }
 
     @GetMapping("/selectOne/{examId}")

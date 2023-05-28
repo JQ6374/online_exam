@@ -22,12 +22,10 @@
        style="width: 24px;height: 24px;margin:0px 10px;border-radius: 50%;">
   <!-- 下拉菜单 -->
   <el-dropdown>
-        <span class="el-dropdown-link">
-          zjq(占位)
-            <el-icon class="el-icon--right">
-                <arrow-down/>
-            </el-icon>
-        </span>
+    <span class="el-dropdown-link">
+      zjq(占位)
+    <el-icon class="el-icon--right"><arrow-down/></el-icon>
+    </span>
     <template #dropdown>
       <el-dropdown-menu>
         <!--        <el-dropdown-item @click="logout">退出登录</el-dropdown-item>-->

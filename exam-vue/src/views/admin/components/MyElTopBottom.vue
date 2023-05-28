@@ -22,6 +22,7 @@
         />
         <el-button icon="Search" circle @click="searchFn"/>
       </div>
+      <slot name="header"></slot>
     </el-header>
     <el-main>
       <slot name="main"></slot>

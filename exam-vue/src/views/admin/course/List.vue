@@ -6,6 +6,34 @@
       requestUrl="/course"
       @update="updateTableData"
   >
+    <template #header>
+      <el-button
+          type="primary"
+          @click="dialogAddVisible=true"
+          style="margin-left: 30px">
+        <span>添加课程</span>
+        <template #icon>
+          <Plus/>
+        </template>
+      </el-button>
+      <el-dialog v-model="dialogAddVisible" title="新建课程">
+        <el-form-item label="课程名" :label-width="formLabelWidth">
+          <el-input
+              v-model="courseName"
+              placeholder="请输入课程名称"
+              autocomplete="off"
+          />
+        </el-form-item>
+        <template #footer>
+          <div class="dialog-footer">
+            <el-button @click="dialogAddVisible = false">取消</el-button>
+            <el-button type="primary" @click="addCourse">
+              提交
+            </el-button>
+          </div>
+        </template>
+      </el-dialog>
+    </template>
     <template #main>
       <el-table
           width="100%"
@@ -131,6 +159,17 @@ const handleDelete = (row) => {
       duration: setting.duration
     })
   });
+}
+
+const dialogAddVisible = ref(false)
+const courseName = ref('')
+const addCourse = async () => {
+  dialogAddVisible.value = true;
+  const res = await request.post<any, ApiResult>('/course/add',
+      {uId: userStore.uId, name: courseName.value})
+  MyElNotification(res, Code.SAVA_OK, "添加")
+  await getTableData();
+  dialogAddVisible.value = false;
 }
 
 </script>

@@ -17,7 +17,7 @@ public interface ExamService {
     public ApiResult updateExamInfo(Exam exam);
 
     //查询
-    public ApiResult selectAll(String pageNum);
+    public ApiResult selectAll(Integer uId);
 
     public ApiResult selectOne(Integer examId);
 }

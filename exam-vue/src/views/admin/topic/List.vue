@@ -46,7 +46,7 @@
 
           <el-form-item label="答案" :label-width="formLabelWidth">
             <el-select v-show="[1].includes(form.typeId)"
-                       v-model="choiceValue"
+                       v-model="form.answer"
                        placeholder="请选择答案"
                        style="width: 240px"
             >
@@ -58,8 +58,8 @@
               />
             </el-select>
             <el-select v-show="[2, 3].includes(form.typeId)"
-                       v-model="choiceValue"
-                       multiple
+                       v-model="form.answer"
+                       :multiple="form.typeId == 3"
                        placeholder="请选择答案"
                        style="width: 240px"
             >
@@ -115,7 +115,7 @@ const getTableData = async () => {
         const data = res.data as [];
         data.map((item: Topic, index) => {
           const answerDict = JSON.parse(item.answer)
-          const answer = answerDict.answerContent
+          const answer: string = answerDict.answerContent
           const typeId = answerDict.typeId
           if (typeId == '1') {
             // 1是对，0是错
@@ -132,7 +132,20 @@ const getTableData = async () => {
 const dialogFormVisible = ref(false)
 const formLabelWidth = '140px'
 
-const form = reactive({
+interface Form {
+  tId: number;
+  uId: number;
+  typeId: number;
+  typeName: string;
+  tagId: number;
+  tagName: string;
+  difficultyId: number;
+  difficultyName: string;
+  question: string;
+  answer: string[] | string | number;
+}
+
+const form: Form = reactive({
   tId: 0,
   uId: 0,
   typeId: 0,
@@ -142,10 +155,7 @@ const form = reactive({
   difficultyId: 0,
   difficultyName: '',
   question: '',
-  answer: '',
-  status: 0,
-  isExist: 0,
-  createTime: ''
+  answer: [],
 })
 
 const typeSelect = ref({
@@ -178,20 +188,24 @@ const typeSelect = ref({
     },
   ]
 })
-const choiceValue = ref([])
 const cleanValue = () => {
-  choiceValue.value = []
+  form.answer = [];
 }
-
 const handleEdit = (row) => {
   dialogFormVisible.value = true;
   for (let key in form) {
-    form[key] = row[key];
+    if (key == 'answer') {
+      form[key] = JSON.parse(row[key]);
+    } else {
+      form[key] = row[key];
+    }
   }
 }
 
 const updateData = async () => {
-  form.answer = JSON.stringify(choiceValue.value)
+  if (form.typeId == 3) {
+    form.answer = JSON.stringify(form.answer);
+  }
   dialogFormVisible.value = false;
   try {
     const res = await request.put<any, ApiResult>('/topic', form)
@@ -216,7 +230,7 @@ const handleDelete = (row) => {
       title: '提示信息',
       message: '您取消了该操作！',
       type: 'warning',
-      duration:setting.duration
+      duration: setting.duration
     })
   });
 }

@@ -12,6 +12,8 @@ import com.zz.utils.result.TempResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ExamServiceImpl implements ExamService {
 
@@ -68,18 +70,18 @@ public class ExamServiceImpl implements ExamService {
     }
 
     @Override
-    public ApiResult selectAll(String pageNumNow) {
+    public ApiResult selectAll(Integer uId) {
         ApiResult apiResult = new ApiResult();
-        Page<?> page = PageHelper.startPage(Integer.parseInt(pageNumNow), 5);  //设置第几条记录开始，多少条记录为一页
+//        Page<?> page = PageHelper.startPage(Integer.parseInt(pageNumNow), 5);  //设置第几条记录开始，多少条记录为一页
         //通过userService获取user的信息，其sql语句为"select * from user" 但因pageHelper已经注册为插件，所以pageHelper会在原sql语句上增加limit，从而实现分页
-        examDao.selectAll();  //因而获得的是分好页的结果集
-        PageInfo<?> pageHelper = page.toPageInfo(); //获取页面信息的对象，里面封装了许多页面的信息 如：总条数，当前页码，需显示的导航页等等
-        apiResult.setData(pageHelper);
+        List<Exam> exams = examDao.selectAll(uId);//因而获得的是分好页的结果集
+//        PageInfo<?> pageHelper = page.toPageInfo(); //获取页面信息的对象，里面封装了许多页面的信息 如：总条数，当前页码，需显示的导航页等等
+        apiResult.setData(exams);
         if (apiResult.getData() != null) {
-            apiResult.setMsg("分页查询成功");
+            apiResult.setMsg("数据查询成功");
             apiResult.setCode(Code.GET_OK);
         } else {
-            apiResult.setMsg("分页查询失败!");
+            apiResult.setMsg("数据查询失败!");
             apiResult.setCode(Code.GET_ERR);
         }
         return apiResult;

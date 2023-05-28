@@ -26,7 +26,7 @@ public interface ExamDao {
     public Integer deleteExam(@Param("param01") Integer examId);
 
     // 查询所有 All 会获取papers的内容
-    @Select("select * from exam where u_id=#{uId}")
+    @Select("select * from exam where u_id=#{uId} ORDER BY start_time DESC")
     @Results({
             @Result(property = "content", column = "p_id",
                     one = @One(select = "com.zz.dao.PapersDao.getPaperContent")

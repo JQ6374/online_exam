@@ -15,7 +15,7 @@ public interface TopicDao {
      * @param uId：老师Id，由老师管理题目
      * @return 题目列表
      */
-    @Select("select * from topic where (u_id=#{uId} or status=1) and is_exist=1")
+    @Select("select * from topic where (u_id=#{uId} or status=1) and is_exist=1 ORDER BY create_time DESC")
     @Results({
             @Result(column = "type_id", property = "typeId"),
             @Result(column = "type_id", property = "typeName",

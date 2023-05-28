@@ -13,7 +13,7 @@ import java.util.ArrayList;
 @Mapper
 public interface PapersDao {
 
-    @Select("select * from papers where u_id=#{uId} and is_exist=1")
+    @Select("select * from papers where u_id=#{uId} and is_exist=1 ORDER BY create_time DESC ")
     ArrayList<Papers> selectAllByUId(Integer uId);
 
     /**

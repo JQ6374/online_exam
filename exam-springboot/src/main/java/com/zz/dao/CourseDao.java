@@ -10,12 +10,12 @@ import java.util.List;
 @Mapper
 public interface CourseDao {
 
-    @Select("select * from course where u_id=#{uId} and is_exist=1")
+    @Select("select * from course where u_id= #{uId} and is_exist=1 ORDER BY create_time DESC")
     ArrayList<Course> selectByUId(Integer uId);
-
 
     /**
      * 查询该老师所教课程的所有学生
+     *
      * @param uId 老师Id
      * @return
      */
@@ -23,7 +23,7 @@ public interface CourseDao {
             "user.userName, user.email, " +
             "course.name as courseName " +
             "FROM user,course,student_course as sc " +
-            "WHERE user.u_id = sc.u_id  AND sc.c_id = course.c_id AND course.u_id = #{uId}")
+            "WHERE user.u_id = sc.u_id  AND sc.c_id = course.c_id AND course.u_id = #{uId} ORDER BY create_time DESC")
     ArrayList<JSONObject> selectStudentAndCourse(Integer uId);
 
     @Update("update student_course set c_id=#{cId} where uc_id = #{ucId}")

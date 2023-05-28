@@ -11,7 +11,7 @@ public class ScorePointSim {
      *
      * @param sentenceA 句子集A
      * @param sentenceB 句子集B
-     * @return
+     * @return 直接返回计算后的分数
      *  Alpha  Beta Gamma Delta  为常系数，参考论文 α、β、γ、δ 的值分别为 0.91、0.90、0.80、
      * 0.50 时，平均评分准确率 ε最高
      */
@@ -44,7 +44,9 @@ public class ScorePointSim {
             i++;
         }
         scoSim = scoSimOneTotal/n;
-        return scoSim;
+        double maxScore = 5;
+        double score = Math.floor((scoSim * maxScore) + 0.5);
+        return score;
             }
         }
 

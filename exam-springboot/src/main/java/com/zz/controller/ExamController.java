@@ -1,5 +1,6 @@
 package com.zz.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.zz.Service.ExamService;
 
 import com.zz.bean.Exam;
@@ -19,6 +20,12 @@ public class ExamController {
     static DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     @Autowired
     private ExamService examService;
+
+    @PostMapping("/judge")
+    public ApiResult judgeScore(@RequestBody JSONObject jsonObject){
+        examService.judge(jsonObject);
+        return null;
+    }
 
     @PostMapping("/createExam")
     public ApiResult createExam(@RequestBody Map<String, Object> map) {

@@ -1,5 +1,6 @@
 package com.zz.Service;
 
+import com.alibaba.fastjson.JSONObject;
 import com.zz.bean.Exam;
 import com.zz.utils.result.ApiResult;
 import com.zz.utils.result.TempResult;
@@ -20,4 +21,6 @@ public interface ExamService {
     public ApiResult selectAll(Integer uId);
 
     public ApiResult selectOne(Integer examId);
+
+    public ApiResult judge(JSONObject jsonObject);
 }

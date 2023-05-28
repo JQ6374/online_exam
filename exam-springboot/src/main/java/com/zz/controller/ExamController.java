@@ -23,8 +23,7 @@ public class ExamController {
 
     @PostMapping("/judge")
     public ApiResult judgeScore(@RequestBody JSONObject jsonObject){
-        examService.judge(jsonObject);
-        return null;
+        return examService.judge(jsonObject);
     }
 
     @PostMapping("/createExam")

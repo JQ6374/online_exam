@@ -1,15 +1,13 @@
 package com.zz.Service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.github.pagehelper.Page;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import com.zz.Service.ExamService;
 import com.zz.bean.Exam;
+import com.zz.bean.StudentExam;
 import com.zz.dao.ExamDao;
 import com.zz.utils.Code;
-import com.zz.utils.SplitObjectAndSubject;
 import com.zz.utils.result.ApiResult;
 import com.zz.utils.result.TempResult;
 import com.zz.utils.subjecttiveJudge.ScorePointSim;
@@ -17,7 +15,10 @@ import com.zz.utils.subjecttiveJudge.SentenceSeparation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Service
 public class ExamServiceImpl implements ExamService {
@@ -119,61 +120,68 @@ public class ExamServiceImpl implements ExamService {
      */
     @Override
     public ApiResult judge(JSONObject jsonObject) {
-        JSONObject returnJson = jsonObject;
-//        待评试卷答案处理操作
-        List<JSONObject> jsonObjects = SplitObjectAndSubject.splitMethod(jsonObject.getJSONObject("content"));
-        //        客观题带评答案获取
-        JSONObject objectiveJson = jsonObjects.get(0);
-        //        主观题带评答案获取
-        JSONObject subjectiveJson = jsonObjects.get(1);
-        JSONArray subjArray = subjectiveJson.getJSONArray("5");
-        //        获取试卷参考答案
-        Integer eId = (Integer) jsonObject.get("eId");
+        Integer uId = jsonObject.getInteger("uId");
+        Integer eId = jsonObject.getInteger("eId");
         Exam exam = examDao.selectOne(eId);
-        String content = exam.getContent();
-        //        将字符型的转换为json格式
-        JSONObject checkAnswer = JSONObject.parseObject(content);
-        List<JSONObject> checkJsons = SplitObjectAndSubject.splitMethod(checkAnswer);
-        //        客观题答案获取
-        JSONObject objectiveCheckJson = checkJsons.get(0);
-        //        主观题答案获取
-        JSONObject subjectiveCheckJson = checkJsons.get(1);
-
-
-
-        //        客观题评分处理
-        JSONArray subjCheckArray = subjectiveCheckJson.getJSONArray("5");
-        /**  主观题评分处理 提取所有jsonArray中的answer 既为主观题答案序列，
-         * 一次将一题的答案给util判分，并将带评答案和分数填入返回
-         * 以下为answer的格式
-         * {"score":5,
-         * "answer":"{\"answer\":\"呼呼，我是第一题的答案\",\"typeId\":5}",
-         * "question":"这是主观题","tId":2}
-         * 发现题号是对应的，一题一题对比即可
-         */
-        //subjArray subjCheckArray\
-        List<String> subjArraySenten = null;
-        List<String> subjCheckArraySenten = null;
-        String jsonObject1 = null;
-        String jsonObject2 = null;
-
-        for (int i = 0; i < subjArray.size(); i++) {
-
-            jsonObject1 = (String) ((JSONObject) ((JSONObject) subjArray.get(i)).get("answer")).get("answer");
-            jsonObject2 = (String) ((JSONObject) ((JSONObject) subjCheckArray.get(i)).get("answer")).get("answer");
-//            subjArraySenten.add(SentenceSeparation.sentenceList(jsonObject1));//待评分句
-//            subjCheckArraySenten.add(SentenceSeparation.sentenceList(jsonObject2));//分句
-
-            subjArraySenten = SentenceSeparation.sentenceList(jsonObject1);//待评分句
-            subjCheckArraySenten = SentenceSeparation.sentenceList(jsonObject2);//分句
-            double score = ScorePointSim.getScorePointSim(subjCheckArraySenten, subjArraySenten);
-            System.out.println(score);
-            //拿到分数后填入jsonObject中，返回ApiResult
-//           JSONObject o = (JSONObject) subjArray.get(i);
-//           o.put("rightAnswer",JSONObject.parseObject(jsonObject1));
-//           o.put("score",score);
+        JSONObject rightContent = JSON.parseObject(exam.getContent());
+        JSONObject content = jsonObject.getJSONObject("content");
+        ArrayList<JSONObject> res = new ArrayList<>();
+        AtomicReference<Double> totalScore = new AtomicReference<>((double) 0);
+        content.keySet().forEach((key) -> {
+            JSONArray topicList = content.getJSONArray(key);
+            JSONArray rightTopicList = rightContent.getJSONArray(key);
+            for (int i = 0; i < topicList.size(); i++) {
+                JSONObject topic = topicList.getJSONObject(i);
+                JSONObject rightTopic = rightTopicList.getJSONObject(i);
+                String studentAnswer = topic.getJSONObject("answer").getString("answerContent");
+                String rightAnswer = rightTopic.getJSONObject("answer").getString("answerContent");
+                topic.put("rightAnswer", rightAnswer);
+                // 主观题判分
+                if (Integer.parseInt(key) == 5) {
+                    List<String> rightKeywordsList = SentenceSeparation.sentenceList(rightAnswer);
+                    List<String> stringKeywordsList = SentenceSeparation.sentenceList(studentAnswer);
+                    double scorePointSim = ScorePointSim.getScorePointSim(rightKeywordsList, stringKeywordsList);
+                    topic.put("getScore", scorePointSim);
+                    //多选题判分
+                } else if (Integer.parseInt(key) == 3) {
+                    JSONArray rightChoiceList = JSON.parseArray(rightAnswer);
+                    JSONArray studentChoiceList = JSON.parseArray(studentAnswer);
+                    boolean flag = true;
+                    if (studentChoiceList.size() == 0) {
+                        topic.put("getScore", 0);
+                        return;
+                    }
+                    for (Object choice : studentChoiceList) {
+                        boolean isRight = rightChoiceList.contains(choice);
+                        if (!isRight) {
+                            flag = false;
+                            topic.put("getScore", 0);
+                        }
+                    }
+                    if (flag && studentChoiceList.size() == rightChoiceList.size()) {
+                        topic.put("getScore", topic.getDoubleValue("score"));
+                    } else {
+                        topic.put("getScore", topic.getDoubleValue("score") / 2);
+                    }
+                    // 其他类型的题目只要匹配字符串是否完全相等
+                } else {
+                    topic.put("getScore", rightAnswer.equals(studentAnswer) ? topic.getDoubleValue("score") : 0);
+                }
+                totalScore.updateAndGet(v -> new Double((double) (v + topic.getDoubleValue("getScore"))));
+                res.add(topic);
+            }
+        });
+        JSONObject result = new JSONObject();
+        result.put("totalScore", totalScore.get());
+        result.put("content", res);
+        StudentExam studentExam = new StudentExam(uId, eId, result.toString());
+        studentExam.setCreateTime(LocalDateTime.now());
+        if (examDao.selectIsExist(studentExam) != 0) {
+            return new ApiResult(Code.SAVA_ERR, null, "不可反复提交试卷！");
         }
-
-        return null;
+        Integer integer = examDao.addExamRecord(studentExam);
+        boolean isSuccess = integer != 0;
+        return new ApiResult(isSuccess ? Code.SAVA_OK : Code.SAVA_ERR, result,
+                isSuccess ? "数据处理成功！" : "数据处理失败！");
     }
 }

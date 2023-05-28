@@ -17,11 +17,10 @@ public class MyTest {
 
     @Test
     void test() {
-        String s = AnswerUtils.formatAnswer(1, "['A', 'B']");
-        JSONObject json = JSON.parseObject(s);
-        System.out.println(s);
-        System.out.println(json);
-        System.out.println(json.getJSONArray("answer"));
+        JSONObject jsonObject = JSONObject.parseObject("{'name': 'zjq'}");
+        jsonObject.put("name", "zxy");
+        jsonObject.put("age", 18);
+        System.out.println(jsonObject);
 
     }
 }

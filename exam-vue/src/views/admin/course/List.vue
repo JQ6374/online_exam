@@ -17,13 +17,23 @@
         </template>
       </el-button>
       <el-dialog v-model="dialogAddVisible" title="新建课程">
-        <el-form-item label="课程名" :label-width="formLabelWidth">
-          <el-input
-              v-model="courseName"
-              placeholder="请输入课程名称"
-              autocomplete="off"
-          />
-        </el-form-item>
+        <el-form
+            ref="formEl"
+            :rules="addRule"
+            :model="addForm"
+        >
+          <el-form-item
+              prop="name"
+              label="课程名"
+              :label-width="formLabelWidth"
+          >
+            <el-input
+                v-model="addForm.name"
+                placeholder="请输入课程名称"
+                autocomplete="off"
+            />
+          </el-form-item>
+        </el-form>
         <template #footer>
           <div class="dialog-footer">
             <el-button @click="dialogAddVisible = false">取消</el-button>
@@ -88,7 +98,7 @@ import myRequest from "@/utils/request.ts";
 import request from "@/utils/request.ts";
 import {onMounted, reactive, ref} from 'vue'
 import {ApiResult} from "@/utils/type.ts";
-import {ElMessageBox, ElNotification} from "element-plus";
+import {ElMessageBox, ElNotification, FormRules} from "element-plus";
 import {Code} from "@/utils/Code.ts";
 import {MyElNotification} from "@/hook/requestTooltip.ts";
 import MyElTopBottom from "@/views/admin/components/MyElTopBottom.vue";
@@ -162,14 +172,22 @@ const handleDelete = (row) => {
 }
 
 const dialogAddVisible = ref(false)
-const courseName = ref('')
+const formEl = ref()
+const addForm = reactive({
+  uId: userStore.uId,
+  name: ''
+})
+const addRule = reactive<FormRules>({
+  name: {required: true, message: '请输入课程名', trigger: 'blur'},
+})
 const addCourse = async () => {
-  dialogAddVisible.value = true;
-  const res = await request.post<any, ApiResult>('/course/add',
-      {uId: userStore.uId, name: courseName.value})
-  MyElNotification(res, Code.SAVA_OK, "添加")
-  await getTableData();
-  dialogAddVisible.value = false;
+  formEl.value?.validate(async (flag) => {
+    if (!flag) return;
+    const res = await request.post<any, ApiResult>('/course/add', addForm)
+    MyElNotification(res, Code.SAVA_OK, "添加")
+    await getTableData();
+    dialogAddVisible.value = false;
+  })
 }
 
 </script>

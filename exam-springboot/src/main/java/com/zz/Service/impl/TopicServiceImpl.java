@@ -181,7 +181,7 @@ public class TopicServiceImpl implements TopicService {
         String papersName = params.getString("papersName");
         JSONObject topicScore = params.getJSONObject("topicScore");
         JSONObject check = params.getJSONObject("check");
-        JSONObject typeCheck = check.getJSONObject("typeCheck");
+        JSONObject typeCheck = check.getJSONObject("typeNumCheck");
         JSONObject difficultyCheck = check.getJSONObject("difficultyCheck");
         ArrayList<JSONObject> typeCountList = topicDao.typeCount(tagId);
         JSONObject typeCount = new JSONObject();

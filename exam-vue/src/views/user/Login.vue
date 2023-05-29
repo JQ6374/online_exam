@@ -15,7 +15,7 @@
               <el-form-item prop="email">
                 <el-input
                     size="large"
-                    :prefix-icon="Message"
+                    prefix-icon="Message"
                     placeholder="请输入邮箱"
                     v-model="ruleForm.email"
                 />
@@ -25,7 +25,7 @@
                     type="password"
                     show-password
                     size="large"
-                    :prefix-icon="Lock"
+                    prefix-icon="Lock"
                     placeholder="请输入密码"
                     v-model="ruleForm.password"
                 />
@@ -44,7 +44,7 @@
               <el-button
                   type="primary"
                   round
-                  @click="Login"
+                  @click="login"
                   :loading="loading">
                 登录
               </el-button>
@@ -62,34 +62,35 @@
 </template>
 
 <script setup lang="ts">
-import {reactive, ref} from 'vue'
+import {onMounted, reactive, ref} from 'vue'
 import {Lock, Message} from "@element-plus/icons-vue";
 import {ElNotification} from "element-plus";
 import type {FormInstance, FormRules} from 'element-plus'
 import useUserStore from "@/store/modules/user.ts";
-import {LoginData} from "@/api/type.ts";
+import {ApiResult, LoginData} from "@/utils/type.ts";
 import {useRouter, useRoute} from "vue-router";
+import request from "@/utils/request.ts";
+
+onMounted(() => {
+  getRoleData();
+})
 
 let $router = useRouter();
 let $route = useRoute()
 
-let roleData = reactive([
-  {
-    'rId': 2,
-    'name': '学生'
-  },
-  {
-    'rId': 1,
-    'name': '教师'
-  }
-]);
+const roleData = ref([])
+const getRoleData = async () => {
+  const res = await request.get<any, ApiResult>('/role')
+  roleData.value = res.data as []
+  console.log(roleData)
+}
 
 const userStore = useUserStore()
 // 表单
 const ruleFormRef = ref<FormInstance>()
 
 const ruleForm = reactive({
-  rId: '',
+  rId: 1,
   email: '',
   password: '',
   emailCode: ''
@@ -121,7 +122,11 @@ const login = async () => {
     loading.value = false;
     let redirect: any = $route.query.redirect;
     console.log(redirect)
-    await $router.push({path: redirect || '/home'});
+    let toPath = '/index'
+    if (ruleForm.rId == 2) {
+      toPath = '/admin'
+    }
+    await $router.push({path: redirect || toPath});
 
     ElNotification({
       title: '登录成功！',
@@ -146,7 +151,7 @@ const login = async () => {
 
 </style>
 <style scoped lang="scss">
-.w3l-hotair-form{
+.w3l-hotair-form {
   background-color: $base-background-color;
 }
 </style>

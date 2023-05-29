@@ -3,92 +3,109 @@
       title="题目创建"
   >
     <template #main>
-      <div class="question-form">
-        <form class="el-form" label-position="top">
-          <div class="el-form-item">
-            <label class="el-form-item__label">题目类型</label>
-            <div class="el-form-item__content">
-              <el-select v-model="form.typeId" placeholder="请选择" @change="cleanValue">
-                <el-option v-for="item in typeList"
-                           :key="item.value"
-                           :label="item.label"
-                           :value="item.value"
-                ></el-option>
-              </el-select>
-            </div>
-          </div>
-          <div class="el-form-item">
-            <label class="el-form-item__label">题目内容</label>
-            <div class="el-form-item__content">
-              <el-input type="textarea" v-model="form.question"></el-input>
-            </div>
-          </div>
-          <div class="el-form-item">
-            <label class="el-form-item__label">答案</label>
-            <div class="el-form-item__content">
-              <el-select v-show="[1].includes(form.typeId)"
-                         v-model="form.answer"
-                         placeholder="请选择答案"
-              >
-                <el-option
-                    v-for="item in typeSelect.trueFalse"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value"
-                />
-              </el-select>
-              <el-select v-show="[2, 3].includes(form.typeId)"
-                         v-model="form.answer"
-                         :multiple="form.typeId == 3"
-                         placeholder="请选择答案"
-              >
-                <el-option
-                    v-for="item in typeSelect.choice"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value"
-                />
-              </el-select>
-              <el-input
-                  v-show="[4, 5].includes(form.typeId)"
-                  v-model="form.answer"
-                  :type="form.typeId ==5 ? 'textarea':'text'"
-                  autocomplete="off"/>
-            </div>
-          </div>
-          <div class="el-form-item">
-            <label class="el-form-item__label">标签</label>
-            <div class="el-form-item__content">
-              <el-select v-model="form.tagId" placeholder="请选择标签">
-                <el-option v-for="item in tagList" :key="item.value" :label="item.label"
-                           :value="item.value"></el-option>
-              </el-select>
-            </div>
-          </div>
-          <div class="el-form-item">
-            <label class="el-form-item__label">难度</label>
-            <div class="el-form-item__content">
-              <el-rate :max="3" v-model="form.difficultyId"/>
-            </div>
-          </div>
-          <div class="el-form-item">
-            <div class="el-form-item__content" style="justify-content: center">
-              <el-button type="primary" native-type="submit">提交</el-button>
-            </div>
-          </div>
-        </form>
-      </div>
+      <el-form
+          ref="ruleFormRef"
+          :model="form"
+          :rules="rules"
+      >
+        <el-form-item
+            prop="typeId"
+            label="题目类型"
+        >
+          <el-select v-model="form.typeId" placeholder="请选择" @change="cleanValue">
+            <el-option v-for="item in typeList"
+                       :key="item.value"
+                       :label="item.label"
+                       :value="item.value"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item
+            prop="question"
+            label="题目内容"
+        >
+          <el-input type="textarea" v-model="form.question"></el-input>
+        </el-form-item>
+        <el-form-item
+            prop="answer"
+            label="答案"
+        >
+          <el-select v-show="[1].includes(form.typeId)"
+                     v-model="form.answer"
+                     placeholder="请选择答案"
+          >
+            <el-option
+                v-for="item in typeSelect.trueFalse"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+            />
+          </el-select>
+          <el-select v-show="[2, 3].includes(form.typeId)"
+                     v-model="form.answer"
+                     :multiple="form.typeId == 3"
+                     placeholder="请选择答案"
+          >
+            <el-option
+                v-for="item in typeSelect.choice"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+            />
+          </el-select>
+          <el-input
+              v-show="[4, 5].includes(form.typeId)"
+              v-model="form.answer"
+              :type="form.typeId ==5 ? 'textarea':'text'"
+              autocomplete="off"/>
+        </el-form-item>
+        <el-form-item
+            prop="tagId"
+            label="标签"
+        >
+          <el-select v-model="form.tagId" placeholder="请选择标签">
+            <el-option v-for="item in tagList"
+                       :key="item.tagId"
+                       :label="item.name"
+                       :value="item.tagId"></el-option>
+          </el-select>
+        </el-form-item>
+
+        <el-form-item
+            prop="difficultyId"
+            label="难度"
+        >
+          <el-rate :max="3" v-model="form.difficultyId"/>
+        </el-form-item>
+        <el-form-item class="my-item-deep">
+          <el-button
+              type="primary"
+              @click="addTopic">提交
+          </el-button>
+        </el-form-item>
+      </el-form>
     </template>
   </my-el-top-bottom>
 </template>
 
 <script setup lang="ts">
-import {reactive, ref} from "vue";
+import {onMounted, reactive, ref} from "vue";
 import MyElTopBottom from "@/views/admin/components/MyElTopBottom.vue";
+import useUserStore from "@/store/modules/user.ts";
+import request from "@/utils/request.ts";
+import {ApiResult} from "@/utils/type.ts";
+import {FormInstance, FormRules} from "element-plus";
+import {MyElNotification} from "@/hook/requestTooltip.ts";
+import {Code} from "@/utils/Code.ts";
+import useLayOutSettingStore from "@/store/modules/layoutTabBar.ts";
 
+onMounted(() => {
+  getTagList()
+})
+const uId = useUserStore().uId;
 
 interface Form {
-  uId: string,
+  uId: number,
   typeId: number,
   tagId: string,
   difficultyId: number,
@@ -96,14 +113,27 @@ interface Form {
   answer: string | Array<string>
 }
 
+const ruleFormRef = ref<FormInstance>()
 const form = reactive<Form>({
-  uId: '',
+  uId: uId,
   typeId: 1,
   tagId: '',
   difficultyId: 1,
   question: '',
   answer: ''
 })
+const rules = reactive<FormRules>({
+  typeId: {required: true, message: '请选择题型', trigger: 'change'},
+  tagId: {required: true, message: '请选择标签', trigger: 'change'},
+  difficultyId: {required: true, message: '请输入答案', trigger: 'change'},
+  question: {required: true, message: '请输入题目', trigger: 'blur'},
+  answer: {required: true, message: '请输入答案', trigger: 'change'},
+})
+const getTagList = async () => {
+  const res = await request.get<any, ApiResult>(`/tag/${uId}`)
+  tagList.value = res.data as [];
+}
+
 const typeList = [
   {
     label: '判断题',
@@ -122,11 +152,7 @@ const typeList = [
     value: 5
   },
 ]
-const tagList = [
-  {value: 1, label: '标签1'},
-  {value: 2, label: '标签2'},
-  {value: 3, label: '标签3'},
-]
+let tagList = ref([])
 const typeSelect = ref({
   trueFalse: [
     {
@@ -160,20 +186,30 @@ const typeSelect = ref({
 const cleanValue = () => {
   form.answer = []
 }
+const settingStore = useLayOutSettingStore();
+const addTopic = () => {
+  ruleFormRef.value?.validate(async (flag) => {
+    if (!flag) return
+    if (form.typeId == 3) {
+      form.answer = JSON.stringify(form.answer)
+    }
+    const res = await request.post<any, ApiResult>('/topic', form)
+    MyElNotification(res, Code.SAVA_OK, '添加')
+    settingStore.refresh = !settingStore.refresh;
+  })
+}
 
 </script>
 
-<style scoped>
-.question-form {
-  max-width: 600px;
+<style scoped lang="scss">
+.el-form {
+  max-width: 500px;
   margin: 0 auto;
 }
 
-.el-form-item__label {
-  width: 80px;
-}
-
-.el-form-item__content {
-  flex: 1;
+.my-item-deep:deep {
+  .el-form-item__content {
+    justify-content: center;
+  }
 }
 </style>

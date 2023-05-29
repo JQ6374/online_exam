@@ -4,7 +4,7 @@ import {ApiResult} from "@/utils/type.ts";
 const urlBase = '/user';
 
 enum API {
-    LOGIN_URL = urlBase + '/user',
+    LOGIN_URL = urlBase + '/login',
     REGISTER_URL = urlBase + '/register',
     UPDATE_URL = urlBase + '/updatePassword'
 }

@@ -18,7 +18,7 @@
               <el-form-item prop="username">
                 <el-input
                     size="large"
-                    :prefix-icon="User"
+                    prefix-icon="User"
                     placeholder="请输入用户名"
                     v-model="ruleForm.username"
                 />
@@ -26,7 +26,7 @@
               <el-form-item prop="email">
                 <el-input
                     size="large"
-                    :prefix-icon="Message"
+                    prefix-icon="Message"
                     placeholder="请输入邮箱"
                     v-model="ruleForm.email"
                 />
@@ -36,7 +36,7 @@
                     type="password"
                     show-password
                     size="large"
-                    :prefix-icon="Lock"
+                    prefix-icon="Lock"
                     placeholder="请输入密码"
                     v-model="ruleForm.password"
                 />
@@ -46,7 +46,7 @@
                     type="password"
                     show-password
                     size="large"
-                    :prefix-icon="Lock"
+                    prefix-icon="Lock"
                     placeholder="请再次输入密码"
                     v-model="ruleForm.passwordCheck"
                 />
@@ -56,7 +56,7 @@
               >
                 <el-input
                     size="large"
-                    :prefix-icon="Key"
+                    prefix-icon="Key"
                     placeholder="请输入图形校验码"
                     v-model="ruleForm.checkCode"
                 >
@@ -68,7 +68,7 @@
               <el-form-item prop="emailCode">
                 <el-input
                     size="large"
-                    :prefix-icon="Key"
+                    prefix-icon="Key"
                     placeholder="请输入邮箱验证码"
                     v-model="ruleForm.emailCode"
                 >
@@ -111,32 +111,31 @@
 </template>
 
 <script setup lang="ts">
-import {reactive, ref} from 'vue'
+import {onMounted, reactive, ref} from 'vue'
 import {Lock, Message, Key, User} from "@element-plus/icons-vue";
 import {ElNotification} from "element-plus";
 import type {FormInstance, FormRules} from 'element-plus'
-import {ApiResult} from "@/api/type.ts";
+import {ApiResult} from "@/utils/type.ts";
 import CheckCode from '@/components/CheckCode/index.vue'
 import request from "@/utils/request.ts";
 import {Code} from "@/utils/Code.ts";
 
+onMounted(() => {
+  getRoleData();
+})
 
-let roleData = reactive([
-  {
-    'rId': 2,
-    'name': '学生'
-  },
-  {
-    'rId': 1,
-    'name': '教师'
-  }
-]);
+const roleData = ref([])
+const getRoleData = async () => {
+  const res = await request.get<any, ApiResult>('/role')
+  roleData.value = res.data as []
+  console.log(roleData)
+}
 
 // 表单
 const ruleFormRef = ref<FormInstance>()
 
 const ruleForm = reactive({
-  rId: '',
+  rId: 1,
   username: '',
   email: '',
   password: '',

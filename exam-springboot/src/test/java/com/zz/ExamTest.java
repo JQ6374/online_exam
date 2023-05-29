@@ -103,4 +103,11 @@ public class ExamTest {
                 "}");
         examService.judge(res);
     }
+
+
+    @Test
+    public void getNameByID(){
+        Exam exam = examDao.selectOne(1);
+        System.out.println(exam.getTeacherName());
+    }
 }

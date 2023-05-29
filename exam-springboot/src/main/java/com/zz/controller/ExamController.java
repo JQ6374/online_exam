@@ -22,7 +22,7 @@ public class ExamController {
     private ExamService examService;
 
     @PostMapping("/judge")
-    public ApiResult judgeScore(@RequestBody JSONObject jsonObject){
+    public ApiResult judgeScore(@RequestBody JSONObject jsonObject) {
         return examService.judge(jsonObject);
     }
 
@@ -55,7 +55,6 @@ public class ExamController {
     @DeleteMapping("/{examId}")
     public ApiResult deleteExam(@PathVariable String examId) {
         Integer id = Integer.parseInt(examId);
-        System.out.println(id);
         TempResult tempResult = examService.deleteExam(id);
         ApiResult apiResult = new ApiResult();
         if (tempResult.isFlag()) {
@@ -72,11 +71,13 @@ public class ExamController {
         //        封装Exam
         System.out.println(map.toString());
         Exam exam = new Exam();
-
         exam.seteId(Integer.parseInt((String) map.get("eid")));
+        exam.setuId(Integer.parseInt((String) map.get("uid")));
         exam.setpId(Integer.parseInt((String) map.get("pid")));
         exam.setcId(Integer.parseInt((String) map.get("cid")));
         exam.setName((String) map.get("name"));
+        exam.setStatus(Integer.parseInt((String) map.get("status")));
+        exam.setIsExist(Integer.parseInt((String) map.get("isExist")));
         String endTime = (String) map.get("endTime");
         String startTime = (String) map.get("startTime");
         //字符串格式化为时间 LocalDateTime类型
@@ -100,7 +101,6 @@ public class ExamController {
     @GetMapping("/selectOne/{examId}")
     public ApiResult selectOne(@PathVariable("examId") String examId) {
         ApiResult apiResult = examService.selectOne(Integer.parseInt(examId));
-        System.out.println(apiResult.getData().toString());
         return apiResult;
     }
 }

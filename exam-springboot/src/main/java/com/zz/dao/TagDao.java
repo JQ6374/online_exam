@@ -1,6 +1,7 @@
 package com.zz.dao;
 
 
+import com.alibaba.fastjson.JSONObject;
 import com.zz.bean.Tag;
 import com.zz.bean.TopicType;
 import org.apache.ibatis.annotations.*;
@@ -16,11 +17,13 @@ public interface TagDao {
     @Select("select name from tag where tag_id=#{tagId}")
     String selectById(Integer tagId);
 
-    @Insert("insert into tag values(null,#{u_id},#{name})")
-    Integer addTag(Tag tag);
+
+    @Insert("insert into tag values(null,#{uId},#{name})")
+//    Integer addTag(Tag tag);
+    Integer addTag(JSONObject tag);
 
     @Update("UPDATE tag SET u_id = #{uId}, name = #{name} where tag_id =#{tagId};")
-    Integer updateTag(Tag tag);
+    Integer updateTag(JSONObject tag);
 
     @Delete("delete from tag where tag_id = #{tagId}")
     Integer deleteTag(Integer tagId);

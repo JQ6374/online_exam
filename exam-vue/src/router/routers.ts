@@ -146,12 +146,22 @@ export const constantRouter = [
             },
           },
           {
-            path: 'papersCreate',
-            name: 'papersCreate',
+            path: 'papersHandCreate',
+            name: 'papersHandCreate',
             // @ts-ignore
-            component: () => import('@/views/admin/papers/Create.vue'),
+            component: () => import('@/views/admin/papers/HandCreate.vue'),
             meta: {
-              title: '试卷创建',
+              title: '手动组卷',
+              hidden: false,
+            },
+          },
+          {
+            path: 'papersRandomCreate',
+            name: 'papersRandomCreate',
+            // @ts-ignore
+            component: () => import('@/views/admin/papers/RandomCreate.vue'),
+            meta: {
+              title: '随机组卷',
               hidden: false,
             },
           },

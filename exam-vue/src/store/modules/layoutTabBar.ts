@@ -8,6 +8,12 @@ const useLayOutSettingStore = defineStore('SettingStore', {
       refresh: false, //仓库这个属性用于控制刷新效果
     }
   },
+  actions: {
+    // 刷新页面
+    refreshFn(){
+      this.refresh = !this.refresh;
+    }
+  }
 })
 
 export default useLayOutSettingStore

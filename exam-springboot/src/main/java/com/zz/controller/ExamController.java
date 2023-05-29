@@ -103,4 +103,8 @@ public class ExamController {
         ApiResult apiResult = examService.selectOne(Integer.parseInt(examId));
         return apiResult;
     }
+
+    @GetMapping("/getstuExams/{uId}")
+    public ApiResult getExamListBystu(@PathVariable("uId")Integer uId){
+        return   examService.getExamListBystu(uId);}
 }

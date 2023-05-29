@@ -23,4 +23,6 @@ public interface ExamService {
     public ApiResult selectOne(Integer examId);
 
     public ApiResult judge(JSONObject jsonObject);
+
+    public ApiResult getExamListBystu(Integer uId);
 }

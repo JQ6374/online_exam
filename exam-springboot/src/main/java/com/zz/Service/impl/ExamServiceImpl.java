@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.zz.Service.ExamService;
+import com.zz.bean.Course;
 import com.zz.bean.Exam;
 import com.zz.bean.StudentExam;
 import com.zz.dao.ExamDao;
@@ -110,6 +111,21 @@ public class ExamServiceImpl implements ExamService {
             apiResult.setMsg("查询失败！");
         }
         return apiResult;
+    }
+
+    /**
+     * 学生获取自己的所有考试信息
+     * @param uId 学生的uid
+     * @return
+     */
+    public ApiResult getExamListBystu(Integer uId){
+        List<Course> coursesByUid = examDao.getCoursesByUid(16);
+        JSONArray jsonArray = new JSONArray();
+        for (Course course:
+                coursesByUid) {
+            jsonArray.add(examDao.getExamsByCourseId(course.getcId()));
+        }
+        return new ApiResult(Code.GET_OK,jsonArray,"查询成功");
     }
 
     /**

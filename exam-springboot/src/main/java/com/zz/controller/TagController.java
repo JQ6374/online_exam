@@ -14,36 +14,39 @@ public class TagController {
 
     /**
      * 根据教师uid查询其创建的所有tag
+     *
      * @param uId 教师uid
      * @return 返回apiresult
      */
     @GetMapping("/gettags/{uId}")
-    public ApiResult getAllTag(@PathVariable("uId") Integer uId){
-    return  tagService.selectAll(uId);
-}
+    public ApiResult getAllTag(@PathVariable("uId") Integer uId) {
+        return tagService.selectAll(uId);
+    }
 
     /**
      * 根据tagId获取该标签
+     *
      * @param tagId
      * @return
      */
     @GetMapping("/gettag/{tagId}")
-    public ApiResult getOneById(@PathVariable("tagId") Integer tagId){
+    public ApiResult getOneById(@PathVariable("tagId") Integer tagId) {
         return tagService.selectById(tagId);
     }
 
     @PostMapping("/addtag")
-    public ApiResult addTag(@RequestBody JSONObject jsonObject){
+    public ApiResult addTag(@RequestBody JSONObject jsonObject) {
         return tagService.addTag(jsonObject);
     }
 
 
     @PostMapping("/updateTag")
-    public ApiResult updateTag(@RequestBody JSONObject jsonObject){
-    return tagService.updateTag(jsonObject);
+    public ApiResult updateTag(@RequestBody JSONObject jsonObject) {
+        return tagService.updateTag(jsonObject);
     }
-@GetMapping("/deleteTag/{tagId}")
-    public ApiResult deleteTag(@PathVariable("tagId") Integer tagId){
+
+    @GetMapping("/deleteTag/{tagId}")
+    public ApiResult deleteTag(@PathVariable("tagId") Integer tagId) {
         return tagService.deleteTag(tagId);
     }
 }

@@ -9,13 +9,19 @@
             />
           </div>
           <div class="title">
-            <span>{{ examName }}</span>
+            <span>{{ joinExamStore.examName }}</span>
           </div>
         </div>
         <div class="header-right">
+          <exam-countdown
+              :start-time="joinExamStore.startTime"
+              :end-time="joinExamStore.endTime"
+          >
+          </exam-countdown>
           <el-button
               type="primary"
               round
+              @click="submitPapers"
           >
             提交试卷
           </el-button>
@@ -34,16 +40,26 @@
               </div>
               <div class="tag-list">
                 <el-tag
-                    v-for="(topic, index) in paperContent[topicType]"
+                    v-for="(topic, i) in joinExamStore.papersContent[topicType]"
                     :key="topic.tId"
-                    :data-index="topic.tId"
-                    @click="handleTag"
+                    :data-index="(index * content.length)+i"
+                    :data-t-id="topic.tId"
+                    @click.prevent="scrollToBottom"
                 >
-                  <el-icon>
-                    <!--                    <SemiSelect/>-->
-                    <!--                    <Select/>-->
-                    <!--                    <CloseBold/>-->
-                    {{ index + 1 }}
+                  <el-icon
+                      :data-index="(index * content.length)+i"
+                      :data-t-id="topic.tId"
+                  >
+                    <SemiSelect
+                        :data-index="(index * content.length)+i"
+                        :data-t-id="topic.tId"
+                        v-if="topic.answer.answerContent.length != 0"
+                    />
+                    <span
+                        :data-index="(index * content.length)+i"
+                        :data-t-id="topic.tId"
+                        v-else>{{ index + 1 }}</span>
+
                   </el-icon>
                 </el-tag>
               </div>
@@ -51,16 +67,20 @@
           </el-scrollbar>
         </el-aside>
         <el-main class="my-item">
-          <el-scrollbar height="555px" ref="mainScrollbar">
+          <el-scrollbar
+              height="555px"
+              ref="mainScrollbar"
+          >
             <div class="topic-list"
                  v-for="(content,topicType,topicTypeIndex) in cleanContent"
                  v-show="content && content.length != 0"
                  :key="topicType"
             >
-              <div class="topic-item"
-                   v-for="(topic, index) in content"
-                   :key="topic.tId"
-                   :ref="`item-${topic.tId}`"
+              <div
+                  v-for="(topic, index) in content"
+                  class="topic-item"
+                  :key="topic.tId"
+                  :data-t-id="topic.tId"
               >
                 <div class="header">
                   <span style="font-size: 16px">{{ topicTypeIndex + 1 }}-{{ index + 1 }}</span>
@@ -76,17 +96,44 @@
                 </div>
                 <div class="choice">
                   <div class="check-box">
-                    <el-checkbox
-                        v-for="item in typeSelect.choice"
+                    <!-- 判断和单选的框 -->
+                    <el-radio-group
+                        v-if="[1,2].includes(topic.answer.typeId)"
                         v-model="topic.answer.answerContent"
-                        :label="item.label"
-                        border/>
+                    >
+                      <el-radio
+                          v-for="item in topic.answer.typeId == 1 ? typeSelect.trueFalse: typeSelect.choice"
+                          :key="item.value"
+                          :label="item.value"
+                          border>
+                        {{ item.label }}
+                      </el-radio>
+                      <!--                      <el-radio label="2" size="large" border>Option B</el-radio>-->
+                    </el-radio-group>
+                    <!-- 多选题的复选框 -->
+                    <el-checkbox-group
+                        v-if="topic.answer.typeId == 3"
+                        v-model="topic.answer.answerContent"
+                        border>
+                      <el-checkbox
+                          v-for="item in typeSelect.choice"
+                          :key="item.value"
+                          :label="item.label"
+                          border/>
+                    </el-checkbox-group>
+                    <!--填空或者主观题-->
+                    <el-input
+                        v-if="[4,5].includes(topic.answer.typeId)"
+                        v-model="topic.answer.answerContent"
+                        :rows="5"
+                        :type="inputType(topic.answer.typeId)"
+                        placeholder="请输入答案"
+                    />
                   </div>
                 </div>
                 <el-divider/>
               </div>
             </div>
-            <div id="ceshi">123</div>
           </el-scrollbar>
         </el-main>
       </el-container>
@@ -96,8 +143,24 @@
 
 <script setup lang="ts">
 import Logo from "@/components/Logo/index.vue";
-import {onMounted, ref} from "vue";
+import {onMounted, reactive, ref} from "vue";
 import {useGeneralDataStore} from "@/store/modules/generalData.ts";
+import ExamCountdown from "@/components/Test/CountDown.vue";
+import {useJoinExamStore} from "@/store/modules/joinExam.ts";
+import {ElMessageBox, ElNotification} from "element-plus";
+import setting from "@/setting.ts";
+import {ApiResult} from "@/utils/type.ts";
+import myRequest from "@/utils/request.ts";
+import {MyElNotification} from "@/hook/requestTooltip.ts";
+import {Code} from "@/utils/Code.ts";
+import {useRouter} from "vue-router";
+import useUserStore from "@/store/modules/user.ts";
+import user from "@/store/modules/user.ts";
+
+onMounted(() => {
+  getGeneralData();
+})
+const userStore = useUserStore()
 
 const typeSelect = ref({
   trueFalse: [
@@ -129,62 +192,45 @@ const typeSelect = ref({
     },
   ]
 })
+const joinExamStore = useJoinExamStore();
+const inputType = (typeId: number) => {
+  return typeId == 5 ? "textarea" : "";
+}
+const $router = useRouter()
 
-const props = defineProps({
-  examName: {
-    type: String,
-    default: '考试标题'
-  },
-  paperContent: {
-    type: Object,
-    default: {
-      "1": [{
-        "answer": "{\"answerContent\":\"1\",\"typeId\":1}",
-        "question": "我被修改了",
-        "score": 1,
-        "tId": 1
-      }, {
-        "answer": "{\"answerContent\":\"0\",\"typeId\":1}",
-        "question": "这是一个判断题，难度为中等",
-        "score": 1,
-        "tId": 4
-      }, {
-        "answer": "{\"answerContent\":\"0\",\"typeId\":1}",
-        "question": "我被修改了，我是凑数的",
-        "score": 1,
-        "tId": 5
-      }],
-      "2": [],
-      "3": [{
-        "answer": "{\"answerContent\":\"[\\\"A\\\",\\\"B\\\",\\\"D\\\"]\",\"typeId\":3}",
-        "question": "这是一个共享的题目",
-        "score": 2,
-        "tId": 3
-      }, {
-        "answer": "{\"answerContent\":\"[\\\"A\\\",\\\"C\\\"]\",\"typeId\":3}",
-        "question": "这是一个多选题",
-        "score": 2,
-        "tId": 6
-      }],
-      "4": [],
-      "5": [{
-        "answer": "{\"answerContent\":\"呼呼，我是第一题的答案\",\"typeId\":5}",
-        "question": "这是主观题",
-        "score": 5,
-        "tId": 2
-      }]
-    }
-  }
-})
 // props.paperContent.
 const cleanContent = Object.fromEntries(
-    Object.entries(props.paperContent)
+    Object.entries(joinExamStore.papersContent)
         .filter(([k, v]) => v && (v.length !== 0))
 );
+const submitPapers = () => {
+  ElMessageBox.confirm('是否提交试卷?', '提示', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning'
+  }).then(async () => {
+    const submit = {
+      "eId": joinExamStore.eId,
+      "uId": userStore.uId,
+      "content": JSON.stringify(joinExamStore.papersContent)
+    }
+    const res = await myRequest.post<any, ApiResult>('/exam/judge', submit)
+    const isSuccess = res.code == Code.SAVA_OK;
+    MyElNotification(res, Code.SAVA_OK, "试卷提交")
+    if (isSuccess) {
+      await $router.push({name: 'userExam'})
+    }
+  }).catch(() => {
+    // 点击取消按钮后的回调函数
+    ElNotification({
+      title: '提示信息',
+      message: '您取消了该操作！',
+      type: 'warning',
+      duration: setting.duration
+    })
+  });
+}
 
-onMounted(() => {
-  getGeneralData();
-})
 const generalDataStore = useGeneralDataStore()
 const getGeneralData = () => {
   generalDataStore.getTopicTypeDict();
@@ -192,16 +238,15 @@ const getGeneralData = () => {
 }
 
 const mainScrollbar = ref()
-const handleTag = (event) => {
-  const tId = event.target.dataset.index;
-  const el = document.querySelector(`[data-t-id="${tId}"]`);
-  console.log(el)
-  console.log(mainScrollbar)
-  // mainScrollbar.value.scrollbar.scrollToElement(el);
-  // console.log(event)
-  // console.log(mainScrollbar)
-  // mainScrollbar.value.scrollTo(0)
-}
+const scrollTop = ref(0);
+const scrollToBottom = (event) => {
+  const index = event.target.dataset.index
+  const tId = event.target.dataset.tId;
+  const height = document.querySelector(`.topic-item[data-t-id="${tId}"]`).offsetHeight + 40
+  scrollTop.value = height * index;
+  mainScrollbar.value!.setScrollTop(scrollTop.value)
+};
+
 </script>
 
 <style scoped lang="scss">
@@ -241,7 +286,14 @@ const handleTag = (event) => {
       }
 
       .header-right {
-        margin-left: 25px;
+        display: flex;
+        align-items: center;
+        margin-right: 30px;
+
+        .el-button {
+          margin-left: 25px;
+        }
+
       }
     }
   }
@@ -289,6 +341,10 @@ const handleTag = (event) => {
 
     .topic-item {
       margin-bottom: 30px;
+
+      .choice {
+        padding-bottom: 10px;
+      }
     }
 
     .content {

@@ -23,7 +23,7 @@
   <!-- 下拉菜单 -->
   <el-dropdown>
     <span class="el-dropdown-link">
-      zjq(占位)
+      {{ userStore.username }}
     <el-icon class="el-icon--right"><arrow-down/></el-icon>
     </span>
     <template #dropdown>

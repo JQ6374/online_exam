@@ -24,7 +24,10 @@
             prop="question"
             label="题目内容"
         >
-          <el-input type="textarea" v-model="form.question"></el-input>
+          <el-input
+              rows="5"
+              type="textarea"
+              v-model="form.question"></el-input>
         </el-form-item>
         <el-form-item
             prop="answer"
@@ -120,7 +123,7 @@ const switchChange = (val) => {
 }
 
 interface Form {
-  uId: number,
+  uId: string,
   typeId: number,
   tagId: string,
   difficultyId: number,

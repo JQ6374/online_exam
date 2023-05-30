@@ -1,10 +1,11 @@
 package com.zz.Service;
 
+import com.alibaba.fastjson.JSONObject;
 import com.zz.bean.Course;
 import com.zz.utils.result.ApiResult;
 import com.zz.utils.result.TempResult;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public interface CourseService {
 
@@ -55,4 +56,6 @@ public interface CourseService {
      * @return ApiResult接口
      */
     ApiResult deleteStudentByCourse(Integer ucId);
+
+    ApiResult<ArrayList<JSONObject>> selectChoiceCourseByUId(Integer uId);
 }

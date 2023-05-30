@@ -7,7 +7,7 @@ import com.zz.utils.result.ApiResult;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-//@RestControllerAdvice
+@RestControllerAdvice
 public class ProjectExceptionAdvice {
 
     // @ExceptionHandler用于设置当前处理器类对应的异常类型

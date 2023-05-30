@@ -7,7 +7,18 @@
 </template>
 
 <script setup lang="ts">
+import useUserStore from "@/store/modules/user.ts";
+import {onMounted} from "vue";
 
+onMounted(() => {
+  getUser()
+})
+
+const userStore = useUserStore()
+const getUser = () => {
+  userStore.uId = localStorage.getItem("uId");
+  userStore.username = localStorage.getItem("username");
+}
 </script>
 
 <style scoped>

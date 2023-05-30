@@ -1,11 +1,11 @@
-export interface ApiResult {
+export interface ApiResult<T = Object> {
   code: number,
-  data: object,
+  data: T,
   msg: string
 }
 
 export interface LoginData {
-  uId: number,
+  uId: string,
   email: string,
   username: string
 }

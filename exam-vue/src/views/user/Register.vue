@@ -165,7 +165,7 @@ const checkCodeFn = (rule: any, value: any, callback: any) => {
   if (!value) {
     return callback(new Error('请输入验证码!'));
   }
-  if (rightCheckCode.value != value) {
+  if (rightCheckCode.value.toLowerCase() != (value as string).toLowerCase()) {
     return callback(new Error('验证码输入错误！'));
   } else {
     return callback();

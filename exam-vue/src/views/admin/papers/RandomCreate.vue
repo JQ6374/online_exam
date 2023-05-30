@@ -14,6 +14,17 @@
         >
           <el-input v-model="form.papersName"></el-input>
         </el-form-item>
+        <el-form-item
+            prop="tagId"
+            label="标签"
+        >
+          <el-select v-model="form.tagId" placeholder="请选择标签">
+            <el-option v-for="item in tagList"
+                       :key="item.tagId"
+                       :label="item.name"
+                       :value="item.tagId"></el-option>
+          </el-select>
+        </el-form-item>
 
 
         <div class="type-num-check">
@@ -102,13 +113,12 @@ onMounted(() => {
   getTopicTypeList();
   getDifficultyList();
 })
-const uId = useUserStore().uId;
 
-
+const userStore = useUserStore()
 const ruleFormRef = ref<FormInstance>()
 const form = reactive({
-  uId: 9,
-  tagId: 1,
+  uId: userStore.uId,
+  tagId: '',
   papersName: '',
   topicScore: {
     "1": 1,
@@ -133,7 +143,8 @@ const form = reactive({
   }
 })
 const rules = reactive<FormRules>({
-  papersName: {required: true, message: '请选择题型', trigger: 'blur'}
+  papersName: {required: true, message: '请选择题型', trigger: 'blur'},
+  tagId: {required: true, message: '请选择标签', trigger: 'blur'}
 })
 
 const topicTypeList = ref([])
@@ -156,7 +167,7 @@ const getDifficultyList = async () => {
 }
 const tagList = ref([])
 const getTagList = async () => {
-  const res = await request.get<any, ApiResult>(`/tag/${uId}`)
+  const res = await request.get<any, ApiResult>(`/tag/${userStore.uId}`)
   tagList.value = res.data as [];
 }
 const settingStore = useLayOutSettingStore()
@@ -165,7 +176,7 @@ const addRandomPapers = () => {
     if (!flag) {
       ElNotification({
         title: '请完善信息！',
-        message: '试卷名是不是还没填呐~',
+        message: '试卷名或者标签是不是还没填呐~',
         type: 'warning'
       })
       return

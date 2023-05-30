@@ -90,7 +90,8 @@ public class CourseServiceImpl implements CourseService {
         ArrayList<JSONObject> studentList = courseDao.selectStudentAndCourse(uId);
 
         List<JSONObject> res = studentList.stream()
-                .filter(item -> studentIdOrName.equals(item.getString("uId")) || studentIdOrName.equals(item.getString("userName")))
+                .filter(item -> studentIdOrName.equals(item.getString("uId"))
+                        || studentIdOrName.equals(item.getString("userName")))
                 .collect(Collectors.toList());
 
         boolean isSuccess = !res.isEmpty();
@@ -127,6 +128,14 @@ public class CourseServiceImpl implements CourseService {
         boolean isSuccess = integer != 0;
         return new ApiResult(isSuccess ? Code.DELETE_OK : Code.DELETE_ERR, null,
                 isSuccess ? "已经该学生移除课程！" : "删除失败！");
+    }
+
+    @Override
+    public ApiResult<ArrayList<JSONObject>> selectChoiceCourseByUId(Integer uId) {
+        ArrayList<JSONObject> data = courseDao.selectChoiceCourseByUId(uId);
+        boolean isSuccess = !data.isEmpty();
+        return new ApiResult<ArrayList<JSONObject>>(isSuccess ? Code.GET_OK : Code.GET_ERR, data,
+                isSuccess ? "查询" + data.size() + "条数据！" : "数据查询为空！");
     }
 //    @Override
 //    public ApiResult selectStudentAndCourse(List<Integer> cIdList) {

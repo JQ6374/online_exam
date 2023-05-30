@@ -36,7 +36,7 @@ export const constantRouter = [
     name: 'admin',
     // @ts-ignore
     component: () => import('@/views/admin/index.vue'),
-    redirect: {name: 'home'},
+    redirect: {name: 'student'},
     meta: {
       title: '管理员页面',
       hidden: true
@@ -48,7 +48,7 @@ export const constantRouter = [
         component: () => import('@/views/admin/home/Index.vue'),
         meta: {
           title: '主页',
-          hidden: false,
+          hidden: true,
           icon: 'HomeFilled'
         },
         name: 'home'
@@ -203,7 +203,7 @@ export const constantRouter = [
   {
     path: '/index',
     name: 'index',
-    redirect: {name: 'userHome'},
+    redirect: {name: 'userCourse'},
     // @ts-ignore
     component: () => import('@/views/admin/index.vue'),
     meta: {
@@ -218,7 +218,7 @@ export const constantRouter = [
         component: () => import('@/views/index/home/index.vue'),
         meta: {
           title: '主页',
-          hidden: false,
+          hidden: true,
           icon: 'HomeFilled'
         },
       },
@@ -259,7 +259,7 @@ export const constantRouter = [
   {
     path: '/test',
     // @ts-ignore
-    component: () => import('@/components/Test.vue'),
+    component: () => import('@/components/Test/Test.vue'),
     name: 'test',
     meta: {
       title: '测试页',

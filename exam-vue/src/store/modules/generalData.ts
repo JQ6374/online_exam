@@ -22,7 +22,7 @@ export const useGeneralDataStore = defineStore('generalDataStore',
             return obj;
           }, {});
         },
-        async getDifficultyList() {
+        async getDifficultyDict() {
           const {data} = await request.get<any, ApiResult>('/difficulty')
           let tempData = data as [];
           this.difficultyDict = tempData.reduce((obj, item) => {
@@ -31,7 +31,7 @@ export const useGeneralDataStore = defineStore('generalDataStore',
             return obj;
           }, {});
         },
-        async getTagList() {
+        async getTagDict() {
           const userStore = useUserStore();
           const {data} = await request.get<any, ApiResult>(`/topicType/${userStore.uId}`)
           let tempData = data as [];

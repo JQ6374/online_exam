@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Map;
 
 @RestController
@@ -29,24 +30,21 @@ public class ExamController {
     }
 
     @PostMapping("/createExam")
-    public ApiResult createExam(@RequestBody Map<String, Object> map) {
+    public ApiResult createExam(@RequestBody JSONObject param) {
 //        读取map数据注入exam
         Exam exam = new Exam();
-        exam.setcId(Integer.parseInt((String) map.get("cId")));
-        exam.setpId(Integer.parseInt((String) map.get("pId")));
-        exam.setName((String) map.get("name"));
-        String endTime = (String) map.get("endTime");
-//        System.out.println(endTime.getClass());
-        String startTime = (String) map.get("startTime");
-        exam.setuId(Integer.parseInt((String) map.get("uId")));
+        exam.setcId(param.getInteger("cId"));
+        exam.setpId(param.getInteger("pId"));
+        exam.setuId(param.getInteger("uId"));
+        exam.setName(param.getString("name"));
+
         //字符串格式化为时间 LocalDateTime类型
-        exam.setEndTime(LocalDateTime.parse(endTime, DATE_TIME_FORMATTER));
-        exam.setStartTime(LocalDateTime.parse(startTime, DATE_TIME_FORMATTER));
+        exam.setStartTime(param.getObject("startTime", LocalDateTime.class));
+        exam.setEndTime(param.getObject("endTime", LocalDateTime.class));
         TempResult tempResult = examService.createExam(exam);
-//        System.out.println(map);
         ApiResult apiResult = new ApiResult();
         if (tempResult.isFlag()) {
-            apiResult.setCode(Code.SAVA_ERR);
+            apiResult.setCode(Code.SAVA_OK);
         } else {
             apiResult.setCode(Code.SAVA_ERR);
         }
@@ -69,22 +67,20 @@ public class ExamController {
     }
 
     @PutMapping("/updateExam")
-    public ApiResult updateExamInfo(@RequestBody Map<String, Object> map) {
-        //        封装Exam
-        System.out.println(map.toString());
+    public ApiResult updateExamInfo(@RequestBody JSONObject param) {
+        // 封装Exam
         Exam exam = new Exam();
-        exam.seteId(Integer.parseInt((String) map.get("eid")));
-        exam.setuId(Integer.parseInt((String) map.get("uid")));
-        exam.setpId(Integer.parseInt((String) map.get("pid")));
-        exam.setcId(Integer.parseInt((String) map.get("cid")));
-        exam.setName((String) map.get("name"));
-        exam.setStatus(Integer.parseInt((String) map.get("status")));
-        exam.setIsExist(Integer.parseInt((String) map.get("isExist")));
-        String endTime = (String) map.get("endTime");
-        String startTime = (String) map.get("startTime");
+        exam.seteId(param.getInteger("eId"));
+        exam.setuId(param.getInteger("uId"));
+        exam.setpId(param.getInteger("pId"));
+        exam.setcId(param.getInteger("cId"));
+        exam.setName(param.getString("name"));
+        exam.setStatus(param.getInteger("status"));
+        exam.setIsExist(param.getInteger("isExist"));
+
         //字符串格式化为时间 LocalDateTime类型
-        exam.setEndTime(LocalDateTime.parse(endTime, DATE_TIME_FORMATTER));
-        exam.setStartTime(LocalDateTime.parse(startTime, DATE_TIME_FORMATTER));
+        exam.setEndTime(param.getObject("endTime", LocalDateTime.class));
+        exam.setStartTime(param.getObject("startTime", LocalDateTime.class));
         //更新操作
         ApiResult apiResult = examService.updateExamInfo(exam);
         if (apiResult.getData() != null) {
@@ -107,8 +103,8 @@ public class ExamController {
      * @return
      */
     @GetMapping("/selectOne/{examId}")
-    public ApiResult selectOne(@PathVariable("examId") String examId) {
-        ApiResult apiResult = examService.selectOne(Integer.parseInt(examId));
+    public ApiResult selectOne(@PathVariable("examId") Integer examId) {
+        ApiResult apiResult = examService.selectOne(examId);
         return apiResult;
     }
 
@@ -127,7 +123,12 @@ public class ExamController {
             for (int i = 0; i < jsonArray.size(); i++) {
                 JSONObject obj = jsonArray.getJSONObject(i);
                 JSONObject answer = obj.getJSONObject("answer");
-                answer.put("answerContent", "");
+                if (answer.getInteger("typeId") == 3) {
+                    answer.put("answerContent", new ArrayList<>());
+                } else {
+                    answer.put("answerContent", "");
+                }
+
                 content.getJSONArray(key).getJSONObject(i).put("answer", answer);
             }
         }
@@ -135,9 +136,24 @@ public class ExamController {
         return apiResult;
     }
 
-    @GetMapping("/getstuExams/{uId}")
-    public ApiResult getExamListBystu(@PathVariable("uId") Integer uId) {
-        System.out.println("=========================" + uId);
+    @GetMapping("/getStuExams/{uId}")
+    public ApiResult getExamListByStu(@PathVariable("uId") Integer uId) {
         return examService.getExamListBystu(uId);
+    }
+
+    @GetMapping("/updateAllStatus")
+    public ApiResult getExamListByStu() {
+        return examService.getExams();
+    }
+
+    @GetMapping("/{uId}/{eId}")
+    public ApiResult isSubmit(@PathVariable("uId") Integer uId,
+                              @PathVariable("eId") Integer eId) {
+        return examService.isSubmit(uId, eId);
+    }
+
+    @GetMapping("/submitList/{uId}")
+    public ApiResult submitList(@PathVariable("uId") Integer uId) {
+        return examService.submitList(uId);
     }
 }

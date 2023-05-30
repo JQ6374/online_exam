@@ -1,6 +1,5 @@
 package com.zz.utils.result;
 
-
 public class ApiResult<T> {
 
     private Integer code;

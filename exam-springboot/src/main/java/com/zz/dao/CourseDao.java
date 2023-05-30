@@ -50,6 +50,22 @@ public interface CourseDao {
     @Update("delete from student_course where uc_id=#{ucId}")
     Integer deleteStudentByCourse(Integer ucId);
 
-    @Select("select `name` as courseName from course where c_id=#{cId}")
-       String selectNameByCid(Integer cId);
+    /**
+     * 用在这个函数关联com.zz.dao.ExamDao#selectOne(java.lang.Integer)
+     * @param cId
+     * @return
+     */
+    @Select("select name as courseName from course where c_id=#{cId}")
+    String selectNameByCid(Integer cId);
+
+    /**
+     * 学生查询已经加入的课程
+     *
+     * @param uId 学生Id
+     * @return [{"teacherName": xxx, "courseName": xxx}]
+     */
+    @Select("select s2.c_id cId, s3.userName teacherName, s2.name courseName " +
+            "from student_course s1, course s2, user s3 " +
+            "where s1.u_id=${uId} and s1.c_id=s2.c_id and s2.u_id=s3.u_id;")
+    ArrayList<JSONObject> selectChoiceCourseByUId(Integer uId);
 }

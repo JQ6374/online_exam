@@ -25,4 +25,10 @@ public interface ExamService {
     public ApiResult judge(JSONObject jsonObject);
 
     public ApiResult getExamListBystu(Integer uId);
+
+    public ApiResult getExams();
+
+    ApiResult isSubmit(Integer uId, Integer eId);
+
+    ApiResult submitList(Integer uId);
 }

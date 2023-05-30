@@ -121,18 +121,19 @@ const login = async () => {
     const {data} = await userStore.userLogin(ruleForm)
     loading.value = false;
     let redirect: any = $route.query.redirect;
-    console.log(redirect)
     let toPath = '/index'
     if (ruleForm.rId == 2) {
       toPath = '/admin'
     }
     await $router.push({path: redirect || toPath});
-
+    userStore.uId = (data as LoginData).uId;
+    userStore.username = (data as LoginData).username
     ElNotification({
       title: '登录成功！',
-      message: `欢迎回来${(data as LoginData).username} ~`,
+      message: `欢迎回来${userStore.username} ~`,
       type: 'success'
     })
+
   } catch (error) {
     loading.value = false;
     //登录失败的提示信息

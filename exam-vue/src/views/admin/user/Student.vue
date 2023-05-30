@@ -8,9 +8,9 @@
   >
     <template #main>
       <el-table width="100%" :height=useMainHeight().mainHeight :data="tableData" stripe>
-        <el-table-column align="center" prop="uId" label="学号" fixed/>
-        <el-table-column align="center" prop="userName" label="学生姓名"/>
-        <el-table-column align="center" prop="courseName" label="课程名"/>
+        <el-table-column align="center" prop="uId" label="学号" sortable/>
+        <el-table-column align="center" prop="userName" label="学生姓名" sortable/>
+        <el-table-column align="center" prop="courseName" label="课程名" sortable/>
         <el-table-column align="center" prop="email" label="邮箱" sortable/>
         <el-table-column align="center" label="操作">
           <template #default="scope">
@@ -120,7 +120,7 @@ const handleEdit = (row) => {
 const updateStudentCourse = async () => {
   dialogFormVisible.value = false;
   try {
-    const res = await request.put<any, ApiResult>('/course/updateStudentByCourse', form)
+    const res = await myRequest.put<any, ApiResult>('/course/updateStudentByCourse', form)
     MyElNotification(res, Code.UPDATE_OK, '修改');
     await getTableData();
   } catch (e) {

@@ -49,7 +49,7 @@
           width="100%"
           :height="useMainHeight().mainHeight"
           :data="tableData" stripe>
-        <el-table-column align="center" prop="cId" label="课程号" fixed/>
+        <el-table-column align="center" prop="cId" label="课程号"/>
         <el-table-column align="center" prop="name" label="课程名称"/>
         <el-table-column align="center" prop="courseCode" label="课程口令"/>
         <el-table-column align="center" prop="createTime" label="创建时间" sortable/>

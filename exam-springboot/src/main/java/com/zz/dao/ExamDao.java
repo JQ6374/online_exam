@@ -1,6 +1,5 @@
 package com.zz.dao;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.zz.bean.Course;
 import com.zz.bean.Exam;
@@ -49,7 +48,16 @@ public interface ExamDao {
      * @return
      */
     @Select("select * from exam where e_id=#{eId}")
-    @Results({@Result(property = "uId", column = "u_id"), @Result(property = "teacherName", column = "u_id", javaType = Course.class, one = @One(select = "com.zz.dao.UserDao.getNameByid")), @Result(property = "cId", column = "c_id"), @Result(property = "courseName", column = "c_id", javaType = Course.class, one = @One(select = "com.zz.dao.CourseDao.selectNameByCid")), @Result(property = "pId", column = "p_id"), @Result(property = "content", column = "p_id", javaType = Papers.class, one = @One(select = "com.zz.dao.PapersDao.getPaperContent"))})
+    @Results({@Result(property = "uId", column = "u_id"),
+            @Result(property = "teacherName", column = "u_id",
+                    javaType = Course.class,
+                    one = @One(select = "com.zz.dao.UserDao.getNameByid")),
+            @Result(property = "cId", column = "c_id"),
+            @Result(property = "courseName", column = "c_id", javaType = Course.class,
+                    one = @One(select = "com.zz.dao.CourseDao.selectNameByCid")),
+            @Result(property = "pId", column = "p_id"),
+            @Result(property = "content", column = "p_id", javaType = Papers.class,
+                    one = @One(select = "com.zz.dao.PapersDao.getPaperContent"))})
     public Exam selectOne(Integer eId);
 
     /**
@@ -59,13 +67,16 @@ public interface ExamDao {
      * @param uId
      * @return
      */
-    @Select("SELECT *,name as courName FROM course c " + "JOIN student_course sc " + "ON c.c_id = sc.c_id " + "JOIN user s ON sc.u_id = s.u_id " + "WHERE s.u_id = #{uId}")
+    @Select("SELECT *,c.name as courName FROM course c "
+            + "JOIN student_course sc "
+            + "ON c.c_id = sc.c_id "
+            + "JOIN user s ON sc.u_id = s.u_id "
+            + "WHERE s.u_id = #{uId}")
     List<Course> getCoursesByUid(Integer uId);
 
     /**
      * 根据方法getCoursesByUid的结果集进行查询，既根据学生的所属课程进行查询该学生所有的考试信息
-     *
-     * @param cId getCoursesByUid的结果集元素
+     * @param cIds getCoursesByUid的结果集元素
      * @return
      */
     @Select("<script>" +
@@ -99,4 +110,19 @@ public interface ExamDao {
 
     @Select("select count(1) from student_exam where u_id=#{uId} and e_id=#{eId}")
     public Integer selectIsExist(StudentExam studentExam);
+
+    /**
+     * 查询所有的考试，来更新状态
+     */
+    @Select("select * from exam")
+    public ArrayList<Exam> findAll();
+
+    @Update("update exam set status=#{status} where e_id=#{eId}")
+    public Integer updateStatus(Exam exam);
+
+    @Select("select count(1) from student_exam where u_id=#{uId} and e_id=#{eId}")
+    Integer isSubmit(Integer uId, Integer eId);
+
+    @Select("select * from student_exam where u_id=#{uId}")
+    ArrayList<JSONObject> submitList(Integer uId);
 }

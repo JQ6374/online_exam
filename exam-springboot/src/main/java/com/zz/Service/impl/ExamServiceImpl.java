@@ -9,6 +9,7 @@ import com.zz.bean.Exam;
 import com.zz.bean.StudentExam;
 import com.zz.dao.ExamDao;
 import com.zz.utils.Code;
+import com.zz.utils.ExamUtils;
 import com.zz.utils.result.ApiResult;
 import com.zz.utils.result.TempResult;
 import com.zz.utils.subjecttiveJudge.ScorePointSim;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 
 @Service
@@ -62,7 +64,6 @@ public class ExamServiceImpl implements ExamService {
     //考试信息更改 时间、试卷等。
     @Override
     public ApiResult updateExamInfo(Exam exam) {
-        System.out.println(exam);
         Integer flag = examDao.updateExamInfo(exam);//返回更新后的考试实体
         ApiResult apiResult = new ApiResult();
 
@@ -126,11 +127,6 @@ public class ExamServiceImpl implements ExamService {
             cIds.add(coursesByUid.get(i).getcId());
         }
         ArrayList<JSONObject> res = examDao.getExamsByCourseId(cIds);
-//        JSONArray jsonArray = new JSONArray();
-//        for (Course course:
-//                coursesByUid) {
-//            jsonArray.add();
-//        }
         return new ApiResult(Code.GET_OK, res, "查询成功");
     }
 
@@ -144,6 +140,8 @@ public class ExamServiceImpl implements ExamService {
     public ApiResult judge(JSONObject jsonObject) {
         Integer uId = jsonObject.getInteger("uId");
         Integer eId = jsonObject.getInteger("eId");
+        ApiResult<Boolean> isSub = isSubmit(uId, eId);
+        if (!isSub.getData()) return isSub;
         Exam exam = examDao.selectOne(eId);
         JSONObject rightContent = JSON.parseObject(exam.getContent());
         JSONObject content = jsonObject.getJSONObject("content");
@@ -205,5 +203,34 @@ public class ExamServiceImpl implements ExamService {
         boolean isSuccess = integer != 0;
         return new ApiResult(isSuccess ? Code.SAVA_OK : Code.SAVA_ERR, result,
                 isSuccess ? "数据处理成功！" : "数据处理失败！");
+    }
+
+    public ApiResult getExams() {
+        List<Exam> examList = examDao.findAll(); // 获取所有考试记录
+        int count = 0;
+        for (Exam exam : examList) { // 遍历考试记录
+            Integer status = ExamUtils.getExamStatus(exam.getStartTime(), exam.getEndTime()); // 计算考试状态
+            if (!Objects.equals(exam.getStatus(), status)) {
+                exam.setStatus(status); // 将计算结果保存到考试记录中
+                examDao.updateStatus(exam);
+                count++;
+            }
+        }
+        return new ApiResult(Code.UPDATE_OK, null, "考试状态更新成功，更新了" + count + "条数据"); // 返回所有考试记录
+    }
+
+    @Override
+    public ApiResult isSubmit(Integer uId, Integer eId) {
+        Integer count = examDao.isSubmit(uId, eId);
+        boolean isSub = count == 0;
+        return new ApiResult(Code.GET_OK, isSub,
+                isSub ? "可以提交试卷！" : "已经提交试卷，不可重复提交！");
+    }
+
+    @Override
+    public ApiResult submitList(Integer uId) {
+        ArrayList<JSONObject> res = examDao.submitList(uId);
+        return new ApiResult(Code.GET_OK, res,
+                res.size() != 0 ? "查询到" + res.size() + "条数据！" : "查询结果为空！");
     }
 }

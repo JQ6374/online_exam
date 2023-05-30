@@ -68,12 +68,25 @@ public interface ExamDao {
      * @param cId getCoursesByUid的结果集元素
      * @return
      */
-    @Select("SELECT e.*, c.name as courseName, u.username as teacherName FROM exam e " +
-            "JOIN course c ON e.c_id = c.c_id "
-            + "JOIN user u ON c.u_id = u.u_id "
-            + "WHERE c.c_id = #{cId}")
-//    ArrayList<JSONObject> getExamsByCourseId(Integer cId);
-    JSONObject getExamsByCourseId(Integer cId);
+    @Select("<script>" +
+            "SELECT e.*, c.name as courseName, u.username as teacherName FROM exam e " +
+            "JOIN course c ON e.c_id = c.c_id " +
+            "JOIN user u ON c.u_id = u.u_id " +
+            "<where>" +
+            "<choose>" +
+            "<when test='cIds == null or cIds.size() == 0'>" +
+            "and c.c_id in (-1)" +
+            "</when>" +
+            "<otherwise>" +
+            "and c.c_id in " +
+            "<foreach item='cId' collection='cIds' open='(' separator=',' close=')'>" +
+            "#{cId}" +
+            "</foreach>" +
+            "</otherwise>" +
+            "</choose>" +
+            "</where>" +
+            "</script>")
+    ArrayList<JSONObject> getExamsByCourseId(ArrayList<Integer> cIds);
 
     /**
      * 存储学生考试提交记录以及试卷

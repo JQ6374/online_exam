@@ -1,5 +1,7 @@
 package com.zz.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.zz.Service.ExamService;
 
@@ -98,13 +100,44 @@ public class ExamController {
         return examService.selectAll(uId);
     }
 
+    /**
+     * 老师查询的能看到答案
+     *
+     * @param examId
+     * @return
+     */
     @GetMapping("/selectOne/{examId}")
     public ApiResult selectOne(@PathVariable("examId") String examId) {
         ApiResult apiResult = examService.selectOne(Integer.parseInt(examId));
         return apiResult;
     }
 
+    /**
+     * 学生查询的，看不到答案
+     *
+     * @param examId
+     * @return
+     */
+    @GetMapping("/selectOne/student/{examId}")
+    public ApiResult selectOneStu(@PathVariable("examId") String examId) {
+        ApiResult<Exam> apiResult = examService.selectOne(Integer.parseInt(examId));
+        JSONObject content = JSONObject.parseObject(apiResult.getData().getContent());
+        for (String key : content.keySet()) {
+            JSONArray jsonArray = content.getJSONArray(key);
+            for (int i = 0; i < jsonArray.size(); i++) {
+                JSONObject obj = jsonArray.getJSONObject(i);
+                JSONObject answer = obj.getJSONObject("answer");
+                answer.put("answerContent", "");
+                content.getJSONArray(key).getJSONObject(i).put("answer", answer);
+            }
+        }
+        apiResult.getData().setContent(content.toString());
+        return apiResult;
+    }
+
     @GetMapping("/getstuExams/{uId}")
-    public ApiResult getExamListBystu(@PathVariable("uId")Integer uId){
-        return   examService.getExamListBystu(uId);}
+    public ApiResult getExamListBystu(@PathVariable("uId") Integer uId) {
+        System.out.println("=========================" + uId);
+        return examService.getExamListBystu(uId);
+    }
 }

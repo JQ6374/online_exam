@@ -120,7 +120,7 @@ public class ExamTest {
         System.out.println(coursesByUid.toString());
         for (Course course:
              coursesByUid) {
-            System.out.println(examDao.getExamsByCourseId(course.getcId()));
+//            System.out.println(examDao.getExamsByCourseId(course.getcId()));
         }
     }
 }

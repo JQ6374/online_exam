@@ -115,17 +115,23 @@ public class ExamServiceImpl implements ExamService {
 
     /**
      * 学生获取自己的所有考试信息
+     *
      * @param uId 学生的uid
      * @return
      */
-    public ApiResult getExamListBystu(Integer uId){
-        List<Course> coursesByUid = examDao.getCoursesByUid(16);
-        JSONArray jsonArray = new JSONArray();
-        for (Course course:
-                coursesByUid) {
-            jsonArray.add(examDao.getExamsByCourseId(course.getcId()));
+    public ApiResult getExamListBystu(Integer uId) {
+        List<Course> coursesByUid = examDao.getCoursesByUid(uId);
+        ArrayList<Integer> cIds = new ArrayList<>();
+        for (int i = 0; i < coursesByUid.size(); i++) {
+            cIds.add(coursesByUid.get(i).getcId());
         }
-        return new ApiResult(Code.GET_OK,jsonArray,"查询成功");
+        ArrayList<JSONObject> res = examDao.getExamsByCourseId(cIds);
+//        JSONArray jsonArray = new JSONArray();
+//        for (Course course:
+//                coursesByUid) {
+//            jsonArray.add();
+//        }
+        return new ApiResult(Code.GET_OK, res, "查询成功");
     }
 
     /**

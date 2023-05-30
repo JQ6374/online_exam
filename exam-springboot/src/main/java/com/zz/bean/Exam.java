@@ -13,6 +13,8 @@ public class Exam {
     private Integer status;
     private Integer isExist;
     private String content;
+    private String courseName;
+    private String teacherName;
 
     @Override
     public String toString() {
@@ -27,11 +29,29 @@ public class Exam {
                 ", status=" + status +
                 ", isExist=" + isExist +
                 ", content='" + content + '\'' +
+                ", courseName='" + courseName + '\'' +
+                ", teacherName='" + teacherName + '\'' +
                 '}';
+    }
+
+    public String getTeacherName() {
+        return teacherName;
+    }
+
+    public void setTeacherName(String teacherName) {
+        this.teacherName = teacherName;
     }
 
     public Integer getuId() {
         return uId;
+    }
+
+    public String getCourseName() {
+        return courseName;
+    }
+
+    public void setCourseName(String courseName) {
+        this.courseName = courseName;
     }
 
     public void setuId(Integer uId) {

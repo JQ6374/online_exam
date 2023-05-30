@@ -49,4 +49,7 @@ public interface CourseDao {
 
     @Update("delete from student_course where uc_id=#{ucId}")
     Integer deleteStudentByCourse(Integer ucId);
+
+    @Select("select `name` as courseName from course where c_id=#{cId}")
+       String selectNameByCid(Integer cId);
 }

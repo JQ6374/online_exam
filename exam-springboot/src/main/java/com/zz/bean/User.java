@@ -12,6 +12,7 @@ public class User {
     private String emailCode;
     private LocalDateTime registerTime;
 
+
     @Override
     public String toString() {
         return "User{" +

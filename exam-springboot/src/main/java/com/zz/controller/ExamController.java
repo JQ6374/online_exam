@@ -1,5 +1,7 @@
 package com.zz.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.zz.Service.ExamService;
 
@@ -22,7 +24,7 @@ public class ExamController {
     private ExamService examService;
 
     @PostMapping("/judge")
-    public ApiResult judgeScore(@RequestBody JSONObject jsonObject){
+    public ApiResult judgeScore(@RequestBody JSONObject jsonObject) {
         return examService.judge(jsonObject);
     }
 
@@ -55,7 +57,6 @@ public class ExamController {
     @DeleteMapping("/{examId}")
     public ApiResult deleteExam(@PathVariable String examId) {
         Integer id = Integer.parseInt(examId);
-        System.out.println(id);
         TempResult tempResult = examService.deleteExam(id);
         ApiResult apiResult = new ApiResult();
         if (tempResult.isFlag()) {
@@ -72,11 +73,13 @@ public class ExamController {
         //        封装Exam
         System.out.println(map.toString());
         Exam exam = new Exam();
-
         exam.seteId(Integer.parseInt((String) map.get("eid")));
+        exam.setuId(Integer.parseInt((String) map.get("uid")));
         exam.setpId(Integer.parseInt((String) map.get("pid")));
         exam.setcId(Integer.parseInt((String) map.get("cid")));
         exam.setName((String) map.get("name"));
+        exam.setStatus(Integer.parseInt((String) map.get("status")));
+        exam.setIsExist(Integer.parseInt((String) map.get("isExist")));
         String endTime = (String) map.get("endTime");
         String startTime = (String) map.get("startTime");
         //字符串格式化为时间 LocalDateTime类型
@@ -97,10 +100,44 @@ public class ExamController {
         return examService.selectAll(uId);
     }
 
+    /**
+     * 老师查询的能看到答案
+     *
+     * @param examId
+     * @return
+     */
     @GetMapping("/selectOne/{examId}")
     public ApiResult selectOne(@PathVariable("examId") String examId) {
         ApiResult apiResult = examService.selectOne(Integer.parseInt(examId));
-        System.out.println(apiResult.getData().toString());
         return apiResult;
+    }
+
+    /**
+     * 学生查询的，看不到答案
+     *
+     * @param examId
+     * @return
+     */
+    @GetMapping("/selectOne/student/{examId}")
+    public ApiResult selectOneStu(@PathVariable("examId") String examId) {
+        ApiResult<Exam> apiResult = examService.selectOne(Integer.parseInt(examId));
+        JSONObject content = JSONObject.parseObject(apiResult.getData().getContent());
+        for (String key : content.keySet()) {
+            JSONArray jsonArray = content.getJSONArray(key);
+            for (int i = 0; i < jsonArray.size(); i++) {
+                JSONObject obj = jsonArray.getJSONObject(i);
+                JSONObject answer = obj.getJSONObject("answer");
+                answer.put("answerContent", "");
+                content.getJSONArray(key).getJSONObject(i).put("answer", answer);
+            }
+        }
+        apiResult.getData().setContent(content.toString());
+        return apiResult;
+    }
+
+    @GetMapping("/getstuExams/{uId}")
+    public ApiResult getExamListBystu(@PathVariable("uId") Integer uId) {
+        System.out.println("=========================" + uId);
+        return examService.getExamListBystu(uId);
     }
 }

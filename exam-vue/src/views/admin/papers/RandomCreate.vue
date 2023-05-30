@@ -205,4 +205,19 @@ $one-title-font-size: 18px;
   li {
     display: flex;
     align-items: center;
-    
+    margin: 10px;
+
+    span {
+      display: block;
+      white-space: nowrap;
+      margin-right: 30px;
+    }
+
+    .remark {
+      font-size: 14px;
+      color: #a6a3a3;
+    }
+  }
+}
+</style>
+

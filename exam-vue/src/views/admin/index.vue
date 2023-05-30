@@ -38,7 +38,7 @@
 //获取路由对象
 import {useRoute} from 'vue-router'
 //引入左侧菜单logo子组件
-import Logo from './layout/logo/index.vue'
+import Logo from '@/components/Logo/index.vue'
 //引入菜单组件
 import Menu from './layout/menu/index.vue'
 //右侧内容展示区域

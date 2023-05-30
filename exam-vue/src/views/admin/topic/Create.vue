@@ -77,6 +77,16 @@
         >
           <el-rate :max="3" v-model="form.difficultyId"/>
         </el-form-item>
+        <el-form-item
+            prop="status"
+            label="是否与其他老师共享题目"
+        >
+
+          <el-switch
+              v-model="switchValue"
+              @change="switchChange"
+          />
+        </el-form-item>
         <el-form-item class="my-item-deep">
           <el-button
               type="primary"
@@ -104,13 +114,19 @@ onMounted(() => {
 })
 const uId = useUserStore().uId;
 
+const switchValue = ref(false)
+const switchChange = (val) => {
+  form.status = val ? 1 : 0
+}
+
 interface Form {
   uId: number,
   typeId: number,
   tagId: string,
   difficultyId: number,
   question: string,
-  answer: string | Array<string>
+  answer: string | Array<string>,
+  status: number
 }
 
 const ruleFormRef = ref<FormInstance>()
@@ -120,14 +136,16 @@ const form = reactive<Form>({
   tagId: '',
   difficultyId: 1,
   question: '',
-  answer: ''
+  answer: '',
+  status: 0
 })
 const rules = reactive<FormRules>({
-  typeId: {required: true, message: '请选择题型', trigger: 'change'},
-  tagId: {required: true, message: '请选择标签', trigger: 'change'},
-  difficultyId: {required: true, message: '请输入答案', trigger: 'change'},
+  typeId: {required: true},
+  tagId: {required: true, message: '请选择标签', trigger: 'blur'},
+  difficultyId: {required: true},
   question: {required: true, message: '请输入题目', trigger: 'blur'},
-  answer: {required: true, message: '请输入答案', trigger: 'change'},
+  answer: {required: true, message: '请输入答案', trigger: 'blur'},
+  status: {required: true},
 })
 const getTagList = async () => {
   const res = await request.get<any, ApiResult>(`/tag/${uId}`)
@@ -207,8 +225,8 @@ const addTopic = () => {
   margin: 0 auto;
 }
 
-.my-item-deep:deep {
-  .el-form-item__content {
+.my-item-deep {
+  :deep(.el-form-item__content) {
     justify-content: center;
   }
 }

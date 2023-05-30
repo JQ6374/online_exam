@@ -78,7 +78,6 @@ const searchFn = async () => {
 </script>
 
 <style scoped lang="scss">
-$el-header-height: 40px;
 .search {
   display: flex;
   margin-left: 50px;

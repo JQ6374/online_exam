@@ -41,8 +41,8 @@ public class EmailAuthController {
             redisTemplate.opsForValue().set(toEmail, code,
                     5, TimeUnit.MINUTES);
         }
-        result.setCode(Code.SAVA_OK);
-        result.setMsg(flag ? "邮件发送成功！" : "服务器繁忙请稍后!");
+        result.setCode(flag ? Code.SAVA_OK : Code.SAVA_ERR);
+        result.setMsg(flag ? "邮件发送成功！" : "邮箱发送失败，请检查是否输入正确!");
         return result;
     }
 }

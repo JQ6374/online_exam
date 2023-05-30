@@ -247,6 +247,16 @@ export const constantRouter = [
     ]
   },
   {
+    path: '/detailsPage',
+    name: 'detailsPage',
+    // @ts-ignore
+    component: () => import('@/views/admin/exam/DetailsPage.vue'),
+    meta: {
+      title: '考试详情页',
+      hidden: true
+    }
+  },
+  {
     path: '/test',
     // @ts-ignore
     component: () => import('@/components/Test.vue'),

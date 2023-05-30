@@ -1,7 +1,7 @@
 <template>
   <div class="logo" v-if="setting.logoHidden">
     <img :src="setting.logo" alt="">
-    <p v-if="!layOutSettingStore.fold">{{ setting.title }}</p>
+    <p v-if="showTitle && !layOutSettingStore.fold">{{ setting.title }}</p>
   </div>
 </template>
 
@@ -9,14 +9,18 @@
 //引入设置标题与logo这配置文件
 import setting from "@/setting.ts";
 import useLayOutSettingStore from "@/store/modules/layoutTabBar.ts";
-const layOutSettingStore =  useLayOutSettingStore()
+
+const layOutSettingStore = useLayOutSettingStore()
+defineProps({
+  showTitle: {
+    type: Boolean,
+    default: true
+  }
+})
+
 
 </script>
-<script lang="ts">
-export default {
-  name: "Logo"
-};
-</script>
+
 <style scoped lang="scss">
 .logo {
   width: 100%;

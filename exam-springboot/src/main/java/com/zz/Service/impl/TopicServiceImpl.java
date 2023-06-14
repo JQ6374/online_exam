@@ -69,7 +69,7 @@ public class TopicServiceImpl implements TopicService {
      * @return 题目集合
      */
     @Override
-    public ApiResult searchByInfo(Integer uId, String info) {
+    public ApiResult<List<Topic>> searchByInfo(Integer uId, String info) {
         ArrayList<Topic> topicList = topicDao.selectByUId(uId);
         List<Topic> res = topicList.stream()
                 .filter(item -> {
@@ -81,7 +81,7 @@ public class TopicServiceImpl implements TopicService {
                 })
                 .collect(Collectors.toList());
         int count = res.size();
-        return new ApiResult(Code.GET_OK, res,
+        return new ApiResult<>(Code.GET_OK, res,
                 count != 0 ? "查询出" + count + "道题目！" : "未找到改题目！");
     }
 

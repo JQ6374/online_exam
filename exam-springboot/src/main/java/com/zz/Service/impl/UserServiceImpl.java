@@ -10,6 +10,7 @@ import com.zz.utils.result.TempResult;
 import com.zz.utils.EmailUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -23,7 +24,7 @@ public class UserServiceImpl implements UserService {
     private UserDao userDao;
 
     @Autowired
-    private BCryptPasswordEncoder encoder;
+    private PasswordEncoder encoder;
 
     @Override
     public TempResult register(User user) {
@@ -47,9 +48,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ApiResult login(User user) {
+    public ApiResult<JSONObject> login(User user) {
         ArrayList<User> userLis = userDao.selectByEmail(user);
-        ApiResult apiResult = new ApiResult();
+        ApiResult<JSONObject> apiResult = new ApiResult<>();
         if (userLis.isEmpty()) {
             apiResult.setCode(Code.GET_ERR);
             apiResult.setMsg("账号不存在！");

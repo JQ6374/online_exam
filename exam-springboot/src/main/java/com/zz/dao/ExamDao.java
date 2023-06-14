@@ -36,7 +36,7 @@ public interface ExamDao {
      * @return
      */
     // 查询所有 All 会获取papers的内容
-    @Select("select * from exam where u_id=#{uId} ORDER BY start_time DESC")
+    @Select("select * from exam where u_id=#{uId} and is_exist=1 ORDER BY start_time DESC")
     @Results({@Result(property = "uId", column = "u_id"), @Result(property = "teacherName", column = "u_id", javaType = Course.class, one = @One(select = "com.zz.dao.UserDao.getNameByid")), @Result(property = "cId", column = "c_id"), @Result(property = "courseName", column = "c_id", javaType = Course.class, one = @One(select = "com.zz.dao.CourseDao.selectNameByCid")), @Result(property = "pId", column = "p_id"), @Result(property = "content", column = "p_id", one = @One(select = "com.zz.dao.PapersDao.getPaperContent"))})
     public List<Exam> selectAll(Integer uId);
 
@@ -95,7 +95,9 @@ public interface ExamDao {
             "</foreach>" +
             "</otherwise>" +
             "</choose>" +
+            "and e.is_exist = 1" +
             "</where>" +
+            "order by start_time desc" +
             "</script>")
     ArrayList<JSONObject> getExamsByCourseId(ArrayList<Integer> cIds);
 

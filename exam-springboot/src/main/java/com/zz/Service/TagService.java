@@ -4,15 +4,15 @@ import com.alibaba.fastjson.JSONObject;
 import com.zz.bean.Tag;
 import com.zz.utils.result.ApiResult;
 
+import java.util.List;
+
 public interface TagService {
-    public ApiResult updateTag(JSONObject tag);
+    ApiResult<Integer> updateTag(JSONObject tag);
 
-    public ApiResult selectAll(Integer uId);
+    ApiResult<List<Tag>> selectAll(Integer uId);
 
-    public ApiResult selectById(Integer tagId);
+    ApiResult<Integer> addTag(JSONObject json);
 
-    public ApiResult addTag(JSONObject json);
-
-    public ApiResult deleteTag(Integer tagId);
+    ApiResult<Integer> deleteTag(Integer tagId);
 
 }

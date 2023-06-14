@@ -31,9 +31,9 @@ public class EmailAuthController {
     private EmailUtils emailUtils;
 
     @PostMapping("/send_email")
-    public ApiResult send_email(@RequestBody JSONObject param) {
+    public ApiResult<Object> send_email(@RequestBody JSONObject param) {
         String toEmail = param.getString("toEmail");
-        ApiResult result = new ApiResult();
+        ApiResult<Object> result = new ApiResult<>();
         String code = emailUtils.generateValidateCodeString(6);
         boolean flag = mailService.sendMail(toEmail, code);
         if (flag) {

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -25,12 +26,12 @@ public class ExamController {
     private ExamService examService;
 
     @PostMapping("/judge")
-    public ApiResult judgeScore(@RequestBody JSONObject jsonObject) {
+    public ApiResult<?> judgeScore(@RequestBody JSONObject jsonObject) {
         return examService.judge(jsonObject);
     }
 
     @PostMapping("/createExam")
-    public ApiResult createExam(@RequestBody JSONObject param) {
+    public ApiResult<Object> createExam(@RequestBody JSONObject param) {
 //        读取map数据注入exam
         Exam exam = new Exam();
         exam.setcId(param.getInteger("cId"));
@@ -42,7 +43,7 @@ public class ExamController {
         exam.setStartTime(param.getObject("startTime", LocalDateTime.class));
         exam.setEndTime(param.getObject("endTime", LocalDateTime.class));
         TempResult tempResult = examService.createExam(exam);
-        ApiResult apiResult = new ApiResult();
+        ApiResult<Object> apiResult = new ApiResult<>();
         if (tempResult.isFlag()) {
             apiResult.setCode(Code.SAVA_OK);
         } else {
@@ -53,10 +54,10 @@ public class ExamController {
     }
 
     @DeleteMapping("/{examId}")
-    public ApiResult deleteExam(@PathVariable String examId) {
+    public ApiResult<Object> deleteExam(@PathVariable String examId) {
         Integer id = Integer.parseInt(examId);
         TempResult tempResult = examService.deleteExam(id);
-        ApiResult apiResult = new ApiResult();
+        ApiResult<Object> apiResult = new ApiResult<>();
         if (tempResult.isFlag()) {
             apiResult.setCode(Code.DELETE_OK);
         } else {
@@ -67,7 +68,7 @@ public class ExamController {
     }
 
     @PutMapping("/updateExam")
-    public ApiResult updateExamInfo(@RequestBody JSONObject param) {
+    public ApiResult<Exam> updateExamInfo(@RequestBody JSONObject param) {
         // 封装Exam
         Exam exam = new Exam();
         exam.seteId(param.getInteger("eId"));
@@ -82,7 +83,7 @@ public class ExamController {
         exam.setEndTime(param.getObject("endTime", LocalDateTime.class));
         exam.setStartTime(param.getObject("startTime", LocalDateTime.class));
         //更新操作
-        ApiResult apiResult = examService.updateExamInfo(exam);
+        ApiResult<Exam> apiResult = examService.updateExamInfo(exam);
         if (apiResult.getData() != null) {
             apiResult.setCode(Code.UPDATE_OK);
         } else {
@@ -92,30 +93,27 @@ public class ExamController {
     }
 
     @GetMapping("/{uId}")
-    public ApiResult selectAll(@PathVariable("uId") Integer uId) {
+    public ApiResult<List<Exam>> selectAll(@PathVariable("uId") Integer uId) {
         return examService.selectAll(uId);
     }
 
     /**
      * 老师查询的能看到答案
      *
-     * @param examId
-     * @return
+     * @param examId 考试Id
      */
     @GetMapping("/selectOne/{examId}")
-    public ApiResult selectOne(@PathVariable("examId") Integer examId) {
-        ApiResult apiResult = examService.selectOne(examId);
-        return apiResult;
+    public ApiResult<Exam> selectOne(@PathVariable("examId") Integer examId) {
+        return examService.selectOne(examId);
     }
 
     /**
      * 学生查询的，看不到答案
      *
-     * @param examId
-     * @return
+     * @param examId 考试Id
      */
     @GetMapping("/selectOne/student/{examId}")
-    public ApiResult selectOneStu(@PathVariable("examId") String examId) {
+    public ApiResult<Exam> selectOneStu(@PathVariable("examId") String examId) {
         ApiResult<Exam> apiResult = examService.selectOne(Integer.parseInt(examId));
         JSONObject content = JSONObject.parseObject(apiResult.getData().getContent());
         for (String key : content.keySet()) {
@@ -128,7 +126,6 @@ public class ExamController {
                 } else {
                     answer.put("answerContent", "");
                 }
-
                 content.getJSONArray(key).getJSONObject(i).put("answer", answer);
             }
         }
@@ -137,23 +134,23 @@ public class ExamController {
     }
 
     @GetMapping("/getStuExams/{uId}")
-    public ApiResult getExamListByStu(@PathVariable("uId") Integer uId) {
-        return examService.getExamListBystu(uId);
+    public ApiResult<List<JSONObject>> getExamListByStu(@PathVariable("uId") Integer uId) {
+        return examService.getExamListByStu(uId);
     }
 
     @GetMapping("/updateAllStatus")
-    public ApiResult getExamListByStu() {
+    public ApiResult<Object> getExamListByStu() {
         return examService.getExams();
     }
 
     @GetMapping("/{uId}/{eId}")
-    public ApiResult isSubmit(@PathVariable("uId") Integer uId,
-                              @PathVariable("eId") Integer eId) {
+    public ApiResult<Boolean> isSubmit(@PathVariable("uId") Integer uId,
+                                       @PathVariable("eId") Integer eId) {
         return examService.isSubmit(uId, eId);
     }
 
     @GetMapping("/submitList/{uId}")
-    public ApiResult submitList(@PathVariable("uId") Integer uId) {
+    public ApiResult<List<JSONObject>> submitList(@PathVariable("uId") Integer uId) {
         return examService.submitList(uId);
     }
 }

@@ -4,6 +4,7 @@ import {Code} from "@/utils/Code.ts";
 import {LoginData} from "@/utils/type.ts";
 import {constantRouter} from "@/router/routers.ts";
 import {ref} from "vue";
+import {GET_TOKEN, REMOVE_TOKEN} from "@/utils/token.ts";
 
 const constantRouterList = ref()
 const useUserStore = defineStore('User', {
@@ -30,15 +31,19 @@ const useUserStore = defineStore('User', {
         //本地存储持久化存储一份
         // SET_TOKEN(String((res.data as LoginData).uId))
         //能保证当前async函数返回一个成功的promise
-        const data = res.data as LoginData;
+        const data: LoginData = res.data as LoginData;
         this.uId = localStorage.getItem("uId") || data.uId;
         this.username = localStorage.getItem("username") || data.username;
-        localStorage.setItem("uId", String(data.uId))
-        localStorage.setItem("username", data.username)
+        GET_TOKEN(data);
         return res
       } else {
         return Promise.reject(new Error(res.msg))
       }
+    },
+    userLogout() {
+      this.uId = '';
+      this.username = '';
+      REMOVE_TOKEN();
     }
   },
   getters: {}

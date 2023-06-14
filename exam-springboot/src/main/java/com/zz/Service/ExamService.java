@@ -5,30 +5,33 @@ import com.zz.bean.Exam;
 import com.zz.utils.result.ApiResult;
 import com.zz.utils.result.TempResult;
 
+import java.util.List;
+import java.util.Objects;
+
 
 public interface ExamService {
 
-    //    创建考试
-    public TempResult createExam(Exam exam);
+    // 创建考试
+    TempResult createExam(Exam exam);
 
-    //    注销考试
-    public TempResult deleteExam(Integer examId);
+    // 注销考试
+    TempResult deleteExam(Integer examId);
 
-    //信息更新 时间、试卷。
-    public ApiResult updateExamInfo(Exam exam);
+    // 信息更新 时间、试卷。
+    ApiResult<Exam> updateExamInfo(Exam exam);
 
-    //查询
-    public ApiResult selectAll(Integer uId);
+    // 查询
+    ApiResult<List<Exam>> selectAll(Integer uId);
 
-    public ApiResult selectOne(Integer examId);
+    ApiResult<Exam> selectOne(Integer examId);
 
-    public ApiResult judge(JSONObject jsonObject);
+    ApiResult<?> judge(JSONObject jsonObject);
 
-    public ApiResult getExamListBystu(Integer uId);
+    ApiResult<List<JSONObject>> getExamListByStu(Integer uId);
 
-    public ApiResult getExams();
+    ApiResult<Object> getExams();
 
-    ApiResult isSubmit(Integer uId, Integer eId);
+    ApiResult<Boolean> isSubmit(Integer uId, Integer eId);
 
-    ApiResult submitList(Integer uId);
+    ApiResult<List<JSONObject>> submitList(Integer uId);
 }

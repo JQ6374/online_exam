@@ -2,9 +2,12 @@ package com.zz.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.zz.Service.TagService;
+import com.zz.bean.Tag;
 import com.zz.utils.result.ApiResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/tag")
@@ -18,35 +21,24 @@ public class TagController {
      * @param uId 教师uid
      * @return 返回apiresult
      */
-    @GetMapping("/gettags/{uId}")
-    public ApiResult getAllTag(@PathVariable("uId") Integer uId) {
+    @GetMapping("/getTags/{uId}")
+    public ApiResult<List<Tag>> getAllTag(@PathVariable("uId") Integer uId) {
         return tagService.selectAll(uId);
     }
 
-    /**
-     * 根据tagId获取该标签
-     *
-     * @param tagId
-     * @return
-     */
-    @GetMapping("/gettag/{tagId}")
-    public ApiResult getOneById(@PathVariable("tagId") Integer tagId) {
-        return tagService.selectById(tagId);
-    }
-
-    @PostMapping("/addtag")
-    public ApiResult addTag(@RequestBody JSONObject jsonObject) {
+    @PostMapping("/addTag")
+    public ApiResult<Integer> addTag(@RequestBody JSONObject jsonObject) {
         return tagService.addTag(jsonObject);
     }
 
 
     @PostMapping("/updateTag")
-    public ApiResult updateTag(@RequestBody JSONObject jsonObject) {
+    public ApiResult<Integer> updateTag(@RequestBody JSONObject jsonObject) {
         return tagService.updateTag(jsonObject);
     }
 
-    @GetMapping("/deleteTag/{tagId}")
-    public ApiResult deleteTag(@PathVariable("tagId") Integer tagId) {
+    @DeleteMapping("/{tagId}")
+    public ApiResult<Integer> deleteTag(@PathVariable("tagId") Integer tagId) {
         return tagService.deleteTag(tagId);
     }
 }

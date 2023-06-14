@@ -21,14 +21,17 @@ import globalComponent from '@/components'
 
 // 配置路由
 import router from "@/router";
+// 路由守卫
+import "@/router/promission.ts"
 
 // 配置pinia仓库
 import pinia from "@/store";
 
+
 const app = createApp(App);
 app.use(globalComponent)
 app.use(ElementPlus, {
-    locale: zhCn
+  locale: zhCn
 });
 app.use(router);
 app.use(pinia);

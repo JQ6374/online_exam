@@ -38,6 +38,9 @@ pagehelper:
 my-email:
   title: "[在线考试系统] 您的账号注册验证码"
 
+jwt:
+  secret: P@ssw0rd123 # 加密密钥
+
 server:
   port: 80
 

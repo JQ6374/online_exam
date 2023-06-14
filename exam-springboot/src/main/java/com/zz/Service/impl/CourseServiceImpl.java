@@ -8,6 +8,7 @@ import com.zz.utils.Code;
 import com.zz.utils.CourseUtils;
 import com.zz.utils.result.ApiResult;
 import com.zz.utils.result.TempResult;
+import org.apache.ibatis.jdbc.Null;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,11 +24,11 @@ public class CourseServiceImpl implements CourseService {
     private CourseDao courseDao;
 
     @Override
-    public ApiResult selectByUId(Integer uId) {
+    public ApiResult<List<Course>> selectByUId(Integer uId) {
         ArrayList<Course> courses = courseDao.selectByUId(uId);
         System.out.println(courses);
         boolean isEmpty = courses.isEmpty();
-        return new ApiResult(Code.GET_OK, courses, !isEmpty ? "查询成功！" : "查询结果为空！");
+        return new ApiResult<>(Code.GET_OK, courses, !isEmpty ? "查询成功！" : "查询结果为空！");
     }
 
     @Override
@@ -71,9 +72,9 @@ public class CourseServiceImpl implements CourseService {
      * @param uId 教师所教授课程cid的的列表
      * @return 返回apiresult
      */
-    public ApiResult selectStudentAndCourse(Integer uId) {
+    public ApiResult<List<JSONObject>> selectStudentAndCourse(Integer uId) {
         ArrayList<JSONObject> jsonObjects = courseDao.selectStudentAndCourse(uId);
-        ApiResult apiResult = new ApiResult();
+        ApiResult<List<JSONObject>> apiResult = new ApiResult<>();
         apiResult.setData(jsonObjects);
         if (apiResult.getData() != null) {
             apiResult.setCode(Code.GET_OK);
@@ -86,22 +87,23 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public ApiResult searchStudentAndCourse(Integer uId, String studentIdOrName) {
+    public ApiResult<List<JSONObject>> searchStudentAndCourse(Integer uId, String studentIdOrName) {
         ArrayList<JSONObject> studentList = courseDao.selectStudentAndCourse(uId);
 
         List<JSONObject> res = studentList.stream()
                 .filter(item -> studentIdOrName.equals(item.getString("uId"))
-                        || studentIdOrName.equals(item.getString("userName")))
+                        || studentIdOrName.equals(item.getString("userName"))
+                        || studentIdOrName.equals(item.getString("courseName")))
                 .collect(Collectors.toList());
 
         boolean isSuccess = !res.isEmpty();
-        return new ApiResult(
+        return new ApiResult<>(
                 Code.GET_OK, res,
                 isSuccess ? "查询出" + res.size() + "名学生！" : "未找到该学生！");
     }
 
     @Override
-    public ApiResult searchCourseByName(Integer uId, String courseName) {
+    public ApiResult<List<Course>> searchCourseByName(Integer uId, String courseName) {
         ArrayList<Course> courseList = courseDao.selectByUId(uId);
 
         List<Course> res = courseList.stream()
@@ -109,24 +111,24 @@ public class CourseServiceImpl implements CourseService {
                 .collect(Collectors.toList());
 
         boolean isSuccess = !res.isEmpty();
-        return new ApiResult(
+        return new ApiResult<>(
                 Code.GET_OK, res,
                 isSuccess ? "查询出" + res.size() + "门课程！" : "未找到该课程！");
     }
 
     @Override
-    public ApiResult updateStudentByCourse(Integer cId, Integer ucId) {
+    public ApiResult<Object> updateStudentByCourse(Integer cId, Integer ucId) {
         Integer integer = courseDao.updateStudentByCourse(cId, ucId);
         boolean isSuccess = integer != 0;
-        return new ApiResult(isSuccess ? Code.UPDATE_OK : Code.UPDATE_ERR, null,
+        return new ApiResult<>(isSuccess ? Code.UPDATE_OK : Code.UPDATE_ERR, null,
                 isSuccess ? "学生所选课程修改成功！" : "修改失败！");
     }
 
     @Override
-    public ApiResult deleteStudentByCourse(Integer ucId) {
+    public ApiResult<Object> deleteStudentByCourse(Integer ucId) {
         Integer integer = courseDao.deleteStudentByCourse(ucId);
         boolean isSuccess = integer != 0;
-        return new ApiResult(isSuccess ? Code.DELETE_OK : Code.DELETE_ERR, null,
+        return new ApiResult<>(isSuccess ? Code.DELETE_OK : Code.DELETE_ERR, null,
                 isSuccess ? "已经该学生移除课程！" : "删除失败！");
     }
 

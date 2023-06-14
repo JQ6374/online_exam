@@ -6,10 +6,11 @@ import com.zz.utils.result.ApiResult;
 import com.zz.utils.result.TempResult;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public interface CourseService {
 
-    ApiResult selectByUId(Integer uId);
+    ApiResult<List<Course>> selectByUId(Integer uId);
 
     boolean addCourse(Course course);
 
@@ -24,15 +25,15 @@ public interface CourseService {
      * @param uId 教师的uId
      * @return ApiResult接口
      */
-    ApiResult selectStudentAndCourse(Integer uId);
+    ApiResult<List<JSONObject>> selectStudentAndCourse(Integer uId);
 
     /**
      * 根据学生Id或者学生姓名搜索
      * @param uId 教师Id
-     * @param studentIdOrName 学生Id或者姓名
+     * @param studentIdOrNameOrCourseName 学生Id或者姓名或者课程名称
      * @return ApiResult接口
      */
-    ApiResult searchStudentAndCourse(Integer uId, String studentIdOrName);
+    ApiResult<List<JSONObject>> searchStudentAndCourse(Integer uId, String studentIdOrNameOrCourseName);
 
     /**
      * 根据课程名进行搜索
@@ -40,7 +41,7 @@ public interface CourseService {
      * @param courseName 课程名
      * @return ApiResult接口
      */
-    ApiResult searchCourseByName(Integer uId, String courseName);
+    ApiResult<List<Course>> searchCourseByName(Integer uId, String courseName);
 
     /**
      * 修改学生所选的课程
@@ -48,14 +49,14 @@ public interface CourseService {
      * @param ucId 选课Id
      * @return ApiResult接口
      */
-    ApiResult updateStudentByCourse(Integer cId, Integer ucId);
+    ApiResult<Object> updateStudentByCourse(Integer cId, Integer ucId);
 
     /**
      * 将学生移除课程
      * @param ucId 选课Id
      * @return ApiResult接口
      */
-    ApiResult deleteStudentByCourse(Integer ucId);
+    ApiResult<Object> deleteStudentByCourse(Integer ucId);
 
     ApiResult<ArrayList<JSONObject>> selectChoiceCourseByUId(Integer uId);
 }

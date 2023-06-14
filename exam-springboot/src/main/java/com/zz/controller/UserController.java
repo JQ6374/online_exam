@@ -1,5 +1,6 @@
 package com.zz.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.zz.Service.CourseService;
 import com.zz.Service.UserService;
 import com.zz.bean.User;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/user")
@@ -26,49 +28,43 @@ public class UserController {
      * @return 返回学生信息列表
      */
     @GetMapping("/student/{uId}")
-    public ApiResult getStudentList(@PathVariable("uId") Integer uId) {
+    public ApiResult<List<JSONObject>> getStudentList(@PathVariable("uId") Integer uId) {
         return courseService.selectStudentAndCourse(uId);
     }
 
     /**
      * 根据学号或者姓名搜索
-     * @param uId
-     * @param studentIdOrName
-     * @return
+     *
+     * @param uId 教师Id
+     * @param studentIdOrName 学生Id或者姓名
      */
     @GetMapping("/searchStudent/{uId}/{studentIdOrName}")
-    public ApiResult searchStudentList(@PathVariable("uId") Integer uId,
-                                       @PathVariable("studentIdOrName") String studentIdOrName) {
+    public ApiResult<List<JSONObject>> searchStudentList(@PathVariable("uId") Integer uId,
+                                                         @PathVariable("studentIdOrName") String studentIdOrName) {
         return courseService.searchStudentAndCourse(uId, studentIdOrName);
     }
 
     @DeleteMapping("/deleteStudentByCourse/{ucId}")
-    public ApiResult deleteStudentByCourse(@PathVariable Integer ucId) {
+    public ApiResult<Object> deleteStudentByCourse(@PathVariable Integer ucId) {
         return courseService.deleteStudentByCourse(ucId);
     }
 
     @PostMapping("/register")
-    public ApiResult register(@RequestBody User user) {
+    public ApiResult<Object> register(@RequestBody User user) {
         user.setRegisterTime(LocalDateTime.now());
         TempResult tempResult = userService.register(user);
-        ApiResult apiResult = new ApiResult();
-        if (tempResult.isFlag()) {
-            apiResult.setCode(Code.SAVA_OK);
-        } else {
-            apiResult.setCode(Code.SAVA_ERR);
-        }
-        apiResult.setMsg(tempResult.getMsg());
-        return apiResult;
+        return new ApiResult<>(tempResult.isFlag() ? Code.SAVA_OK : Code.SAVA_ERR,
+                null, tempResult.getMsg());
     }
 
     @PostMapping("/login")
-    public ApiResult login(@RequestBody User user) {
+    public ApiResult<JSONObject> login(@RequestBody User user) {
         return userService.login(user);
     }
 
     @PutMapping("/updatePassword")
-    public ApiResult updatePassword(@RequestBody User user) {
+    public ApiResult<Object> updatePassword(@RequestBody User user) {
         TempResult tempResult = userService.updatePassword(user);
-        return new ApiResult(Code.UPDATE_OK, null, tempResult.getMsg());
+        return new ApiResult<>(Code.UPDATE_OK, null, tempResult.getMsg());
     }
 }

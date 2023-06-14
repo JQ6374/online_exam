@@ -7,6 +7,7 @@ import com.zz.utils.result.TempResult;
 import net.sf.jsqlparser.statement.select.Top;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public interface TopicService {
 
@@ -22,5 +23,5 @@ public interface TopicService {
 
     TempResult topicToPapers(JSONObject params);
 
-    ApiResult searchByInfo(Integer uId, String info);
+    ApiResult<List<Topic>> searchByInfo(Integer uId, String info);
 }

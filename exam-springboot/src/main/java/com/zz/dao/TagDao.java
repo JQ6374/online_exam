@@ -19,7 +19,6 @@ public interface TagDao {
 
 
     @Insert("insert into tag values(null,#{uId},#{name})")
-//    Integer addTag(Tag tag);
     Integer addTag(JSONObject tag);
 
     @Update("UPDATE tag SET u_id = #{uId}, name = #{name} where tag_id =#{tagId};")

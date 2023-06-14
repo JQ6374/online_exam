@@ -63,9 +63,9 @@ public class ExamServiceImpl implements ExamService {
 
     //考试信息更改 时间、试卷等。
     @Override
-    public ApiResult updateExamInfo(Exam exam) {
+    public ApiResult<Exam> updateExamInfo(Exam exam) {
         Integer flag = examDao.updateExamInfo(exam);//返回更新后的考试实体
-        ApiResult apiResult = new ApiResult();
+        ApiResult<Exam> apiResult = new ApiResult<>();
 
         if (flag != null) {
             apiResult.setMsg("修改成功");
@@ -78,8 +78,8 @@ public class ExamServiceImpl implements ExamService {
     }
 
     @Override
-    public ApiResult selectAll(Integer uId) {
-        ApiResult apiResult = new ApiResult();
+    public ApiResult<List<Exam>> selectAll(Integer uId) {
+        ApiResult<List<Exam>> apiResult = new ApiResult<>();
 //        Page<?> page = PageHelper.startPage(Integer.parseInt(pageNumNow), 5);  //设置第几条记录开始，多少条记录为一页
         //通过userService获取user的信息，其sql语句为"select * from user" 但因pageHelper已经注册为插件，所以pageHelper会在原sql语句上增加limit，从而实现分页
         List<Exam> exams = examDao.selectAll(uId);//因而获得的是分好页的结果集
@@ -96,12 +96,12 @@ public class ExamServiceImpl implements ExamService {
     }
 
     @Override
-    public ApiResult selectOne(Integer examId) {
+    public ApiResult<Exam> selectOne(Integer examId) {
         /**
          * 查询结果
          */
         Exam exam = examDao.selectOne(examId);
-        ApiResult apiResult = new ApiResult();
+        ApiResult<Exam> apiResult = new ApiResult<>();
         if (exam != null) {
             apiResult.setData(exam);
             apiResult.setCode(Code.GET_OK);
@@ -120,14 +120,14 @@ public class ExamServiceImpl implements ExamService {
      * @param uId 学生的uid
      * @return
      */
-    public ApiResult getExamListBystu(Integer uId) {
+    public ApiResult<List<JSONObject>> getExamListByStu(Integer uId) {
         List<Course> coursesByUid = examDao.getCoursesByUid(uId);
         ArrayList<Integer> cIds = new ArrayList<>();
-        for (int i = 0; i < coursesByUid.size(); i++) {
-            cIds.add(coursesByUid.get(i).getcId());
+        for (Course course : coursesByUid) {
+            cIds.add(course.getcId());
         }
         ArrayList<JSONObject> res = examDao.getExamsByCourseId(cIds);
-        return new ApiResult(Code.GET_OK, res, "查询成功");
+        return new ApiResult<>(Code.GET_OK, res, "查询成功");
     }
 
     /**
@@ -137,7 +137,7 @@ public class ExamServiceImpl implements ExamService {
      * @return apiresult中是一个含有分数、正确答案的新的paper
      */
     @Override
-    public ApiResult judge(JSONObject jsonObject) {
+    public ApiResult<?> judge(JSONObject jsonObject) {
         Integer uId = jsonObject.getInteger("uId");
         Integer eId = jsonObject.getInteger("eId");
         ApiResult<Boolean> isSub = isSubmit(uId, eId);
@@ -187,7 +187,7 @@ public class ExamServiceImpl implements ExamService {
                 } else {
                     topic.put("getScore", rightAnswer.equals(studentAnswer) ? topic.getDoubleValue("score") : 0);
                 }
-                totalScore.updateAndGet(v -> new Double((double) (v + topic.getDoubleValue("getScore"))));
+                totalScore.updateAndGet(v -> v + topic.getDoubleValue("getScore"));
                 res.add(topic);
             }
         });
@@ -197,15 +197,15 @@ public class ExamServiceImpl implements ExamService {
         StudentExam studentExam = new StudentExam(uId, eId, result.toString());
         studentExam.setCreateTime(LocalDateTime.now());
         if (examDao.selectIsExist(studentExam) != 0) {
-            return new ApiResult(Code.SAVA_ERR, null, "不可反复提交试卷！");
+            return new ApiResult<>(Code.SAVA_ERR, null, "不可反复提交试卷！");
         }
         Integer integer = examDao.addExamRecord(studentExam);
         boolean isSuccess = integer != 0;
-        return new ApiResult(isSuccess ? Code.SAVA_OK : Code.SAVA_ERR, result,
+        return new ApiResult<>(isSuccess ? Code.SAVA_OK : Code.SAVA_ERR, result,
                 isSuccess ? "数据处理成功！" : "数据处理失败！");
     }
 
-    public ApiResult getExams() {
+    public ApiResult<Object> getExams() {
         List<Exam> examList = examDao.findAll(); // 获取所有考试记录
         int count = 0;
         for (Exam exam : examList) { // 遍历考试记录
@@ -216,21 +216,21 @@ public class ExamServiceImpl implements ExamService {
                 count++;
             }
         }
-        return new ApiResult(Code.UPDATE_OK, null, "考试状态更新成功，更新了" + count + "条数据"); // 返回所有考试记录
+        return new ApiResult<>(Code.UPDATE_OK, null, "考试状态更新成功，更新了" + count + "条数据"); // 返回所有考试记录
     }
 
     @Override
-    public ApiResult isSubmit(Integer uId, Integer eId) {
+    public ApiResult<Boolean> isSubmit(Integer uId, Integer eId) {
         Integer count = examDao.isSubmit(uId, eId);
         boolean isSub = count == 0;
-        return new ApiResult(Code.GET_OK, isSub,
+        return new ApiResult<>(Code.GET_OK, isSub,
                 isSub ? "可以提交试卷！" : "已经提交试卷，不可重复提交！");
     }
 
     @Override
-    public ApiResult submitList(Integer uId) {
+    public ApiResult<List<JSONObject>> submitList(Integer uId) {
         ArrayList<JSONObject> res = examDao.submitList(uId);
-        return new ApiResult(Code.GET_OK, res,
+        return new ApiResult<>(Code.GET_OK, res,
                 res.size() != 0 ? "查询到" + res.size() + "条数据！" : "查询结果为空！");
     }
 }

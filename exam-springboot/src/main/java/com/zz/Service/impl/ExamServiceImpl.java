@@ -146,7 +146,7 @@ public class ExamServiceImpl implements ExamService {
         JSONObject rightContent = JSON.parseObject(exam.getContent());
         JSONObject content = jsonObject.getJSONObject("content");
         ArrayList<JSONObject> res = new ArrayList<>();
-        AtomicReference<Double> totalScore = new AtomicReference<>((double) 0);
+        AtomicReference<Double> totalScore = new AtomicReference<>(0.0);
         content.keySet().forEach((key) -> {
             JSONArray topicList = content.getJSONArray(key);
             JSONArray rightTopicList = rightContent.getJSONArray(key);
@@ -192,7 +192,7 @@ public class ExamServiceImpl implements ExamService {
             }
         });
         JSONObject result = new JSONObject();
-        result.put("totalScore", totalScore.get());
+        result.put("totalScore", totalScore);
         result.put("content", res);
         StudentExam studentExam = new StudentExam(uId, eId, result.toString());
         studentExam.setCreateTime(LocalDateTime.now());

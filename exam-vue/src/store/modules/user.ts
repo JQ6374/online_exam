@@ -4,7 +4,8 @@ import {Code} from "@/utils/Code.ts";
 import {LoginData} from "@/utils/type.ts";
 import {constantRouter} from "@/router/routers.ts";
 import {ref} from "vue";
-import {GET_TOKEN, REMOVE_TOKEN} from "@/utils/token.ts";
+import jwtDecode from "jwt-decode";
+import {REMOVE_TOKEN, SET_TOKEN} from "@/utils/token.ts";
 
 const constantRouterList = ref()
 const useUserStore = defineStore('User', {
@@ -12,7 +13,7 @@ const useUserStore = defineStore('User', {
     return {
       uId: '',
       username: '',
-      // token: GET_TOKEN(),
+      token: '',
       menuRoutes: constantRouterList
     }
   },
@@ -32,10 +33,13 @@ const useUserStore = defineStore('User', {
         // SET_TOKEN(String((res.data as LoginData).uId))
         //能保证当前async函数返回一个成功的promise
         const data: LoginData = res.data as LoginData;
-        this.uId = localStorage.getItem("uId") || data.uId;
-        this.username = localStorage.getItem("username") || data.username;
-        GET_TOKEN(data);
-        return res
+        const token: string = data.token;
+        const parseToken: any = jwtDecode(token);
+        const userInfo = JSON.parse(parseToken.sub);
+        SET_TOKEN(token, userInfo.uId, userInfo.username)
+        this.uId = localStorage.getItem('uId') || ''
+        this.username = localStorage.getItem('username') || ''
+        this.token = localStorage.getItem('token') || ''
       } else {
         return Promise.reject(new Error(res.msg))
       }
@@ -43,6 +47,7 @@ const useUserStore = defineStore('User', {
     userLogout() {
       this.uId = '';
       this.username = '';
+      this.token = '';
       REMOVE_TOKEN();
     }
   },

@@ -82,7 +82,6 @@ const roleData = ref([])
 const getRoleData = async () => {
   const res = await request.get<any, ApiResult>('/role')
   roleData.value = res.data as []
-  console.log(roleData)
 }
 
 const userStore = useUserStore()
@@ -118,7 +117,7 @@ const login = async () => {
   await ruleFormRef.value?.validate();
   loading.value = true;
   try {
-    const {data} = await userStore.userLogin(ruleForm)
+    await userStore.userLogin(ruleForm)
     loading.value = false;
     let redirect: any = $route.query.redirect;
     let toPath = '/index'
@@ -126,8 +125,6 @@ const login = async () => {
       toPath = '/admin'
     }
     await $router.push({path: redirect || toPath});
-    userStore.uId = (data as LoginData).uId;
-    userStore.username = (data as LoginData).username
     ElNotification({
       title: '登录成功！',
       message: `欢迎回来${userStore.username} ~`,

@@ -14,8 +14,8 @@
           stripe
       >
         <el-table-column align="center" prop="eId" label="考试号"/>
-        <el-table-column align="center" prop="name" label="考试名"/>
-        <el-table-column align="center" prop="courseName" label="课程名"/>
+        <el-table-column align="center" prop="name" label="考试名" sortable/>
+        <el-table-column align="center" prop="courseName" label="课程名" sortable/>
         <el-table-column align="center" prop="startTime" label="开始时间" sortable/>
         <el-table-column align="center" prop="endTime" label="结束时间" sortable/>
         <el-table-column align="center" label="操作">

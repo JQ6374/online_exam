@@ -17,7 +17,6 @@ export const MyElNotification = (res: ApiResult, codeOk: number,
   const isSuccess = res.code == codeOk;
   ElNotification({
     title: isSuccess ? `${handleName}成功!` : `${handleName}失败!`,
-    // message: isSuccess ? res.msg : Code.ERROR_MSG,
     message: res.msg,
     type: isSuccess ? 'success' : 'warning',
     duration: durationTime

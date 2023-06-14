@@ -15,28 +15,40 @@ interface ExamInfo {
   content: string,
 }
 
+// @ts-ignore
 export const useJoinExamStore = defineStore("joinExamStore", {
   state: () => {
     return {
-      eId: '',
-      pId: '',
-      examName: '',
-      papersContent: '',
-      startTime: '',
-      endTime: '',
-      status: ''
+      examInfo: JSON.parse(localStorage.getItem("examInfo") || ''),
     }
+  },
+  getters: {
+    papersContent(): Object {
+      return JSON.parse(this.examInfo.content);
+    },
+    eId(): string {
+      return this.examInfo.eId;
+    },
+    pId(): string {
+      return this.examInfo.pId;
+    },
+    examName(): string {
+      return this.examInfo.name;
+    },
+    startTime(): string {
+      return this.examInfo.startTime;
+    },
+    endTime(): string {
+      return this.examInfo.endTime;
+    },
+    status(): string {
+      return this.examInfo.status;
+    },
   },
   actions: {
     async getExamInfo(eId: number) {
       const {data} = await myRequest.get<any, ApiResult<ExamInfo>>(`/exam/selectOne/student/${eId}`)
-      this.eId = data.eId;
-      this.pId = data.pId
-      this.examName = data.name
-      this.startTime = data.startTime
-      this.endTime = data.endTime;
-      this.papersContent = JSON.parse(data.content)
-      this.status = data.status
+      localStorage.setItem("examInfo", JSON.stringify(data))
     }
   }
 })

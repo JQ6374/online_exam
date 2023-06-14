@@ -66,14 +66,19 @@ public class UserServiceImpl implements UserService {
             boolean isSucceed = encoder.matches(user.getPassword(), rightUser.getPassword());
             apiResult.setCode(isSucceed ? Code.GET_OK : Code.GET_ERR);
             JSONObject data = new JSONObject();
-            apiResult.setData(data);
-            apiResult.setMsg(isSucceed ? "登录成功！" : "密码错误！");
             // 返回token，并将用户信息存储到redis
             if (isSucceed) {
-                String token = jwtTokenUtil.generateToken(rightUser.getuId().toString());
+                JSONObject userJson = new JSONObject();
+                userJson.put("uId", rightUser.getuId());
+                userJson.put("username", rightUser.getUsername());
+                String token = jwtTokenUtil.generateToken(userJson.toJSONString());
+                String parserToken = jwtTokenUtil.parserToken(token);
+                System.out.println(parserToken);
                 data.put("token", token);
                 redisTemplate.opsForValue().set("userId:" + rightUser.getuId(), rightUser);
             }
+            apiResult.setData(data);
+            apiResult.setMsg(isSucceed ? "登录成功！" : "密码错误！");
         }
         return apiResult;
     }

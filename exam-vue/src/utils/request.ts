@@ -5,10 +5,12 @@ import {Code} from "@/utils/Code.ts";
 //创建axios实例
 let myRequest = axios.create({
   baseURL: import.meta.env.VITE_APP_BASE_API,
-  timeout: 5000
+  timeout: 5000,
+  withCredentials: true,
 })
 //请求拦截器
 myRequest.interceptors.request.use(config => {
+  config.headers['token'] = localStorage.getItem('token') || '';
   return config;
 });
 //响应拦截器

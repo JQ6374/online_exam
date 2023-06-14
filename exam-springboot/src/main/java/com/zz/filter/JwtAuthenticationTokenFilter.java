@@ -1,5 +1,6 @@
 package com.zz.filter;
 
+import com.alibaba.fastjson.JSONObject;
 import com.zz.bean.User;
 import com.zz.utils.Code;
 import com.zz.utils.JwtTokenUtil;
@@ -34,13 +35,13 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     protected void doFilterInternal(@NotNull HttpServletRequest request,
                                     @NotNull HttpServletResponse response,
                                     @NotNull FilterChain filterChain) throws ServletException, IOException {
-        response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
         response.setCharacterEncoding("UTF-8");
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         String token = request.getHeader("token");
         if (!StringUtils.hasText(token)) {
             String[] doFilterUrls = {"/api/user/login", "/api/user/register",
-                    "/api/auth/send_email", "/api/user/updatePassword"};
+                    "/api/auth/send_email", "/api/user/updatePassword",
+                    "/api/role"};
             for (String doFilterUrl : doFilterUrls) {
                 if (request.getRequestURI().contains(doFilterUrl)) {
                     filterChain.doFilter(request, response);
@@ -50,9 +51,9 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             response.getWriter().write(new ApiResult<>(Code.TOKEN_EMPTY_ERROR, null, "令牌为空!").toString());
             return;
         }
-        String userId;
+        String userInfo;
         try {
-            userId = jwtTokenUtil.parserToken(token);
+            userInfo = jwtTokenUtil.parserToken(token);
         } catch (ExpiredJwtException e) {
             response.getWriter().write(new ApiResult<>(Code.TOKEN_TIMEOUT_ERROR, null, "登录会话过期，请重新登录!").toString());
             return;
@@ -61,10 +62,11 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             return;
         }
 
-        String redisKey = "userId:" + userId;
+        JSONObject userJson = JSONObject.parseObject(userInfo);
+        String redisKey = "userId:" + userJson.getString("uId");
         User loginUser = (User) redisTemplate.opsForValue().get(redisKey);
         if (Objects.isNull(loginUser)) {
-            response.getWriter().write(new ApiResult<>(Code.TOKEN_VALIDATE_ERROR, null, "非法令牌!").toString());
+            response.getWriter().write(new ApiResult<>(Code.TOKEN_VALIDATE_ERROR, null, "请先登录!").toString());
         } else {
             filterChain.doFilter(request, response);
         }

@@ -5,9 +5,7 @@ export interface ApiResult<T = Object> {
 }
 
 export interface LoginData {
-  uId: string,
-  email: string,
-  username: string
+  token: string
 }
 
 export interface Role {

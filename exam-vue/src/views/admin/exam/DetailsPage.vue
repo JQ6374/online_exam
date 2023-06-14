@@ -31,34 +31,30 @@
         <el-aside class="my-item">
           <el-scrollbar ref="mainScrollbar" height="560px">
             <div class="topic-type"
-                 v-for="(content,topicType, index) in cleanContent"
+                 v-for="(content,topicType) in cleanContent"
                  v-show="content && content.length != 0"
                  :key="topicType"
             >
               <div class="title">
-                <span>{{ index + 1 }}、{{ generalDataStore.topicTypeDict[topicType] }}</span>
+                <span>{{ generalDataStore.topicTypeDict[topicType] }}</span>
               </div>
               <div class="tag-list">
                 <el-tag
                     v-for="(topic, i) in joinExamStore.papersContent[topicType]"
                     :key="topic.tId"
-                    :data-index="(index * content.length)+i"
                     :data-t-id="topic.tId"
-                    @click.prevent="scrollToBottom"
                 >
                   <el-icon
-                      :data-index="(index * content.length)+i"
                       :data-t-id="topic.tId"
+                      @click.prevent="scrollToBottom"
                   >
                     <SemiSelect
-                        :data-index="(index * content.length)+i"
                         :data-t-id="topic.tId"
-                        v-if="topic.answer.answerContent.length != 0"
+                        v-if="changeStatus(topic.tId)"
                     />
                     <span
-                        :data-index="(index * content.length)+i"
                         :data-t-id="topic.tId"
-                        v-else>{{ index + 1 }}</span>
+                        v-else>{{ i + 1 }}</span>
 
                   </el-icon>
                 </el-tag>
@@ -108,7 +104,6 @@
                           border>
                         {{ item.label }}
                       </el-radio>
-                      <!--                      <el-radio label="2" size="large" border>Option B</el-radio>-->
                     </el-radio-group>
                     <!-- 多选题的复选框 -->
                     <el-checkbox-group
@@ -143,7 +138,7 @@
 
 <script setup lang="ts">
 import Logo from "@/components/Logo/index.vue";
-import {onMounted, reactive, ref} from "vue";
+import {computed, onMounted, reactive, ref} from "vue";
 import {useGeneralDataStore} from "@/store/modules/generalData.ts";
 import ExamCountdown from "@/components/Test/CountDown.vue";
 import {useJoinExamStore} from "@/store/modules/joinExam.ts";
@@ -198,11 +193,13 @@ const inputType = (typeId: number) => {
 }
 const $router = useRouter()
 
-// props.paperContent.
-const cleanContent = Object.fromEntries(
-    Object.entries(joinExamStore.papersContent)
-        .filter(([k, v]) => v && (v.length !== 0))
-);
+const cleanContent = ref(joinExamStore.papersContent)
+
+const changeStatus = computed(() => (tId) => {
+  const topic = Object.values(cleanContent.value).flat().find(item => item.tId == tId);
+  return topic.answer.answerContent != '';
+})
+
 const submitPapers = () => {
   ElMessageBox.confirm('是否提交试卷?', '提示', {
     confirmButtonText: '确定',
@@ -240,11 +237,9 @@ const getGeneralData = () => {
 const mainScrollbar = ref()
 const scrollTop = ref(0);
 const scrollToBottom = (event) => {
-  const index = event.target.dataset.index
   const tId = event.target.dataset.tId;
-  const height = document.querySelector(`.topic-item[data-t-id="${tId}"]`).offsetHeight + 40
-  scrollTop.value = height * index;
-  mainScrollbar.value!.setScrollTop(scrollTop.value)
+  const element = document.querySelector(`.topic-item[data-t-id="${tId}"]`)
+  element && element.scrollIntoView({behavior: "smooth"})
 };
 
 </script>

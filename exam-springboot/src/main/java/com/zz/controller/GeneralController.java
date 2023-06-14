@@ -23,6 +23,11 @@ public class GeneralController {
     @Autowired
     private GeneralService generalService;
 
+    @GetMapping("/checkToken")
+    public ApiResult<Object> checkToken() {
+        return new ApiResult<>(Code.GET_OK, null, "token尚未过期！");
+    }
+
     @GetMapping("/tag/{uId}")
     public ApiResult<List<Tag>> getTag(@PathVariable Integer uId) {
         return new ApiResult<>(Code.GET_OK, generalService.getTagList(uId), null);

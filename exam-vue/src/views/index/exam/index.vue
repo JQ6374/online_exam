@@ -103,8 +103,6 @@ onMounted(() => {
   getSubmitList();
 })
 const showScore = (row) => {
-  console.log(submitEdDict)
-  console.log(row.e_id)
   ElMessageBox.alert(`本场考试成绩为: ${submitEdDict.value[row.e_id].totalScore}`, '查看分数', {
     confirmButtonText: '确定',
     callback: (action: Action) => {
@@ -117,7 +115,6 @@ const showScore = (row) => {
 }
 const submitEdDict = ref({})
 const submitEdEIdList = ref([])
-console.log(submitEdEIdList)
 const getSubmitList = async () => {
   const res = await myRequest.get<any, ApiResult>(`/exam/submitList/${studentId}`)
   const data = res.data as []
@@ -126,7 +123,7 @@ const getSubmitList = async () => {
     return obj;
   }, {});
   submitEdDict.value = dictData;
-  submitEdEIdList.value = data.map(item => item.e_id)
+  submitEdEIdList.value = data.map((item: any) => item.e_id)
 }
 const tableData = ref([])
 

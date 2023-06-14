@@ -41,6 +41,11 @@ import {useRouter, useRoute} from 'vue-router';
 import useUserStore from '@/store/modules/user';
 //获取骨架的小仓库
 import useLayOutSettingStore from '@/store/modules/layoutTabBar.ts';
+import myRequest from "@/utils/request.ts";
+import {ApiResult} from "@/utils/type.ts";
+import {MyElNotification} from "@/hook/requestTooltip.ts";
+import {Code} from "@/utils/Code.ts";
+import {ElMessage, ElNotification} from "element-plus";
 
 let layoutSettingStore = useLayOutSettingStore();
 let userStore = useUserStore();
@@ -69,11 +74,18 @@ const fullScreen = () => {
 }
 //退出登录点击回调
 const logout = async () => {
-  //第一件事情:需要向服务器发请求[退出登录接口]******
-  //第二件事情:仓库当中关于用于相关的数据清空[token|username|avatar]
-  //第三件事情:跳转到登录页面
+  //1.需要向服务器发请求[退出登录接口]******
+  await myRequest.delete<any, ApiResult>(`/user/logout/${useUserStore().uId}`);
+
+  //2.仓库当中关于用于相关的数据清空[token|username|uId]
   await userStore.userLogout();
-  //跳转到登录页面
+  ElNotification({
+    title: '提示',
+    message: '账号退出成功！',
+    type: 'success',
+    duration: 1000
+  })
+  //3.跳转到登录页面
   await $router.push({name: 'login'});
 
 }

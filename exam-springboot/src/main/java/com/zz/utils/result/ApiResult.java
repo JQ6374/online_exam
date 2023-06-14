@@ -18,11 +18,11 @@ public class ApiResult<T> {
 
     @Override
     public String toString() {
-        return "ApiResult{" +
-                "code=" + code +
-                ", data=" + data +
-                ", msg='" + msg + '\'' +
-                '}';
+        return "{\n" +
+                "    \"code\": " + code + "," +
+                "    \"data\": " + data + "," +
+                "    \"msg\": \"" + msg + "\"" +
+                "}";
     }
 
     public Integer getCode() {

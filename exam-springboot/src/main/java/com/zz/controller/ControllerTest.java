@@ -1,6 +1,5 @@
 package com.zz.controller;
 
-import com.zz.bean.Exam;
 import com.zz.utils.result.ApiResult;
 import org.springframework.web.bind.annotation.*;
 

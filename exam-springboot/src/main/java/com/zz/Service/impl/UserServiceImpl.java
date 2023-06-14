@@ -5,11 +5,12 @@ import com.zz.Service.UserService;
 import com.zz.bean.User;
 import com.zz.dao.UserDao;
 import com.zz.utils.Code;
+import com.zz.utils.JwtTokenUtil;
 import com.zz.utils.result.ApiResult;
 import com.zz.utils.result.TempResult;
 import com.zz.utils.EmailUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +26,12 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private PasswordEncoder encoder;
+
+    @Autowired
+    private JwtTokenUtil jwtTokenUtil;
+
+    @Autowired
+    private RedisTemplate<Object, Object> redisTemplate;
 
     @Override
     public TempResult register(User user) {
@@ -59,11 +66,14 @@ public class UserServiceImpl implements UserService {
             boolean isSucceed = encoder.matches(user.getPassword(), rightUser.getPassword());
             apiResult.setCode(isSucceed ? Code.GET_OK : Code.GET_ERR);
             JSONObject data = new JSONObject();
-            data.put("uId", rightUser.getuId());
-            data.put("username", rightUser.getUsername());
-            data.put("email", rightUser.getEmail());
             apiResult.setData(data);
             apiResult.setMsg(isSucceed ? "登录成功！" : "密码错误！");
+            // 返回token，并将用户信息存储到redis
+            if (isSucceed) {
+                String token = jwtTokenUtil.generateToken(rightUser.getuId().toString());
+                data.put("token", token);
+                redisTemplate.opsForValue().set("userId:" + rightUser.getuId(), rightUser);
+            }
         }
         return apiResult;
     }
@@ -75,5 +85,12 @@ public class UserServiceImpl implements UserService {
             tempResult.setMsg(userDao.updateUser(user) != 0 ? "修改成功！" : Code.ERROR_MSG);
         }
         return tempResult;
+    }
+
+    @Override
+    public ApiResult<Object> logout(String uId) {
+        boolean isLogout = Boolean.TRUE.equals(redisTemplate.delete("userId:" + uId));
+        return new ApiResult<>(isLogout ? Code.DELETE_OK : Code.DELETE_ERR, null,
+                isLogout ? "退出成功！" : Code.ERROR_MSG);
     }
 }

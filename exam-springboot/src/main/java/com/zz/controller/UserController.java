@@ -62,6 +62,11 @@ public class UserController {
         return userService.login(user);
     }
 
+    @DeleteMapping("/logout/{uId}")
+    public ApiResult<Object> logout(@PathVariable String uId) {
+        return userService.logout(uId);
+    }
+
     @PutMapping("/updatePassword")
     public ApiResult<Object> updatePassword(@RequestBody User user) {
         TempResult tempResult = userService.updatePassword(user);

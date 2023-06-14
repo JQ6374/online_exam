@@ -23,7 +23,7 @@ public class JwtTokenUtil {
     private String secret;
 
     // 从Token中获取用户名
-    public String getUsernameFromToken(String token) {
+    public String parserToken(String token) {
         return getClaimFromToken(token, Claims::getSubject);
     }
 
@@ -73,7 +73,7 @@ public class JwtTokenUtil {
 
     // 验证Token是否有效
     public Boolean validateToken(String token, UserDetails userDetails) {
-        final String username = getUsernameFromToken(token);
+        final String username = parserToken(token);
         // 检查Token是否已过期，并且用户名与Token中的用户名是否匹配
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }

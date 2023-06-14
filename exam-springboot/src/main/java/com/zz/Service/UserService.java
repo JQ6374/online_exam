@@ -11,4 +11,6 @@ public interface UserService {
     ApiResult<JSONObject> login(User user);
 
     TempResult updatePassword(User user);
+
+    ApiResult<Object> logout(String uId);
 }

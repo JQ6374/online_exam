@@ -5,12 +5,12 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/online_exam
     username: root
-    password: dsj1
+    password: xxxx
     type: com.alibaba.druid.pool.DruidDataSource
   mail:
     host: smtp.qq.com  # 服务器 不用修改
-    username: 2410360091@qq.com
-    password: xnkvpquqqpvwecja  #授权码
+    username: xxxx
+    password: xxxx  #授权码
     default-encoding: utf-8
     protocol: smtp
     port: 25

@@ -1,13 +1,11 @@
 # online_exam
 
 #### 介绍
-
 基于SpringBoot+Vue3前后分离项目的在线考试系统；
 
 PC在线地址：http://47.120.40.41/#/login
 
 #### 软件架构
-
 前端：
 
 + vue3
@@ -29,7 +27,6 @@ PC在线地址：http://47.120.40.41/#/login
 > 前端采用npnm包管理工具、后端采用maven管理依赖
 
 + 启动后端服务（确保安装MySQL以及Redis）
-
   + 打开exam_springboot项目
   + 利用maven下载依赖
   + 修改配置`exam-springboot/src/main/resources/application.yml`
@@ -39,7 +36,6 @@ PC在线地址：http://47.120.40.41/#/login
   + 运行`com/zz/Application.java`即可
 
 + 启动前端服务
-
   + 打开exam_vue项目，执行如下指令：
 
     ```shell
@@ -50,6 +46,13 @@ PC在线地址：http://47.120.40.41/#/login
     ```
 
 #### 说明补充
+
+> 前后端代码书写风格，分别参考了黑马程序员以及尚硅谷的教学视频
+>
+> 链接地址：
+>
+> + https://www.bilibili.com/video/BV1Xh411V7b5/?p=51&spm_id_from=333.1007.top_right_bar_window_history.content.click
+> + https://www.bilibili.com/video/BV1Fi4y1S7ix/?spm_id_from=333.1007.top_right_bar_window_custom_collection.content.click
 
 > 取消了主观题判分功能，因为需要依赖哈工大的同义词词林，依赖文件太大不好上传与部署；
 >

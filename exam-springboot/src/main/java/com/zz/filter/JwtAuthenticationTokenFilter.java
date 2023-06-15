@@ -8,7 +8,6 @@ import com.zz.utils.result.ApiResult;
 import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.util.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -38,16 +37,16 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         response.setCharacterEncoding("UTF-8");
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         String token = request.getHeader("token");
-        if (!StringUtils.hasText(token)) {
-            String[] doFilterUrls = {"/api/user/login", "/api/user/register",
-                    "/api/auth/send_email", "/api/user/updatePassword",
-                    "/api/role"};
-            for (String doFilterUrl : doFilterUrls) {
-                if (request.getRequestURI().contains(doFilterUrl)) {
-                    filterChain.doFilter(request, response);
-                    return;
-                }
+        String[] doFilterUrls = {"/api/user/login", "/api/user/register",
+                "/api/auth/send_email", "/api/user/updatePassword",
+                "/api/role"};
+        for (String doFilterUrl : doFilterUrls) {
+            if (doFilterUrl.contains(request.getRequestURI())) {
+                filterChain.doFilter(request, response);
+                return;
             }
+        }
+        if (!StringUtils.hasText(token)) {
             response.getWriter().write(new ApiResult<>(Code.TOKEN_EMPTY_ERROR, null, "令牌为空!").toString());
             return;
         }

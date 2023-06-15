@@ -22,11 +22,11 @@ public class UserTest {
 
     @Test
     void insertTest() {
-        User user = new User();
-        user.setUsername("zjq");
-        user.setPassword("123");
-        Integer integer = userDao.addUser(user);
-        System.out.println(integer);
+//        User user = new User();
+//        user.setUsername("zjq");
+//        user.setPassword("123");
+//        Integer integer = userDao.addUser(user);
+//        System.out.println(integer);
     }
 
     @Test

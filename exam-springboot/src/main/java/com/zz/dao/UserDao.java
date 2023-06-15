@@ -19,9 +19,9 @@ public interface UserDao {
     @Select("select * from user where email=#{email} and r_id=#{rId}")
     ArrayList<User> selectByEmail(User user);
 
-    @Update("update user set password=#{password} where email=#{email} and r_**id=#{rId}")
+    @Update("update user set password=#{password} where email=#{email} and r_id=#{rId}")
     Integer updateUser(User user);
 
     @Select("select username from user where u_id = #{uId}")
-    String getNameByid(Integer uId);
+    String getNameById(Integer uId);
 }

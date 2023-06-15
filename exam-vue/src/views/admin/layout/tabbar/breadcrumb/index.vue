@@ -21,7 +21,6 @@
 
 <script setup lang="ts">
 import {useRoute} from 'vue-router';
-import {ref} from 'vue';
 import useLayOutSettingStore from '@/store/modules/layoutTabBar.ts';
 //获取layout配置相关的仓库
 let LayOutSettingStore = useLayOutSettingStore();

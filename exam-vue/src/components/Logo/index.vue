@@ -1,6 +1,6 @@
 <template>
   <div class="logo" v-if="setting.logoHidden">
-    <img :src="setting.logo" alt="">
+    <img src="@/assets/vite.svg" alt="">
     <p v-if="showTitle && !layOutSettingStore.fold">{{ setting.title }}</p>
   </div>
 </template>
@@ -11,6 +11,7 @@ import setting from "@/setting.ts";
 import useLayOutSettingStore from "@/store/modules/layoutTabBar.ts";
 
 const layOutSettingStore = useLayOutSettingStore()
+
 defineProps({
   showTitle: {
     type: Boolean,

@@ -158,10 +158,10 @@ public class ExamServiceImpl implements ExamService {
                 topic.put("rightAnswer", rightAnswer);
                 // 主观题判分
                 if (Integer.parseInt(key) == 5) {
-                    List<String> rightKeywordsList = SentenceSeparation.sentenceList(rightAnswer);
-                    List<String> stringKeywordsList = SentenceSeparation.sentenceList(studentAnswer);
-                    double scorePointSim = ScorePointSim.getScorePointSim(rightKeywordsList, stringKeywordsList);
-                    topic.put("getScore", scorePointSim);
+//                    List<String> rightKeywordsList = SentenceSeparation.sentenceList(rightAnswer);
+//                    List<String> stringKeywordsList = SentenceSeparation.sentenceList(studentAnswer);
+//                    double scorePointSim = ScorePointSim.getScorePointSim(rightKeywordsList, stringKeywordsList);
+                    topic.put("getScore", 0.0);
                     //多选题判分
                 } else if (Integer.parseInt(key) == 3) {
                     JSONArray rightChoiceList = JSON.parseArray(rightAnswer);

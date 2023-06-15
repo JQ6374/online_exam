@@ -19,7 +19,8 @@ interface ExamInfo {
 export const useJoinExamStore = defineStore("joinExamStore", {
   state: () => {
     return {
-      examInfo: JSON.parse(localStorage.getItem("examInfo") || ''),
+      // @ts-ignore
+      examInfo: JSON.parse(localStorage.getItem("examInfo")),
     }
   },
   getters: {

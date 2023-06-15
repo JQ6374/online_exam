@@ -10,7 +10,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 public class MySecurityConfig extends WebSecurityConfigurerAdapter {
@@ -35,9 +34,6 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
 //                .antMatchers("/api/user/login", "/api/user/register",
 //                        "/api/auth/send_email", "/api/user/updatePassword").anonymous()
                 .anyRequest().authenticated();
-
-        http.addFilterBefore(jwtAuthenticationTokenFilter,
-                UsernamePasswordAuthenticationFilter.class);
     }
 
     @Bean

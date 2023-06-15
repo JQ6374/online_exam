@@ -18,7 +18,7 @@
     </template>
   </el-popover>
   <!--  <img :src="userStore.avatar" style="width: 24px;height: 24px;margin:0px 10px;border-radius: 50%;">-->
-  <img src="/public/vite.svg"
+  <img src="@/assets/vite.svg"
        style="width: 24px;height: 24px;margin:0px 10px;border-radius: 50%;">
   <!-- 下拉菜单 -->
   <el-dropdown>
@@ -35,6 +35,7 @@
 </template>
 
 <script setup lang="ts">
+import setting from '@/setting'
 import {ref} from 'vue'
 import {useRouter, useRoute} from 'vue-router';
 //获取用户相关的小仓库
@@ -43,9 +44,7 @@ import useUserStore from '@/store/modules/user';
 import useLayOutSettingStore from '@/store/modules/layoutTabBar.ts';
 import myRequest from "@/utils/request.ts";
 import {ApiResult} from "@/utils/type.ts";
-import {MyElNotification} from "@/hook/requestTooltip.ts";
-import {Code} from "@/utils/Code.ts";
-import {ElMessage, ElNotification} from "element-plus";
+import { ElNotification} from "element-plus";
 
 let layoutSettingStore = useLayOutSettingStore();
 let userStore = useUserStore();

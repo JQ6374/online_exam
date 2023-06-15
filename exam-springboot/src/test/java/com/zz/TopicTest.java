@@ -25,8 +25,6 @@ public class TopicTest {
 
     @Test
     void test() {
-        double n = 0.7;
-        System.out.println((int) n);
     }
 
     @Test
@@ -58,33 +56,33 @@ public class TopicTest {
 
     @Test
     void topicToRandomPapersTest() {
-        String params = "{\n" +
-                "    \"uId\": 9,\n" +
-                "    \"tagId\": 1,\n" +
-                "    \"papersName\": \"政治\",\n" +
-                "    \"topicScore\": {\n" +
-                "        \"1\": 1,\n" +
-                "        \"2\": 2,\n" +
-                "        \"3\": 2,\n" +
-                "        \"4\": 2,\n" +
-                "        \"5\": 5\n" +
-                "    },\n" +
-                "    \"check\": {\n" +
-                "        \"typeCheck\": {\n" +
-                "            \"1\": 3,  // type_id: num\n" +
-                "            \"2\": 0,\n" +
-                "            \"3\": 0,\n" +
-                "            \"4\": 0,\n" +
-                "            \"5\": 1\n" +
-                "        },\n" +
-                "        \"difficultyCheck\": {\n" +
-                "            \"1\": 0.7,  // 百分比\n" +
-                "            \"2\": 0.2,\n" +
-                "            \"3\": 0.1\n" +
-                "        } \n" +
-                "    }\n" +
-                "}";
-        JSONObject check = JSON.parseObject(params);
-        topicService.topicToPapers(check);
+//        String params = "{\n" +
+//                "    \"uId\": 9,\n" +
+//                "    \"tagId\": 1,\n" +
+//                "    \"papersName\": \"政治\",\n" +
+//                "    \"topicScore\": {\n" +
+//                "        \"1\": 1,\n" +
+//                "        \"2\": 2,\n" +
+//                "        \"3\": 2,\n" +
+//                "        \"4\": 2,\n" +
+//                "        \"5\": 5\n" +
+//                "    },\n" +
+//                "    \"check\": {\n" +
+//                "        \"typeCheck\": {\n" +
+//                "            \"1\": 3,  // type_id: num\n" +
+//                "            \"2\": 0,\n" +
+//                "            \"3\": 0,\n" +
+//                "            \"4\": 0,\n" +
+//                "            \"5\": 1\n" +
+//                "        },\n" +
+//                "        \"difficultyCheck\": {\n" +
+//                "            \"1\": 0.7,  // 百分比\n" +
+//                "            \"2\": 0.2,\n" +
+//                "            \"3\": 0.1\n" +
+//                "        } \n" +
+//                "    }\n" +
+//                "}";
+//        JSONObject check = JSON.parseObject(params);
+//        topicService.topicToPapers(check);
     }
 }

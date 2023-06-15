@@ -41,9 +41,6 @@ my-email:
 jwt:
   secret: P@ssw0rd123 # 加密密钥
 
-server:
-  port: 80
-
 mybatis:
   configuration:
     # 开启sql日志
@@ -53,6 +50,3 @@ mybatis:
     # 开启事务管理器
     sqlSessionTemplate:
       executorType: BATCH
-
-
-

@@ -34,7 +34,7 @@ export default defineConfig({
     server: {
         proxy: {
             '/api': {
-                target: 'http://localhost/api', // 目标 API 地址
+                target: 'http://localhost:8080/api', // 目标 API 地址
                 changeOrigin: true, // 是否改变请求源
                 rewrite: (path) => path.replace(/^\/api/, '') // 重写请求路径，去掉 /api 前缀
             }

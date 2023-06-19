@@ -49,7 +49,7 @@ public class MailServiceImpl implements MailService {
                     "            您的验证码为：<b>%s</b>，赶快去完善注册信息吧！！！" +
                     "        </p>" +
                     "        <p>感谢您的支持和理解！</p>" +
-                    "        <p>来自：电影分析系统！</p>" +
+                    "        <p>来自：在线考试系统！</p>" +
                     "        <p>验证码五分钟后过期！</p>";
             msg.setText(String.format(text, code), "utf-8", "html");
             mailSender.send(msg);

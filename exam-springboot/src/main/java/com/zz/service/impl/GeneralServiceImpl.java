@@ -1,6 +1,6 @@
-package com.zz.Service.impl;
+package com.zz.service.impl;
 
-import com.zz.Service.GeneralService;
+import com.zz.service.GeneralService;
 import com.zz.bean.Difficulty;
 import com.zz.bean.Role;
 import com.zz.bean.Tag;

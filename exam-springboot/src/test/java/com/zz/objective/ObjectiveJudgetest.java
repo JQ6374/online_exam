@@ -1,7 +1,6 @@
 package com.zz.objective;
 
-import com.alibaba.fastjson.JSONObject;
-import com.zz.Service.ExamService;
+import com.zz.service.ExamService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

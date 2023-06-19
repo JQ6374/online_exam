@@ -1,10 +1,8 @@
-package com.zz.Service;
+package com.zz.service;
 
 import com.zz.bean.Papers;
 import com.zz.utils.result.ApiResult;
-import org.apache.ibatis.annotations.Select;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public interface PapersService {

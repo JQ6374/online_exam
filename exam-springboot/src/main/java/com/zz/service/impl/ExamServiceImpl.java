@@ -1,9 +1,9 @@
-package com.zz.Service.impl;
+package com.zz.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.zz.Service.ExamService;
+import com.zz.service.ExamService;
 import com.zz.bean.Course;
 import com.zz.bean.Exam;
 import com.zz.bean.StudentExam;
@@ -12,8 +12,6 @@ import com.zz.utils.Code;
 import com.zz.utils.ExamUtils;
 import com.zz.utils.result.ApiResult;
 import com.zz.utils.result.TempResult;
-import com.zz.utils.subjecttiveJudge.ScorePointSim;
-import com.zz.utils.subjecttiveJudge.SentenceSeparation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

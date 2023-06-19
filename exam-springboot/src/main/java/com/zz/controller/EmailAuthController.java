@@ -1,7 +1,7 @@
 package com.zz.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import com.zz.Service.MailService;
+import com.zz.service.MailService;
 import com.zz.utils.Code;
 import com.zz.utils.result.ApiResult;
 import com.zz.utils.EmailUtils;

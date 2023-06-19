@@ -1,7 +1,7 @@
-package com.zz.Service.impl;
+package com.zz.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
-import com.zz.Service.UserService;
+import com.zz.service.UserService;
 import com.zz.bean.User;
 import com.zz.dao.UserDao;
 import com.zz.utils.Code;

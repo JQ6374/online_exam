@@ -1,9 +1,8 @@
 package com.zz.controller;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.zz.Service.ExamService;
+import com.zz.service.ExamService;
 
 import com.zz.bean.Exam;
 import com.zz.utils.Code;
@@ -16,7 +15,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/exam")

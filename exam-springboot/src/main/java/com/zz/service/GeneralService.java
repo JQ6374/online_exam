@@ -1,4 +1,4 @@
-package com.zz.Service;
+package com.zz.service;
 
 import com.zz.bean.Difficulty;
 import com.zz.bean.Role;

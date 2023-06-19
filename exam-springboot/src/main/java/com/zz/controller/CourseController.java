@@ -1,7 +1,7 @@
 package com.zz.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import com.zz.Service.CourseService;
+import com.zz.service.CourseService;
 import com.zz.bean.Course;
 import com.zz.utils.Code;
 import com.zz.utils.result.ApiResult;

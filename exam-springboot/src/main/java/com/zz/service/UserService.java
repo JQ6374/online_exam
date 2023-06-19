@@ -1,4 +1,4 @@
-package com.zz.Service;
+package com.zz.service;
 
 import com.alibaba.fastjson.JSONObject;
 import com.zz.bean.User;

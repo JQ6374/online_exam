@@ -1,8 +1,8 @@
-package com.zz.Service.impl;
+package com.zz.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.zz.Service.TopicService;
+import com.zz.service.TopicService;
 import com.zz.bean.Papers;
 import com.zz.bean.Topic;
 import com.zz.bean.PapersContent;
@@ -11,7 +11,6 @@ import com.zz.dao.TopicDao;
 import com.zz.dao.TopicTypeDao;
 import com.zz.utils.AnswerUtils;
 import com.zz.utils.Code;
-import com.zz.utils.CourseUtils;
 import com.zz.utils.result.ApiResult;
 import com.zz.utils.result.TempResult;
 import org.springframework.beans.factory.annotation.Autowired;

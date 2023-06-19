@@ -1,4 +1,4 @@
-package com.zz.Service;
+package com.zz.service;
 
 import com.alibaba.fastjson.JSONObject;
 import com.zz.bean.Exam;
@@ -6,7 +6,6 @@ import com.zz.utils.result.ApiResult;
 import com.zz.utils.result.TempResult;
 
 import java.util.List;
-import java.util.Objects;
 
 
 public interface ExamService {

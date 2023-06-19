@@ -1,7 +1,7 @@
 package com.zz.controller;
 
 
-import com.zz.Service.GeneralService;
+import com.zz.service.GeneralService;
 import com.zz.bean.Difficulty;
 import com.zz.bean.Role;
 import com.zz.bean.Tag;

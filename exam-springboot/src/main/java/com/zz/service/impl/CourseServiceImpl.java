@@ -1,14 +1,13 @@
-package com.zz.Service.impl;
+package com.zz.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
-import com.zz.Service.CourseService;
+import com.zz.service.CourseService;
 import com.zz.bean.Course;
 import com.zz.dao.CourseDao;
 import com.zz.utils.Code;
 import com.zz.utils.CourseUtils;
 import com.zz.utils.result.ApiResult;
 import com.zz.utils.result.TempResult;
-import org.apache.ibatis.jdbc.Null;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

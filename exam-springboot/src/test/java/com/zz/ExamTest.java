@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.zz.Service.ExamService;
+import com.zz.service.ExamService;
 import com.zz.bean.Course;
 import com.zz.bean.Exam;
 import com.zz.controller.ExamController;

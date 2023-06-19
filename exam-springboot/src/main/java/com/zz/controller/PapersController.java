@@ -1,6 +1,6 @@
 package com.zz.controller;
 
-import com.zz.Service.impl.PaperServiceImpl;
+import com.zz.service.impl.PaperServiceImpl;
 import com.zz.bean.Papers;
 import com.zz.utils.result.ApiResult;
 import org.springframework.beans.factory.annotation.Autowired;

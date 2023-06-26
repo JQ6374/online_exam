@@ -70,7 +70,7 @@ import useUserStore from "@/store/modules/user.ts";
 import request from "@/utils/request.ts";
 import {ElNotification} from "element-plus";
 import {MyElNotification} from "@/hook/requestTooltip.ts";
-import {Code} from "@/utils/Code.ts";
+import {Code} from "@/utils/code.ts";
 import useLayOutSettingStore from "@/store/modules/layoutTabBar.ts";
 
 onMounted(() => {

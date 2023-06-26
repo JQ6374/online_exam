@@ -24,7 +24,7 @@ PC在线地址：http://47.120.40.41/#/login
 
 #### 安装教程
 
-> 前端采用npnm包管理工具、后端采用maven管理依赖
+> 前端采用pnpm包管理工具、后端采用maven管理依赖
 
 + 启动后端服务（确保安装MySQL以及Redis）
   + 打开exam_springboot项目

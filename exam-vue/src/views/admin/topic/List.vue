@@ -93,7 +93,7 @@ import myRequest from "@/utils/request.ts";
 import {ApiResult, Topic} from "@/utils/type.ts";
 import request from "@/utils/request.ts";
 import {MyElNotification} from "@/hook/requestTooltip.ts";
-import {Code} from "@/utils/Code.ts";
+import {Code} from "@/utils/code.ts";
 import {ElMessageBox, ElNotification} from "element-plus";
 import {useMainHeight} from "@/store/modules/mainHeight.ts";
 import useUserStore from "@/store/modules/user.ts";

@@ -36,7 +36,7 @@ import {ElNotification} from "element-plus";
 import request from "@/utils/request.ts";
 import {ApiResult} from "@/utils/type.ts";
 import {MyElNotification} from "@/hook/requestTooltip.ts";
-import {Code} from "@/utils/Code.ts";
+import {Code} from "@/utils/code.ts";
 import useUserStore from "@/store/modules/user.ts";
 
 const userStore = useUserStore();

@@ -147,7 +147,7 @@ import setting from "@/setting.ts";
 import {ApiResult} from "@/utils/type.ts";
 import myRequest from "@/utils/request.ts";
 import {MyElNotification} from "@/hook/requestTooltip.ts";
-import {Code} from "@/utils/Code.ts";
+import {Code} from "@/utils/code.ts";
 import {useRouter} from "vue-router";
 import useUserStore from "@/store/modules/user.ts";
 import user from "@/store/modules/user.ts";

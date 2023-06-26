@@ -58,7 +58,7 @@ import request from "@/utils/request.ts";
 import {onMounted, reactive, ref} from 'vue'
 import {ApiResult} from "@/utils/type.ts";
 import {ElMessageBox, ElNotification, FormRules} from "element-plus";
-import {Code} from "@/utils/Code.ts";
+import {Code} from "@/utils/code.ts";
 import {MyElNotification} from "@/hook/requestTooltip.ts";
 import MyElTopBottom from "@/views/admin/components/MyElTopBottom.vue";
 import {useMainHeight} from "@/store/modules/mainHeight.ts";

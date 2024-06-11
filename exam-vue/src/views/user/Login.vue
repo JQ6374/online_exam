@@ -121,7 +121,7 @@ const login = async () => {
     loading.value = false;
     let redirect: any = $route.query.redirect;
     let toPath = '/index'
-    if (ruleForm.rId == 2) {
+    if (ruleForm.rId == 1) {
       toPath = '/admin'
     }
     await $router.push({path: redirect || toPath});

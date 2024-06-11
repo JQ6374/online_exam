@@ -9,11 +9,11 @@ spring:
     type: com.alibaba.druid.pool.DruidDataSource
   mail:
     host: smtp.qq.com  # 服务器 不用修改
-    username: xxxx
-    password: xxxx  #授权码
+    username: xxxxx # 邮箱账号
+    password: xxxxx # 授权码
     default-encoding: utf-8
     protocol: smtp
-    port: 25
+    port: 465
     properties:
       mail.smtp.socketFactory.class: javax.net.ssl.SSLSocketFactory
   redis:

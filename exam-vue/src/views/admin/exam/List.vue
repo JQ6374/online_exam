@@ -97,7 +97,7 @@ import {useMainHeight} from "@/store/modules/mainHeight.ts";
 import {onMounted, reactive, ref} from "vue";
 import {ApiResult} from "@/utils/type.ts";
 import {MyElNotification} from "@/hook/requestTooltip.ts";
-import {Code} from "@/utils/Code.ts";
+import {Code} from "@/utils/code.ts";
 import {ElMessageBox, ElNotification} from "element-plus";
 import useUserStore from "@/store/modules/user.ts";
 import setting from "@/setting.ts";

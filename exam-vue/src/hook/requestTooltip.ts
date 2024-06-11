@@ -1,6 +1,6 @@
 // @ts-ignore
 import {ElNotification} from "element-plus";
-// import {Code} from "@/utils/Code.ts";
+// import {Code} from "@/utils/code.ts";
 import {ApiResult} from "@/utils/type.ts";
 import setting from "@/setting.ts";
 

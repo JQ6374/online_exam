@@ -1,6 +1,6 @@
 import {defineStore} from "pinia";
 import {reqLogin} from "@/api/user";
-import {Code} from "@/utils/Code.ts";
+import {Code} from "@/utils/code.ts";
 import {LoginData} from "@/utils/type.ts";
 import {constantRouter} from "@/router/routers.ts";
 import {ref} from "vue";

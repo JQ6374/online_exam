@@ -1,7 +1,7 @@
 import axios from "axios";
 // @ts-ignore
 import {ElMessage, ElNotification} from "element-plus";
-import {Code} from "@/utils/Code.ts";
+import {Code} from "@/utils/code.ts";
 //创建axios实例
 let myRequest = axios.create({
   baseURL: import.meta.env.VITE_APP_BASE_API,

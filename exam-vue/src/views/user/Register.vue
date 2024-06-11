@@ -118,7 +118,7 @@ import type {FormInstance, FormRules} from 'element-plus'
 import {ApiResult} from "@/utils/type.ts";
 import CheckCode from '@/components/CheckCode/index.vue'
 import request from "@/utils/request.ts";
-import {Code} from "@/utils/Code.ts";
+import {Code} from "@/utils/code.ts";
 
 onMounted(() => {
   getRoleData();

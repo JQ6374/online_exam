@@ -12,6 +12,8 @@ import com.zz.utils.Code;
 import com.zz.utils.ExamUtils;
 import com.zz.utils.result.ApiResult;
 import com.zz.utils.result.TempResult;
+import com.zz.utils.subjecttiveJudge.ScorePointSim;
+import com.zz.utils.subjecttiveJudge.SentenceSeparation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -156,9 +158,11 @@ public class ExamServiceImpl implements ExamService {
                 topic.put("rightAnswer", rightAnswer);
                 // 主观题判分
                 if (Integer.parseInt(key) == 5) {
+                    // 主观题判分需要下载“handle-dir”压缩包，在readme.md中有下载地址
 //                    List<String> rightKeywordsList = SentenceSeparation.sentenceList(rightAnswer);
 //                    List<String> stringKeywordsList = SentenceSeparation.sentenceList(studentAnswer);
 //                    double scorePointSim = ScorePointSim.getScorePointSim(rightKeywordsList, stringKeywordsList);
+//                    topic.put("getScore",scorePointSim);
                     topic.put("getScore", 0.0);
                     //多选题判分
                 } else if (Integer.parseInt(key) == 3) {

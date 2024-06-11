@@ -105,7 +105,7 @@ import request from "@/utils/request.ts";
 import {ApiResult} from "@/utils/type.ts";
 import {ElNotification, FormInstance, FormRules} from "element-plus";
 import {MyElNotification} from "@/hook/requestTooltip.ts";
-import {Code} from "@/utils/Code.ts";
+import {Code} from "@/utils/code.ts";
 import useLayOutSettingStore from "@/store/modules/layoutTabBar.ts";
 
 onMounted(() => {
